@@ -1,6 +1,9 @@
 //compiler directives
-#IFNDEF BOARD_H
-#DEFINE BOARD_H
+//#IFNDEF BOARD_H
+//#DEFINE BOARD_H
+#pragma once
+
+#include "stdafx.h"
 #include <string>
 #include <vector>
 #include <map>

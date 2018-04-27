@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "board.h"
 using namespace std;
 
