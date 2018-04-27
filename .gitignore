@@ -256,6 +256,56 @@ paket-files/
 # CodeRush
 .cr/
 
+# Created by https://www.gitignore.io/api/anjuta
+
+### Anjuta ###
+# Local configuration folder and symbol database
+/.anjuta/
+/.anjuta_sym_db.db
+
+
+# End of https://www.gitignore.io/api/anjuta
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
+
+
+# Created by https://www.gitignore.io/api/c++
+
+### C++ ###
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+
+# End of https://www.gitignore.io/api/c++
