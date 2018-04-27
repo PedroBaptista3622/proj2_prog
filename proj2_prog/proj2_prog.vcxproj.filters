@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\CrosswordsPlayer">
+      <UniqueIdentifier>{4cb46494-a1a8-4c4d-81b3-319de7f2420a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\CrosswordCreator">
+      <UniqueIdentifier>{5d66434b-e6a6-4440-8162-4302e948bcc3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -28,6 +34,12 @@
     </ClCompile>
     <ClCompile Include="proj2_prog.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cwcreator.cpp">
+      <Filter>Source Files\CrosswordCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="cwplayer.cpp">
+      <Filter>Source Files\CrosswordsPlayer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
