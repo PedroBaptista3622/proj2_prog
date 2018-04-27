@@ -3,9 +3,9 @@ using namespace std;
 
 
 /**
- * Overloads the "less than" two strings, returning whether the first string 
+ * Overloads the "less than" two strings, returning whether the first string
  * should be ordered before the second string
- * 
+ *
  * @param	s1	the first string to compare
  * @param	s2	the second string to compare
  * @return		the truth value of the predicate
@@ -32,7 +32,7 @@ bool operator<(const string& lhs, const string& rhs)
  * <p>
  * Requires that a Dictionary is later added using the linkDictionary
  * procedure.
- * 
+ *
  * @param	lines	The number of lines the board will have
  * @param	columns	The number of columns in the board will have
  */
@@ -45,7 +45,7 @@ Board::Board(unsigned int lines, unsigned int columns)
 
 /**
  * Constructs a Board object and associates a Dictionary to it.
- * 
+ *
  * @param	lines		The number of lines the board will have
  * @param	columns		The number of columns in the board will have
  * @param	dictionary	Pointer to the Dictionary object
@@ -59,7 +59,7 @@ Board::Board(unsigned int lines, unsigned int columns, Dictionary* dictionary)
 
 /**
  * Associates a Dictionary object by its pointer to the Board object.
- * 
+ *
  * @param	dictionary	Pointer to the Dictionary object
  */
 void Board::linkDic(Dictionary* dictionary)
@@ -70,7 +70,7 @@ void Board::linkDic(Dictionary* dictionary)
 /** TODO
  * Compares two position strings and returns whether the first is before
  * the second, using first the line and then the column as criteria.
- * 
+ *
  * @param	pos1	First position string
  * @param	pos2	Second position string
  * @return			Truth value of predicate
