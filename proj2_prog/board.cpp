@@ -1,4 +1,5 @@
 #include "board.h"
+#include <cassert>
 using namespace std;
 
 
@@ -65,6 +66,52 @@ Board::Board(unsigned int lines, unsigned int columns, Dictionary* dictionary)
 void Board::linkDic(Dictionary* dictionary)
 {
 	this->dictionary = dictionary;
+}
+
+/**
+ * Returns a string "a" to "zz" correspoding to a number up to 26^2 + 25.
+ *
+ * @param	number	In range [0, 26^2 + 25]
+ * @return			String from "a" to "zz"
+ */
+string Board::cvtPosNr(unsigned int number)
+{
+	assert(number >= 0);
+	assert(number <= (26*26 + 25));
+	if ((number / 26) == 0)
+	{
+		string output;
+		output.push_back(char(int('a') + number));
+		return output;
+	}
+	else
+	{
+		string output;
+		output.push_back(char(int('a') + number / 26 - 1));
+		output.push_back(char(int('a') + number % 26));
+		return output;
+	}
+}
+
+/**
+ * Returns a number up to 26^2 - 1 corresponding to a string
+ * from "a" to "zz".
+ *
+ * @param	string	From "a" to "zz"
+ * @return			Number in range [0, 26^2 - 1]
+ */
+unsigned int Board::cvtPosStr(string str)
+{
+	assert(str.length() > 0);
+	assert(str.length() <= 2);
+	if (str.length() == 1)
+		return int(str[0]) - int ('a');
+	else
+	{
+		unsigned int rightChar = int(str[1]) - int ('a');
+		unsigned int leftChar = int(str[0]) - int ('a');
+		return rightChar + 26*(leftChar + 1);
+	}
 }
 
 /** TODO
