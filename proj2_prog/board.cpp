@@ -1,17 +1,18 @@
 #include "board.h"
 #include <cassert>
+#include <cctype>
 using namespace std;
 
 
 /**
- * Overloads the "less than" two strings, returning whether the first string
- * should be ordered before the second string
+ * Returns whether the first string should be ordered before the second
+ * string, alphabetically
  *
- * @param	s1	the first string to compare
- * @param	s2	the second string to compare
+ * @param	lhs	the first string to compare
+ * @param	rhs	the second string to compare
  * @return		the truth value of the predicate
  */
-bool operator<(const string& lhs, const string& rhs)
+bool Board::first(const string& lhs, const string& rhs)
 {
 	bool smaller = (lhs.size() < rhs.size());
 	int maxcompare;
@@ -100,10 +101,14 @@ string Board::cvtPosNr(unsigned int number)
  * @param	string	From "a" to "zz"
  * @return			Number in range [0, 26^2 - 1]
  */
-unsigned int Board::cvtPosStr(string str)
+unsigned int Board::cvtPosStr(const string& str)
 {
 	assert(str.length() > 0);
 	assert(str.length() <= 2);
+	
+	for (int i = 0; i < str.length(); i++)
+		tolower(str[i]);
+	
 	if (str.length() == 1)
 		return int(str[0]) - int ('a');
 	else
@@ -114,7 +119,7 @@ unsigned int Board::cvtPosStr(string str)
 	}
 }
 
-/** TODO
+/**
  * Compares two position strings and returns whether the first is before
  * the second, using first the line and then the column as criteria.
  *
@@ -122,12 +127,39 @@ unsigned int Board::cvtPosStr(string str)
  * @param	pos2	Second position string
  * @return			Truth value of predicate
  */
-/*
- bool prevPos(string pos1, string pos2)
+bool Board::prevPos(const string& pos1, const string& pos2)
 {
 	struct coords {
 		string line;
 		string column;
 	} coords1, coords2;
+
+	for (int i = 0; i < pos1.length(); i++)
+	{
+		if (isupper(pos1[i]))
+			coords1.line.push_back(pos1[i]);
+		else
+			coords1.column.push_back(pos1[i]);
+	}
+
+	for (int i = 0; i < pos2.length(); i++)
+	{
+		if (isupper(pos2[i]))
+			coords2.line.push_back(pos2[i]);
+		else
+			coords2.column.push_back(pos2[i]);
+	}
+
+	if (cvtPosStr(coords1.line) < cvtPosStr(coords2.line))
+		 return true;
+	else if (cvtPosStr(coords1.line) == cvtPosStr(coords2.line))
+	{
+		if (cvtPosStr(coords1.column) < cvtPosStr(coords2.column))
+			return true;
+		else
+			return false;
+	}
+	else
+		return false;
+	
 }
-*/

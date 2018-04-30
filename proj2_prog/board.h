@@ -14,17 +14,6 @@ using namespace std;
 //code
 
 /**
- * Overloads the "less than" two strings, returning whether the first string
- * should be ordered before the second string
- *
- * @param	lhs	the first string to compare
- * @param	rhs	the second string to compare
- * @return		the truth value of the predicate
- */
-bool operator<(const string& lhs, const string& rhs);
-
-
-/**
  * Board is a class that stores the atributes of a crosswords puzzle, including
  * its size, inserted words and an associated dictionary.
  * <p>
@@ -130,6 +119,16 @@ class Board
 	private:
 
 		/**
+		 * Returns whether the first string should be ordered before the second
+		 * string, alphabetically
+		 *
+		 * @param	lhs	the first string to compare
+		 * @param	rhs	the second string to compare
+		 * @return		the truth value of the predicate
+		 */
+		bool first(const string& lhs, const string& rhs);
+		
+		/**
 		 * Compares two position strings and returns whether the first is before
 		 * the second, using first the line and then the column as criteria.
 		 *
@@ -137,7 +136,7 @@ class Board
 		 * @param	pos2	Second position string
 		 * @return			Truth value of predicate
 		 */
-		bool prevPos(string pos1, string pos2);
+		bool prevPos(const string& pos1, const string& pos2);
 
 		//keeps size
 		struct size {
@@ -146,13 +145,11 @@ class Board
 		} number;
 
 		//keeps a list of words and its position
-		map<string,string> words;
+		map<string,string, first> words;
 
 		//keeps a list of the position of the black spaces
 		set<string, prevPos> blackSpaces;
 
-		//keeps a map of the occupied spaces and respective characters
-		map<string, char> chars;
 
 		//pointer to the dictionary
 		Dictionary* dictionary;
@@ -172,7 +169,7 @@ class Board
 		 * @param	string	From "a" to "zz"
 		 * @return			Number in range [0, 26^2 - 1]
 		 */
-		unsigned int cvtPosStr(string str);
+		unsigned int cvtPosStr(const string& str);
 
 		/**
 		 * Fills all empty spaces with black spaces
