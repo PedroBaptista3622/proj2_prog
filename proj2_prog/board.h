@@ -9,9 +9,8 @@
 #include <map>
 #include <utility>
 #include "dictionary.h"
+#include "utility.h"
 using namespace std;
-
-//code
 
 /**
  * Board is a class that stores the atributes of a crosswords puzzle, including
@@ -117,27 +116,6 @@ class Board
 		void show();
 
 	private:
-
-		/**
-		 * Returns whether the first string should be ordered before the second
-		 * string, alphabetically
-		 *
-		 * @param	lhs	the first string to compare
-		 * @param	rhs	the second string to compare
-		 * @return		the truth value of the predicate
-		 */
-		bool first(const string& lhs, const string& rhs);
-		
-		/**
-		 * Compares two position strings and returns whether the first is before
-		 * the second, using first the line and then the column as criteria.
-		 *
-		 * @param	pos1	First position string
-		 * @param	pos2	Second position string
-		 * @return			Truth value of predicate
-		 */
-		bool prevPos(const string& pos1, const string& pos2);
-
 		//keeps size
 		struct size {
 			unsigned int lines;
@@ -147,8 +125,8 @@ class Board
 		//keeps a list of words and its position
 		map<string,string, first> words;
 
-		//keeps a list of the position of the black spaces
-		set<string, prevPos> blackSpaces;
+		//keeps a list of the position of the characters already added
+		map<string, char, prevPos> addedChars;
 
 
 		//pointer to the dictionary
@@ -176,3 +154,5 @@ class Board
 		 */
 		void blackout();
 };
+
+//#ENDIF
