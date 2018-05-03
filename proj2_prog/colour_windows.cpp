@@ -39,7 +39,7 @@ void clrscr(void)
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 
 	GetConsoleScreenBufferInfo(hCon, &csbi);
-	dwCnSize = csbi.dwSize.X * csbi.dwSize.Y;
+	dwConSize = csbi.dwSize.X * csbi.dwSize.Y;
 
 	//fill with spaces
 	FillConsoleOutputCharacter(hCon, TEXT(' '), dwConSize, coordScreen, &cCharsWritten);
@@ -77,7 +77,7 @@ void setcolor(unsigned int color)
 
 void setcolor(unsigned int color, unsigned int background_color)
 {
-	HANDLE = hCon = GetStdHandle(STD_OUTPUT_HANDLE);
+	HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (background_color == BLACK)
 		SetConsoleTextAttribute(hCon, color);
 	else
