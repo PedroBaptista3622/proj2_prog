@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "board.h"
 #include <cassert>
 #include <cctype>
