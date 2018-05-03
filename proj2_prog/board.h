@@ -1,6 +1,6 @@
-//compiler directives
-//#IFNDEF BOARD_H
-//#DEFINE BOARD_H
+//Compiler directives
+//#ifndef BOARD_H
+//#define BOARD_H
 #pragma once
 
 #include "stdafx.h"
@@ -11,6 +11,8 @@
 #include "dictionary.h"
 #include "utility.h"
 using namespace std;
+
+//Definitions
 
 /**
  * Board is a class that stores the atributes of a crosswords puzzle, including
@@ -155,4 +157,5 @@ class Board
 		void blackout();
 };
 
-//#ENDIF
+//#endif
+//End of file

@@ -1,6 +1,6 @@
 //Compiler Directives
-//#IFNDEF UTILITY_H
-//#DEFINE UTILITY_H
+//#ifndef UTILITY_H
+//#define UTILITY_H
 #pragma once
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                                                                             *
@@ -8,6 +8,7 @@
  *       Defines some useful functions to be used throughout the project       *
  *                                                                             *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+// Author - João N. Matos
 
 /*
  * Returns whether the first string should be ordered before the second
@@ -29,4 +30,5 @@ bool first(const string& lhs, const string& rhs);
  */
 bool prevPos(const string& pos1, const string& pos2);
 
-//#ENDIF
+//#endif
+//End of file

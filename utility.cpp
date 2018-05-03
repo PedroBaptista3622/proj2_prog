@@ -1,4 +1,8 @@
-
+/** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** *
+ *                             Utility Functions                               *
+ *                              Implementation                                 *
+ ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** */
+// Author - João N. Matos
 
 /**
  * Compares two position strings and returns whether the first is before
@@ -68,3 +72,5 @@ bool first(const string& lhs, const string& rhs)
 	}
 	return smaller;
 }
+
+//End of file
