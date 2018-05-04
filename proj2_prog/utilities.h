@@ -30,5 +30,13 @@ bool first(const string& lhs, const string& rhs);
  */
 bool prevPos(const string& pos1, const string& pos2);
 
+/**
+ * Capitalises entire string of alphabetic characters
+ * 
+ * @param	str		String of alphabetic characters
+ * @return			Capitalised version of string
+ */
+string stringToUpper(const string& str);
+
 //#endif
 //End of file
