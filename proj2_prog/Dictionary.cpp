@@ -1,142 +1,95 @@
 #include "stdafx.h"
 #include "Dictionary.h"
 
+void Dictionary::removeSpaces(string &word)
+{
+	if (word.length() >= 1)
+		if (word.at(0) == ' ')
+		{
+			word = word.substr(1);
+		}
+}
 
 Dictionary::Dictionary()
 {
 	bool fileOpened = false;
+	string currentLine;
 	cout << "Please insert dictionary name" << endl;
 	cin >> name;
+
 
 	ifstream dict;
 	dict.open(name);
 
-
-	if (dict.fail())
+	if (!dict.fail())
 	{
-		cerr << "Error opening dictionary file" << endl;
+		fileOpened = true;
+		cout << "File Opened!" << endl;
 	}
 	else
 	{
-		fileOpened = true;
-		cout << "Dictionary file successfully opened" << endl;
+		cerr << "Error opening file" << endl;
 	}
 
 	if (fileOpened)
 	{
-		cout << "Importing words from dictionary" << endl;
-
-		string word;
-		vector <string> synonyms;
-		string currentWord;
-		string currentLine = "Testeeee";
-
 		while (getline(dict, currentLine))
 		{
-			cout << currentLine << endl;
-
-			size_t c = currentLine.find(':');
+			string keyWord;
+			string currentWord; //1st synonym in the line
+			vector <string> synonyms;//Contains every synonym of each keyword
 			bool end = false;
+			int c = currentLine.find(':'); //c Contains the index of ':'
 
-			if (c != std::string::npos)
+			keyWord = currentLine.substr(0, c);
+			currentLine = currentLine.substr(c + 2);
+
+			do
 			{
-				word = currentLine.substr(0, c);
-				currentLine = currentLine.substr(c + 1);
-
-				/*Example:
-
-				Aback: backwards, rearwards, aft, abaft, astern, behind, back
-
-				word = "Aback"
-				currentLine = "backwards, rearwards, aft, abaft, astern, behind, back" + CR and LF
-				*/
-
 				c = currentLine.find(',');
 
-				if (c == std::string::npos)
+				if (c == string::npos)
 				{
-					c = currentLine.find((char)13); // Checks if it's the end of the line (newline char)
-					if (!c > 2)
-					{
-						end = true;
-					}
+					c = currentLine.find((char)13);
+					end = true;
+					//c Contains de index if ',' if it exists, otherwise, contains de index of CR
 				}
 
-				while (!end)
+				currentWord = currentLine.substr(0, c);
+				removeSpaces(currentWord);//Removes the empty space at the start of the word
+				synonyms.push_back(currentWord);//Adds word to the synonyms vector
+
+
+				if (!end) //If it's the last element this won't be executed
 				{
-					if (c == std::string::npos)
-					{
-						c = currentLine.find((char)13); // Checks if it's the end of the line (newline char)
-						end = true;
-					}
-
-					currentWord = currentLine.substr(0, c);
-					synonyms.push_back(currentWord);
-
-
-					/*
-
-					1st time executing: (from the previous example)
-					currentWord = "backwards"
-					currentLine = "rearwards, aft, abaft, astern, behind, back" + CR and LF
-					...
-					last time executing:
-					currentWord = "back"
-					currentLine = CR and LF
-
-					*/
-
-
-					if (!end)
-					{
-						currentLine = currentLine.substr(c + 1);
-						c = currentLine.find(',');
-					}
-
-
+					currentLine = currentLine.substr(c + 1);
 				}
 
-				dictionary[word] = synonyms;
-				synonyms.clear();
 
-			}
-			else
-			{
-				cerr << "Error importing words" << endl;
-			}
 
+			} while (!end);
+
+			dictionary[keyWord] = synonyms; //Adds to the dictionary map the first and second elements 
 
 		}
 
-		dict.close();
-		cout << "Words successfully imported" << endl;
-
+		dict.close(); //Closes file
 	}
-
-
-}
-
-void Dictionary::delSpaces()
-{
-	for (auto elem : dictionary)
+	else
 	{
-		for (int i = 0; i < elem.second.size(); i++)
-		{
-			if (elem.second.at(i).at(0) == ' ')
-			{
-				elem.second.at(i) = elem.second.at(i).substr(1);
-			}
-		}
+		cerr << "Error opening file" << endl;
 	}
+
 }
+
 
 void Dictionary::printDictionary()
 {
-	for (auto elem : dictionary)
+	for (auto elem : dictionary) // Goes through every pair of the dictionary map 
 	{
 		cout << elem.first << ": ";
 
-		for (int i = 0; i < elem.second.size(); i++)
+		for (int i = 0; i < elem.second.size(); i++) // Goes through every word of the vector in the second element of the dictionary map
 		{
 
 			if (i == elem.second.size() - 1)
