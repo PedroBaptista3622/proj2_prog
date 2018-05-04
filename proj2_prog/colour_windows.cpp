@@ -87,7 +87,7 @@ void setcolor(unsigned int color, unsigned int background_color)
 //=================================================================================================
 
 // Fill the screen with coloured numbers
-
+/*
 int main()
 {
 	clrscr();
@@ -105,5 +105,6 @@ int main()
 			cout << x % 10;
 		}
 }
+*/
 
 //End of file
