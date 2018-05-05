@@ -75,7 +75,7 @@ Dictionary::Dictionary()
 
 			} while (!end);
 
-			dictionary[keyWord] = synonyms; //Adds to the dictionary map the first and second elements 
+			this->dictionary[keyWord] = synonyms; //Adds to the dictionary map the first and second elements 
 
 		}
 
@@ -87,7 +87,6 @@ Dictionary::Dictionary()
 	}
 
 }
-
 
 void Dictionary::printDictionary()
 {
@@ -109,4 +108,14 @@ void Dictionary::printDictionary()
 
 		}
 	}
+}
+
+bool Dictionary::checkWordDictionary(const string &keyWord)
+{
+	return this->dictionary.find(keyWord) != dictionary.end();
+}
+
+vector <string> Dictionary::getSynonyms(const string &keyWord)
+{
+	return this->dictionary.find(keyWord)->second;
 }
