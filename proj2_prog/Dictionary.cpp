@@ -1,5 +1,11 @@
 #include "stdafx.h"
 #include "Dictionary.h"
+#include "utilities.h"
+
+string Dictionary::dictName()
+{
+	return this->name;
+}
 
 void Dictionary::removeSpaces(string &word)
 {
@@ -41,7 +47,7 @@ Dictionary::Dictionary()
 			bool end = false;
 			int c = currentLine.find(':'); //c Contains the index of ':'
 
-			keyWord = currentLine.substr(0, c);
+			keyWord = stringToUpper(currentLine.substr(0, c));
 			currentLine = currentLine.substr(c + 2);
 
 			do
@@ -57,7 +63,7 @@ Dictionary::Dictionary()
 
 				currentWord = currentLine.substr(0, c);
 				removeSpaces(currentWord);//Removes the empty space at the start of the word
-				synonyms.push_back(currentWord);//Adds word to the synonyms vector
+				synonyms.push_back(stringToUpper(currentWord));//Adds word to the synonyms vector
 
 
 				if (!end) //If it's the last element this won't be executed
@@ -69,7 +75,7 @@ Dictionary::Dictionary()
 
 			} while (!end);
 
-			dictionary[keyWord] = synonyms; //Adds to the dictionary map the first and second elements 
+			this->dictionary[keyWord] = synonyms; //Adds to the dictionary map the first and second elements 
 
 		}
 
@@ -81,7 +87,6 @@ Dictionary::Dictionary()
 	}
 
 }
-
 
 void Dictionary::printDictionary()
 {
@@ -103,4 +108,14 @@ void Dictionary::printDictionary()
 
 		}
 	}
+}
+
+bool Dictionary::checkWordDictionary(const string &keyWord)
+{
+	return this->dictionary.find(keyWord) != dictionary.end();
+}
+
+vector <string> Dictionary::getSynonyms(const string &keyWord)
+{
+	return this->dictionary.find(keyWord)->second;
 }

@@ -2,6 +2,10 @@
 //#ifndef UTILITY_H
 //#define UTILITY_H
 #pragma once
+
+#include "stdafx.h"
+#include <string>
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                                                                             *
  *                           Utilities Library                                 *

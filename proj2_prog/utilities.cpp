@@ -4,6 +4,12 @@
  ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** */
 // Author - João N. Matos
 
+#include "stdafx.h"
+#include "utilities.h"
+#include <cctype>
+#include "board.h"
+
+using namespace std;
 /**
  * Compares two position strings and returns whether the first is before
  * the second, using first the line and then the column as criteria.
@@ -82,7 +88,7 @@ bool first(const string& lhs, const string& rhs)
 string stringToUpper(const string& str)
 {
 	string outp;
-	for (unsigned int i = 0, i < str.length(), i++)
+	for (unsigned int i = 0; i < str.length(); i++)
 		outp.push_back(toupper(str.at(i)));
 	return outp;
 }
