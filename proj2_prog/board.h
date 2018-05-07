@@ -9,7 +9,7 @@
 #include <map>
 #include <utility>
 #include "dictionary.h"
-#include "utility.h"
+#include "utilities.h"
 using namespace std;
 
 //Definitions
