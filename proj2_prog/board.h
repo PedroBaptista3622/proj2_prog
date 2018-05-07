@@ -9,7 +9,7 @@
 #include <map>
 #include <utility>
 #include "dictionary.h"
-#include "utility.h"
+#include "utilities.h"
 using namespace std;
 
 //Definitions
@@ -62,15 +62,6 @@ class Board
 		 */
 		Board(string filename);
 
-		/**
-		 * Constructs a Board object by loading an unfinished board from a file
-		 * and associates a Dictionary object to it.
-		 *
-		 * @param	filename	Name of the file to import
-		 * @param	dictionary	Pointer to the Dictionary object
-		 */
-		Board(string filename, Dictionary* dictionary);
-
 		//Methods
 
 		/**
@@ -78,6 +69,7 @@ class Board
 		 *
 		 * @param	dictionary	Pointer to the Dictionary object
 		 */
+		
 		void linkDic(Dictionary* dictionary);
 
 		/**
@@ -107,10 +99,10 @@ class Board
 		 * Saves the board to a file, returning 0 if sucessful and -1 if not.
 		 *
 		 * @param	filename	Name of the file to store the board in
-		 * @param	mode		Determines whether to save board as finished
+		 * @param	finished	Determines whether to save board as finished
 		 * @returns				Exit code
 		 */
-		int save(string filename, unsigned int mode);
+		int save(string filename, bool finished);
 
 		/**
 		 * Shows the board on screen.
@@ -125,10 +117,10 @@ class Board
 		} number;
 
 		//keeps a list of words and its position
-		map<string,string, first> words;
+		map<string,string/*TODO, first*/> words;
 
 		//keeps a list of the position of the characters already added
-		map<string, char, prevPos> addedChars;
+		map<string, char/*TODO, prevPos*/> addedChars;
 
 
 		//pointer to the dictionary

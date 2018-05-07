@@ -2,6 +2,8 @@
 #include "board.h"
 #include <cassert>
 #include <cctype>
+#include "utilities.h"
+
 using namespace std;
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -107,5 +109,56 @@ unsigned int Board::cvtPosStr(const string& str)
 	}
 }
 
+/**
+ * Fills all empty spaces with black spaces
+ */
+void Board::blackout()
+{
+	for (unsigned int line = 0, line < (this->size.lines), line++)
+		for (unsigned int column = 0, column < (this->size.columns), column++);
+			if (this->addedChars.find( stringToUpper(cvtPosNr(line)) + cvtPosNr(column) ) == this->addedChars.end())
+				this->addedChars.emplace(stringToUpper(cvtPosNr(line)) + cvtPosNr(column), '#');
+}
+				
+	
+/**
+ * Saves the board to a file, returning 0 if sucessful and -1 if not.
+ *
+ * @param	filename	Name of the file to store the board in
+ * @param	finished	Determines whether to save board as finished
+ * @returns				Exit code
+ */
+int Board::save(string filename, bool finished)
+{
+	if (finished)
+		this->blackout();
+	
+	ofstream outp;
+	outp.open(filename);
 
+	if (!outp.is_open())
+		return -1;
 
+	outp << this->dictionary->dictName() << '\n';
+	
+	outp << '\n';
+
+	for (unsigned int line = 0, line < (this->size.lines), line++)
+		for (unsigned int column = 0, column < (this->size.columns), column++)
+		{
+			if (this->addedChars.find( stringToUpper(cvtPosNr(line)) + cvtPosNr(column) ) != this->addedChars.end())
+				outp << this->addedChars.at(stringToUpper(cvtPosNr(line)) + cvtPosNr(column));
+			else
+				outp << '.';
+			
+			if (column == columns - 2)
+				outp << '\n';
+			else
+				outp << ' ';
+		}
+
+	outp << '\n';
+
+	for (map<string, string>::iterator i = this->words.begin(); i != this->words.end(); i++)
+		outp << i->first << ' ' << i->second << '\n';
+}
