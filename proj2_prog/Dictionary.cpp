@@ -2,6 +2,59 @@
 #include "Dictionary.h"
 #include "utilities.h"
 
+bool Dictionary::wildcardMatch(const char *str, const char *strWild)
+{
+	
+	while (*strWild)
+	{
+
+		if (*strWild == '?')
+		{
+			
+			if (!*str)
+				return false;
+		
+			++str;
+			++strWild;
+		}
+		else if (*strWild == '*')
+		{
+			
+			if (wildcardMatch(str, strWild + 1))
+				
+				return true;
+		
+			if (*str && wildcardMatch(str + 1, strWild))
+				return true;
+			
+			return false;
+		}
+		else
+		{
+			
+			if (toupper(*str++) != toupper(*strWild++))
+				return false;
+		}
+	}
+	
+	return !*str && !*strWild;
+}
+
+vector <string> Dictionary::getPossibleWords(string searchParam)
+{
+	vector <string> matches;
+
+	for (auto elem : dictionary)
+	{
+		if (wildcardMatch(elem.first.c_str, searchParam.c_str))
+		{
+			matches.push_back(elem.first);
+		}
+	}
+
+	return matches;
+}
+
 string Dictionary::dictName()
 {
 	return this->name;
@@ -22,7 +75,6 @@ Dictionary::Dictionary()
 	string currentLine;
 	cout << "Please insert dictionary name" << endl;
 	cin >> name;
-
 
 	ifstream dict;
 	dict.open(name);
