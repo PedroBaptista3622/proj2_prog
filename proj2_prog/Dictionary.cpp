@@ -70,31 +70,12 @@ void Dictionary::removeSpaces(string &word)
 }
 
 Dictionary::Dictionary(string filename)
-{
-	/*
-	bool fileOpened = false;
-	string currentLine;
-	cout << "Please insert dictionary name" << endl;
-	cin >> name;
-	*/
+{	
 	this->name = filename;
 	ifstream dict;
-	dict.open(name);
-
-	/*
-	if (!dict.fail())
-	{
-		fileOpened = true;
-		cout << "File Opened!" << endl;
-	}
-	else
-	{
-		cerr << "Error opening file" << endl;
-	}
-
-	*/
- 	//if (fileOpened)
-	//{
+	dict.open(filename);
+	string currentLine;
+	
 	while (getline(dict, currentLine))
 	{
 		string keyWord;
@@ -136,13 +117,6 @@ Dictionary::Dictionary(string filename)
 	}
 
 	dict.close(); //Closes file
-	/*
-	}
-	else
-	{
-		cerr << "Error opening file" << endl;
-	}
-	*/
 
 }
 

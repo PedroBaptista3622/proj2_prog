@@ -24,10 +24,14 @@ void printPossibleActions()
 void createPuzzle()
 {
 	unsigned int lines, columns; // xLenght = horizontal length of board, yLength = vertical length of board
+	string filename;
 
 	cout << "Insert size of board (lines and then columns)" << endl;
 	cin >> lines >> columns;
-	Dictionary synonyms;
+	cout << "Insert dictionary file name" << endl;
+	cin >> filename;
+
+	Dictionary synonyms(filename);
 	Board board(lines, columns, &synonyms); //Creates empty board with the given dimentions and a dictionary associated
 
 	while (true)
