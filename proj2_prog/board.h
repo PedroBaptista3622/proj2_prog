@@ -41,7 +41,7 @@ class Board
 		 * @param	lines	The number of lines the board will have
 		 * @param	columns	The number of columns in the board will have
 		 */
-		Board(unsigned int lines, unsigned int columns);
+		Board(unsigned int lines, unsigned int columns); //DONE
 
 		/**
 		 * Constructs a Board object and associates a Dictionary to it.
@@ -50,7 +50,7 @@ class Board
 		 * @param	columns		The number of columns in the board will have
 		 * @param	dictionary	Pointer to the Dictionary object
 		 */
-		Board(unsigned int lines, unsigned int columns, Dictionary* dictionary);
+		Board(unsigned int lines, unsigned int columns, Dictionary* dictionary); //DONE
 
 		/**
 		 * Constructs a Board object by loading an unfinished board from a file.
@@ -70,7 +70,7 @@ class Board
 		 * @param	dictionary	Pointer to the Dictionary object
 		 */
 		
-		void linkDic(Dictionary* dictionary);
+		void linkDic(Dictionary* dictionary); //DONE
 
 		/**
 		 * Tries to insert a word from the dictionary into the board, checking
@@ -81,13 +81,13 @@ class Board
 		 * <p>
 		 *  0: success;
 		 * <p>
-		 * -1: inexistent word;
+		 * -1: inexistent word; DEPRECATED
 		 * <p>
-		 * -2: ilegal overlap (different characters, black spaces);
+		 * -1: ilegal overlap (different characters, black spaces);
 		 * <p>
-		 * -3: lack of space;
+		 * -2: lack of space;
 		 * <p>
-		 * -4: repeated words.
+		 * -3: repeated words.
 		 *
 		 * @param	position	The position string to insert the word in
 		 * @param	word		The word to insert
@@ -102,7 +102,7 @@ class Board
 		 * @param	finished	Determines whether to save board as finished
 		 * @returns				Exit code
 		 */
-		int save(string filename, bool finished);
+		int save(string filename, bool finished); //DONE
 
 		/**
 		 * Shows the board on screen.
@@ -122,9 +122,12 @@ class Board
 		//keeps a list of the position of the characters already added
 		map<string, char/*TODO, prevPos*/> addedChars;
 
-
+/*
 		//pointer to the dictionary
 		Dictionary* dictionary;
+
+		bool internalDictionary;
+*/
 
 		/**
 		 * Returns a string "a" to "zz" correspoding to a number up to 26^2 - 1.
@@ -132,7 +135,7 @@ class Board
 		 * @param	number	In range [0, 26^2 - 1]
 		 * @return			String from "a" to "zz"
 		 */
-		string cvtPosNr(unsigned int number);
+		string cvtPosNr(unsigned int number); //DONE
 
 		/**
 		 * Returns a number up to 26^2 - 1 corresponding to a string
@@ -141,12 +144,14 @@ class Board
 		 * @param	string	From "a" to "zz"
 		 * @return			Number in range [0, 26^2 - 1]
 		 */
-		unsigned int cvtPosStr(const string& str);
+		unsigned int cvtPosStr(const string& str); //DONE
 
 		/**
 		 * Fills all empty spaces with black spaces
 		 */
-		void blackout();
+		void blackout(); //DONE
+
+		
 };
 
 //#endif

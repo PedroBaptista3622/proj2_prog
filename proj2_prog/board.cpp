@@ -57,6 +57,103 @@ void Board::linkDic(Dictionary* dictionary)
 	this->dictionary = dictionary;
 }
 
+/**
+ * Saves the board to a file, returning 0 if sucessful and -1 if not.
+ *
+ * @param	filename	Name of the file to store the board in
+ * @param	finished	Determines whether to save board as finished
+ * @returns				Exit code
+ */
+int Board::save(string filename, bool finished)
+{
+	if (finished)
+		this->blackout();
+	
+	ofstream outp;
+	outp.open(filename);
+
+	if (!outp.is_open())
+		return -1;
+
+	outp << this->dictionary->dictName() << '\n';
+	
+	outp << '\n';
+
+	for (unsigned int line = 0, line < size.lines, line++)
+		for (unsigned int column = 0, column < size.columns, column++)
+		{
+			if (this->addedChars.find( stringToUpper(cvtPosNr(line)) + cvtPosNr(column) ) != this->addedChars.end())
+				outp << this->addedChars.at(stringToUpper(cvtPosNr(line)) + cvtPosNr(column));
+			else
+				outp << '.';
+			
+			if (column == columns - 2)
+				outp << '\n';
+			else
+				outp << ' ';
+		}
+
+	outp << '\n';
+
+	for (map<string, string>::iterator i = this->words.begin(); i != this->words.end(); i++)
+		outp << i->first << ' ' << i->second << '\n';
+
+	return 0;
+}
+
+/**
+* Shows the board on screen.
+*/
+void Board::show();
+{
+  //prints column header
+  cout << "  "
+  if ((size.lines / 27) > 0)
+    cout << ' ';
+  setcolor(RED);
+  for (unsigned int column = 0; column < size.columns; column++)
+    cout << cvtPosNr(column) << ' ';
+  cout << endl;
+
+  //prints each row
+  for (unsigned int line = 0; line < size.lines; line++)
+  {
+    setcolor(RED, BLACK_B);
+    cout << stringToUpper(cvtPosNr(line));
+    if ( ((size.lines / 27) > 0) && (line < 26))
+      cout << "  ";
+    else
+      cout << ' ';
+
+    setcolor(BLACK, WHITE_B);
+    cout << ' ';
+
+    for (unsigned int column = 0, column < size.columns, column++)
+		{
+      if ( ((size.columns / 27) > 0) && (column >= 26))
+        cout << ' ';
+
+			if (addedChars.find( stringToUpper(cvtPosNr(line)) + cvtPosNr(column) ) != addedChars.end())
+      {
+        if (addedChars.at(stringToUpper(cvtPosNr(line)) + cvtPosNr(column)) == '#')
+          setcolor(WHITE, BLACK_B);
+
+				cout << addedChars.at(stringToUpper(cvtPosNr(line)) + cvtPosNr(column));
+
+        if (addedChars.at(stringToUpper(cvtPosNr(line)) + cvtPosNr(column)) == '#')
+          setcolor(BLACK, WHITE_B);
+      }
+      else
+				cout << '.';
+		}
+
+    setcolor(DEFAULT_TEXT, DEFAULT_BG);
+
+    cout << endl;
+
+  }
+}
+
 //PRIVATE MEMBER FUNCTIONS
 
 /**
@@ -119,46 +216,4 @@ void Board::blackout()
 			if (this->addedChars.find( stringToUpper(cvtPosNr(line)) + cvtPosNr(column) ) == this->addedChars.end())
 				this->addedChars.emplace(stringToUpper(cvtPosNr(line)) + cvtPosNr(column), '#');
 }
-				
-	
-/**
- * Saves the board to a file, returning 0 if sucessful and -1 if not.
- *
- * @param	filename	Name of the file to store the board in
- * @param	finished	Determines whether to save board as finished
- * @returns				Exit code
- */
-int Board::save(string filename, bool finished)
-{
-	if (finished)
-		this->blackout();
-	
-	ofstream outp;
-	outp.open(filename);
 
-	if (!outp.is_open())
-		return -1;
-
-	outp << this->dictionary->dictName() << '\n';
-	
-	outp << '\n';
-
-	for (unsigned int line = 0, line < (this->size.lines), line++)
-		for (unsigned int column = 0, column < (this->size.columns), column++)
-		{
-			if (this->addedChars.find( stringToUpper(cvtPosNr(line)) + cvtPosNr(column) ) != this->addedChars.end())
-				outp << this->addedChars.at(stringToUpper(cvtPosNr(line)) + cvtPosNr(column));
-			else
-				outp << '.';
-			
-			if (column == columns - 2)
-				outp << '\n';
-			else
-				outp << ' ';
-		}
-
-	outp << '\n';
-
-	for (map<string, string>::iterator i = this->words.begin(); i != this->words.end(); i++)
-		outp << i->first << ' ' << i->second << '\n';
-}
