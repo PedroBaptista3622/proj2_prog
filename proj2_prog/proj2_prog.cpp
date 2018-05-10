@@ -11,9 +11,5 @@ int main()
 {
     std::cout << "Hello, world!\n";
 
-
-	Dictionary teste;
-	teste.printDictionary();
-
     return 0;
 }
