@@ -14,7 +14,7 @@ class Dictionary
 {
 public:
 
-	Dictionary(string filename);
+	Dictionary(string filename, bool &control);
 	
 	void printDictionary();//Prints dictionary: [key]: [element1 of vector], [element2 of vector], [element3 of vector]
 	string dictName();//Returns dictionary source file name

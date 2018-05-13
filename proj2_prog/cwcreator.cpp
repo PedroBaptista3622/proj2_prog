@@ -7,9 +7,6 @@
 
 using namespace std;
 
-
-//MISSING CTRL + Z STUFF *-*
-
 void printLogo()
 {
 	cout << "-----------------------------------" << endl;
@@ -35,96 +32,149 @@ void printInputHelp()
 
 void createPuzzle()
 {
-	unsigned int lines, columns; // xLenght = horizontal length of board, yLength = vertical length of board
+	unsigned int lines, columns; // Lines/Columns = number of lines/columns
 	string filename;
+	bool error = false; //Variable used to check if any errors opening the dictionary happened
 
 	cout << "Insert size of board (lines and then columns)" << endl;
 	cin >> lines >> columns;
 	cout << "Insert dictionary file name" << endl;
 	cin >> filename;
 
-	Dictionary synonyms(filename);
-	Board board(lines, columns, &synonyms); //Creates empty board with the given dimentions and a dictionary associated
+	Dictionary synonyms(filename, error);
 
-	while (true)
+	if (!error)
 	{
-		string input; // Contains commands entered by user
-		string word; // Contains the word entered by the user
+		Board board(lines, columns, &synonyms); //Creates empty board with the given dimentions and a dictionary associated
 
-		board.show();
-
-		cout << "Enter Position (LcD / 0 = exit)";
-		cin >> input;
-
-		if (input == "0")
-			break;
-
-		cout << "Enter Word (- = remove / ? = help / 0 = exit)";
-		cout << "You can also get some words to help by entering \"Word?\"" << endl;
-		cin >> word;
-
-		if (input == "0")
+		while (true)
 		{
-			break;
-		}
-		else if (input == "?")
-		{
-			printInputHelp();
-		}
-		else if (word == "-")
-		{
-			input.clear();
-			cout << "Enter Position (LcD / 0 = exit)";
+			string input; // Contains action entered by user
+			string word; // Contains the word entered by the user
+			bool validInput = false; // Used to make the program "robust to invalid inputs"
+
+			board.show();
+
+			cout << "Enter Position (LcD / CTRL + Z = Save and Exit / 0 = Exit)";
 			cin >> input;
-			// DELETE WORD FUNCTION MISSING
-		}
-		else if (word == "Word?" || word == "word?")
-		{
-			cout << "Possible words: " << endl;
 
-			vector <string> possibleWords = synonyms.getPossibleWords(/*MISSING SEARCH PARAMETER*/);
-
-			for (int i = 0; i < possibleWords.size(); i++)
+			if (cin.eof())
 			{
-				if (i == possibleWords.size() - 1)
+				char answer;
+				bool validAnswer = false;
+
+				cout << "Do you want to save the board to resume it later? (Y/N)" << endl;
+
+				do {
+
+					cin >> answer;
+
+					if (answer == 'Y')
+					{
+						board.save();//MISSING STUFF
+						validAnswer = true;
+					}
+					else if (answer == 'N')
+					{
+						validAnswer = true;
+					}
+					else
+					{
+						cout << "Invalid answer, try again" << endl;
+					}
+
+				} while (!validAnswer);
+
+				if (answer == 'Y' || answer == 'N')
+					break;
+			}
+			else if (input == "0")
+			{
+				break;
+			}
+
+			cout << "Enter Word (- = remove / ? = help / 0 = exit)";
+			cout << "You can also get some words to help by entering \"Word?\"" << endl;
+			
+			do {
+
+				cin >> word;
+
+				if (input == "0")
 				{
-					cout << possibleWords.at(i) << endl;
+					validInput = true;
+					break;
+				}
+				else if (input == "?")
+				{
+					validInput = true;
+					printInputHelp();
+				}
+				else if (word == "-")
+				{
+					validInput = true;
+					input.clear();
+					cout << "Enter Position (LcD / 0 = exit)";
+					cin >> input;
+					// DELETE WORD FUNCTION MISSING
+				}
+				else if (word == "Word?" || word == "word?")
+				{
+					validInput = true;
+					cout << "Possible words: " << endl;
+
+					vector <string> possibleWords = synonyms.getPossibleWords(/*MISSING SEARCH PARAMETER*/);
+
+					for (int i = 0; i < possibleWords.size(); i++)
+					{
+						if (i == possibleWords.size() - 1)
+						{
+							cout << possibleWords.at(i) << endl;
+						}
+						else
+						{
+							cout << possibleWords.at(i) << ", ";
+						}
+					}
 				}
 				else
 				{
-					cout << possibleWords.at(i) << ", ";
+
+					switch (board.insWord(input, word))
+					{
+					case 0:
+						validInput = true;
+						board.show();
+						break;
+
+					case -1:
+						cerr << "Word doesn't exist, try again" << endl;
+						break;
+
+					case -2:
+						cerr << "Ilegal Overlap, try again" << endl;
+						break;
+
+					case -3:
+						cerr << "Lack of Space, try a smaller word" << endl;
+						break;
+
+					case -4:
+						cerr << "Repeated Words, try another one" << endl;
+						break;
+					}
+
 				}
-			}
+
+			} while (!validInput);
 		}
-		else
-		{
-
-			switch (board.insWord(input, word))
-			{
-			case 0:
-				board.show();
-				break;
-
-			case -1:
-				cerr << "Word doesn't exist" << endl;
-				break;
-
-			case -2:
-				cerr << "Ilegal Overlap" << endl;
-				break;
-
-			case -3:
-				cerr << "Lack of Space" << endl;
-				break;
-
-			case -4:
-				cerr << "Repeated Words" << endl;
-				break;
-			}
-
-		}
-
 	}
+
+}
+
+void resumePuzzle()
+{
+	//MISSING RESUME BOARD STUFF
 }
 
 int main()
@@ -148,6 +198,7 @@ int main()
 		else if (action == 2)
 		{
 			validAction = true;
+			resumePuzzle();
 			//MISSING STUFF
 		}
 		else if (action == 0)
@@ -156,7 +207,7 @@ int main()
 		}
 		else
 		{
-			cout << "Invalid Input" << endl;
+			cout << "Invalid Input, try again" << endl;
 		}
 
 	} while (!validAction);

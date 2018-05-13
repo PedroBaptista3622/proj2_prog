@@ -69,55 +69,61 @@ void Dictionary::removeSpaces(string &word)
 		}
 }
 
-Dictionary::Dictionary(string filename)
+Dictionary::Dictionary(string filename, bool &control)
 {	
 	this->name = filename;
 	ifstream dict;
 	dict.open(filename);
 	string currentLine;
 	
-	while (getline(dict, currentLine))
+	if (dict.is_open)
 	{
-		string keyWord;
-		string currentWord; //1st synonym in the line
-		vector <string> synonyms;//Contains every synonym of each keyword
-		bool end = false;
-		int c = currentLine.find(':'); //c Contains the index of ':'
-
-		keyWord = stringToUpper(currentLine.substr(0, c));
-		currentLine = currentLine.substr(c + 2);
-
-		do
+		while (getline(dict, currentLine))
 		{
-			c = currentLine.find(',');
+			string keyWord;
+			string currentWord; //1st synonym in the line
+			vector <string> synonyms;//Contains every synonym of each keyword
+			bool end = false;
+			int c = currentLine.find(':'); //c Contains the index of ':'
 
-			if (c == string::npos)
+			keyWord = stringToUpper(currentLine.substr(0, c));
+			currentLine = currentLine.substr(c + 2);
+
+			do
 			{
-				c = currentLine.find((char)13);
-				end = true;
-				//c Contains de index if ',' if it exists, otherwise, contains de index of CR
-			}
+				c = currentLine.find(',');
 
-			currentWord = currentLine.substr(0, c);
-			removeSpaces(currentWord);//Removes the empty space at the start of the word
-			synonyms.push_back(stringToUpper(currentWord));//Adds word to the synonyms vector
+				if (c == string::npos)
+				{
+					c = currentLine.find((char)13);
+					end = true;
+					//c Contains de index if ',' if it exists, otherwise, contains de index of CR
+				}
 
-
-			if (!end) //If it's the last element this won't be executed
-			{
-				currentLine = currentLine.substr(c + 1);
-			}
+				currentWord = currentLine.substr(0, c);
+				removeSpaces(currentWord);//Removes the empty space at the start of the word
+				synonyms.push_back(stringToUpper(currentWord));//Adds word to the synonyms vector
 
 
+				if (!end) //If it's the last element this won't be executed
+				{
+					currentLine = currentLine.substr(c + 1);
+				}
 
-		} while (!end);
 
-		this->dictionary[keyWord] = synonyms; //Adds to the dictionary map the first and second elements
 
+			} while (!end);
+
+			this->dictionary[keyWord] = synonyms; //Adds to the dictionary map the first and second elements
+
+		}
+		dict.close(); //Closes file
 	}
-
-	dict.close(); //Closes file
-
+	else
+	{
+		cerr << "Error opening file" << endl;
+		control = true;
+	}
 }
 
 void Dictionary::printDictionary()
