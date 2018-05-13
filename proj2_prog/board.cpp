@@ -317,3 +317,71 @@ void Board::blackout()
 				this->addedChars.emplace(stringToUpper(cvtPosNr(line)) + cvtPosNr(column), '#');
 }
 
+/**
+ * Re-does the addedChars map from the existing added words
+ */
+void Board::refill()
+{
+	map<string, char> newMap;
+
+	for (map<string, char>::iterator it = addedChars.begin(); it != addedChars.end(); it++)
+	{
+		if (it.second() == '#')
+			newMap.emplace(it.first(), '#');
+	}
+
+	for (map<string, string>::iterator par = addedChars.begin(); par != words.end(); par++)
+	{
+		string pos = par.first();
+		string word = par.first();
+
+		//separates the elements of the position string
+		string lineStr, colStr;
+		char direction;
+
+		while ((pos.length() > 0) ? isupper(pos.at(0)) : false)
+		{
+			lineStr.push_back(pos.at(0));
+			pos.erase(0, 1);
+		}
+
+		while ((pos.length() > 0) ? islower(pos.at(0)) : false)
+		{
+			colStr.push_back(pos.at(0));
+			pos.erase(0, 1);
+		}
+
+		if (pos.length() > 0)
+			if (isupper(pos.at(0)))
+			direction = pos.at(0);
+
+		unsigned int firstLine, firstColumn;
+		firstLine = cvtPosStr(lineStr);
+		firstColumn = cvtPosStr(colStr);
+
+		map<string, char> wordChars; //provisional store of the characters
+		for (unsigned int offset = 0; offset < word.length(); offset++)
+		{
+			if (direction == 'V')
+				wordChars.emplace( stringToUpper(cvtPosNr(firstLine + offset)) + cvtPosNr(firstColumn), stringToUpper(word).at(offset));
+			else
+				wordChars.emplace( stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn + offset), stringToUpper(word).at(offset));
+		}
+
+		for (map<string, char>::iterator it = wordChars.begin(); it != wordChars.end(); it++)
+		{
+			if (addedChars.find(it.first()) != addedChars.end())
+			{
+				wordChars.erase(it);	
+			}
+		}
+
+		for (map<string, char>::iterator it = charMap.begin(); it != charMap.end; it++)
+			newMap.emplace( it.first(), it.second() );
+	}
+
+	addedChars = newMap;
+
+}
+		
+		

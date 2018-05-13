@@ -151,6 +151,11 @@ class Board
 		 */
 		void blackout(); //DONE
 
+		/**
+		 * Re-does the addedChars map from the existing added words
+		 */
+		void refill(); //DONE
+
 		
 };
 
