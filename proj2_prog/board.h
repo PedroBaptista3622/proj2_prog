@@ -81,19 +81,19 @@ class Board
 		 * <p>
 		 *  0: success;
 		 * <p>
-		 * -1: inexistent word; DEPRECATED
+		 * -1: invalid position string;
 		 * <p>
-		 * -1: ilegal overlap (different characters, black spaces);
+		 * -2: ilegal overlap (different characters, black spaces);
 		 * <p>
-		 * -2: lack of space;
+		 * -3: lack of space;
 		 * <p>
-		 * -3: repeated words.
+		 * -4: repeated words.
 		 *
 		 * @param	position	The position string to insert the word in
 		 * @param	word		The word to insert
 		 * @return				The exit code of the procedure
 		 */
-		int insWord(string pos, string word);
+		int insWord(string pos, string word); //DONE
 
 		/**
 		 * Saves the board to a file, returning 0 if sucessful and -1 if not.
@@ -107,7 +107,7 @@ class Board
 		/**
 		 * Shows the board on screen.
 		 */
-		void show();
+		void show(); //DONE
 
 	private:
 		//keeps size
@@ -117,10 +117,10 @@ class Board
 		} number;
 
 		//keeps a list of words and its position
-		map<string,string/*TODO, first*/> words;
+		map<string,string> words;
 
 		//keeps a list of the position of the characters already added
-		map<string, char/*TODO, prevPos*/> addedChars;
+		map<string, char> addedChars;
 
 /*
 		//pointer to the dictionary

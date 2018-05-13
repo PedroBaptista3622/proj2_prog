@@ -104,7 +104,7 @@ int Board::save(string filename, bool finished)
 /**
 * Shows the board on screen.
 */
-void Board::show();
+void Board::show()
 {
   //prints column header
   cout << "  "
@@ -153,6 +153,106 @@ void Board::show();
 
   }
 }
+
+/**
+ * Tries to insert a word from the dictionary into the board, checking
+ * for any ilegal overlap, inexistent words, repeated words, and lack of
+ * space. Then updates the black space list.
+ * <p>
+ * Returns the following exit codes:
+ * <p>
+ *  0: success;
+ * <p>
+ * -1: invalid position string;
+ * <p>
+ * -2: ilegal overlap (different characters, black spaces);
+ * <p>
+ * -3: lack of space;
+ * <p>
+ * -4: repeated words.
+ *
+ * @param	position	The position string to insert the word in
+ * @param	word		The word to insert
+ * @return				The exit code of the procedure
+ */
+int insWord(string pos, string word)
+{
+	if (words.find(stringToUpper(word)) =! words.end())
+		return -4;
+	
+	//separates the elements of the position string
+	string lineStr, colStr;
+	char direction;
+
+	while ((pos.length() > 0) ? isupper(pos.at(0)) : false)
+	{
+		lineStr.push_back(pos.at(0));
+		pos.erase(0, 1);
+	}
+
+	while ((pos.length() > 0) ? islower(pos.at(0)) : false)
+	{
+		colStr.push_back(pos.at(0));
+		pos.erase(0, 1);
+	}
+
+	if (pos.length() > 0)
+		if (isupper(pos.at(0)))
+			direction = pos.at(0);
+
+	//checks whether a valid position was input 
+	if (pos.length() > 0)
+		return -1;
+	if (lineStr.length() > 2 || lineStr.length() < 1)
+		return -1;
+	if (colStr.length() > 2 || colStr.length() < 1)
+		return -1;
+	if (direction != 'V' && direction != 'H')
+		return -1;
+
+	unsigned int firstLine, firstColumn;
+	firstLine = cvtPosStr(lineStr);
+	firstColumn = cvtPosStr(colStr);
+
+	//checks whether the board is big enough to place the word
+	if (firstLine >= size.lines && firstColumn >= size.columns)
+		return -1;
+
+	if (direction == 'V')
+		if (firstLine + word.length() > size.lines)
+			return -3;
+	else
+		if (firstColumn + word.length() > size.columns)
+			return -3;
+
+	map<string, char> charMap; //provisional store of the characters
+	for (unsigned int offset = 0; offset < word.length(); offset++)
+	{
+		if (direction == 'V')
+			charMap.emplace( stringToUpper(cvtPosNr(firstLine + offset)) + cvtPosNr(firstColumn), stringToUpper(word).at(offset));
+		else
+			charMap.emplace( stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn + offset), stringToUpper(word).at(offset));
+	}
+
+	for (map<string, char>::iterator it = charMap.begin(); it != charMap.end(); it++)
+	{
+		if (addedChars.find(it.first()) != addedChars.end())
+		{
+			if (addedChars.at(it.first()) != it.second())
+				return -2;
+			else
+				charMap.erase(it);	
+		}
+	}
+
+	for (map<string, char>::iterator it = charMap.begin(); it != charMap.end; it++)
+		addedChars.emplace( it.first(), it.second() );
+
+	words.emplace(pos, stringToUpper(word));
+
+	return 0;
+}
+		
 
 //PRIVATE MEMBER FUNCTIONS
 
