@@ -62,14 +62,20 @@ class Board
 		 */
 		Board(string filename);
 
-		//Methods
+		//DESTRUCTOR
+
+		/**
+		 * Destructs Board object
+		 */
+		Board~();
+
+		//PUBLIC MEMBER FUNCTION
 
 		/**
 		 * Associates a Dictionary object by its pointer to the Board object.
 		 *
 		 * @param	dictionary	Pointer to the Dictionary object
 		 */
-		
 		void linkDic(Dictionary* dictionary); //DONE
 
 		/**
@@ -81,13 +87,15 @@ class Board
 		 * <p>
 		 *  0: success;
 		 * <p>
-		 * -1: invalid position string;
+		 * -1: inexistent word;
 		 * <p>
 		 * -2: ilegal overlap (different characters, black spaces);
 		 * <p>
 		 * -3: lack of space;
 		 * <p>
-		 * -4: repeated words.
+		 * -4: repeated words;
+		 * <p>
+		 * -5: invalid position.
 		 *
 		 * @param	position	The position string to insert the word in
 		 * @param	word		The word to insert
@@ -122,12 +130,9 @@ class Board
 		//keeps a list of the position of the characters already added
 		map<string, char> addedChars;
 
-/*
-		//pointer to the dictionary
 		Dictionary* dictionary;
 
 		bool internalDictionary;
-*/
 
 		/**
 		 * Returns a string "a" to "zz" correspoding to a number up to 26^2 - 1.

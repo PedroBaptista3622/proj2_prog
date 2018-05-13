@@ -45,6 +45,17 @@ Board::Board(unsigned int lines, unsigned int columns, Dictionary* dictionary)
 	this->dictionary = dictionary;
 }
 
+//DESTRUCTOR
+
+/**
+ * Destructs Board object
+ */
+Board::Board~()
+{
+	if (internalDictionary)
+		delete dictionary;
+}
+
 //PUBLIC MEMBER FUNCTIONS
 
 /**
@@ -67,7 +78,7 @@ void Board::linkDic(Dictionary* dictionary)
 int Board::save(string filename, bool finished)
 {
 	if (finished)
-		this->blackout();
+		blackout();
 	
 	ofstream outp;
 	outp.open(filename);
@@ -75,15 +86,15 @@ int Board::save(string filename, bool finished)
 	if (!outp.is_open())
 		return -1;
 
-	outp << this->dictionary->dictName() << '\n';
+	outp << dictionary->dictName() << '\n';
 	
 	outp << '\n';
 
 	for (unsigned int line = 0, line < size.lines, line++)
 		for (unsigned int column = 0, column < size.columns, column++)
 		{
-			if (this->addedChars.find( stringToUpper(cvtPosNr(line)) + cvtPosNr(column) ) != this->addedChars.end())
-				outp << this->addedChars.at(stringToUpper(cvtPosNr(line)) + cvtPosNr(column));
+			if (addedChars.find( stringToUpper(cvtPosNr(line)) + cvtPosNr(column) ) != addedChars.end())
+				outp << addedChars.at(stringToUpper(cvtPosNr(line)) + cvtPosNr(column));
 			else
 				outp << '.';
 			
@@ -95,7 +106,7 @@ int Board::save(string filename, bool finished)
 
 	outp << '\n';
 
-	for (map<string, string>::iterator i = this->words.begin(); i != this->words.end(); i++)
+	for (map<string, string>::iterator i = words.begin(); i != words.end(); i++)
 		outp << i->first << ' ' << i->second << '\n';
 
 	return 0;
@@ -163,13 +174,15 @@ void Board::show()
  * <p>
  *  0: success;
  * <p>
- * -1: invalid position string;
+ * -1: inexistent word;
  * <p>
  * -2: ilegal overlap (different characters, black spaces);
  * <p>
  * -3: lack of space;
  * <p>
- * -4: repeated words.
+ * -4: repeated words;
+ * <p>
+ * -5: invalid position.
  *
  * @param	position	The position string to insert the word in
  * @param	word		The word to insert
@@ -177,6 +190,9 @@ void Board::show()
  */
 int insWord(string pos, string word)
 {
+	if (!(dictionary->checkWordDictionary (word)))
+		return -1
+
 	if (words.find(stringToUpper(word)) =! words.end())
 		return -4;
 	
@@ -202,13 +218,13 @@ int insWord(string pos, string word)
 
 	//checks whether a valid position was input 
 	if (pos.length() > 0)
-		return -1;
+		return -5;
 	if (lineStr.length() > 2 || lineStr.length() < 1)
-		return -1;
+		return -5;
 	if (colStr.length() > 2 || colStr.length() < 1)
-		return -1;
+		return -5;
 	if (direction != 'V' && direction != 'H')
-		return -1;
+		return -5;
 
 	unsigned int firstLine, firstColumn;
 	firstLine = cvtPosStr(lineStr);
@@ -216,7 +232,7 @@ int insWord(string pos, string word)
 
 	//checks whether the board is big enough to place the word
 	if (firstLine >= size.lines && firstColumn >= size.columns)
-		return -1;
+		return -5;
 
 	if (direction == 'V')
 		if (firstLine + word.length() > size.lines)
@@ -226,6 +242,20 @@ int insWord(string pos, string word)
 			return -3;
 
 	map<string, char> charMap; //provisional store of the characters
+
+	//adds a black space before, if needed
+	if (direction == 'V')
+	{
+		if (firstLine > 0)
+			charMap.emplace( stringToUpper( cvtPosNr(firstLine - 1)) + cvtPosNr(firstColumn), '#');
+	}
+	else
+	{
+		if (firstColumn > 0)
+			charMap.emplace( stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn - 1), '#');
+	}
+
+	//adds each character in the word
 	for (unsigned int offset = 0; offset < word.length(); offset++)
 	{
 		if (direction == 'V')
@@ -234,6 +264,19 @@ int insWord(string pos, string word)
 			charMap.emplace( stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn + offset), stringToUpper(word).at(offset));
 	}
 
+	//adds black space at the end of word, if needed
+	if (direction == 'V')
+	{
+		if (firstLine + word.length < size.lines)
+			charMap.emplace( stringToUpper( cvtPosNr(firstLine - word.length())) + cvtPosNr(firstColumn), '#');
+	}
+	else
+	{
+		if (firstColumn + word.length < size.column)
+			charMap.emplace( stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn + word.length()), '#');
+	}
+
+	//checks for illegal overlaps and redundant characters
 	for (map<string, char>::iterator it = charMap.begin(); it != charMap.end(); it++)
 	{
 		if (addedChars.find(it.first()) != addedChars.end())
