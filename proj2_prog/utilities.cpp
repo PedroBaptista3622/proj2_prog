@@ -85,7 +85,7 @@ bool first(const string& lhs, const string& rhs)
  * @param	str		String of alphabetic characters
  * @return			Capitalised version of string
  */
-string stringToUpper(const string& str)
+string stringToUpper(string str)
 {
 	string outp;
 	for (unsigned int i = 0; i < str.length(); i++)

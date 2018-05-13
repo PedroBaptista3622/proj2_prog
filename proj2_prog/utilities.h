@@ -40,7 +40,7 @@ bool prevPos(const string& pos1, const string& pos2);
  * @param	str		String of alphabetic characters
  * @return			Capitalised version of string
  */
-string stringToUpper(const string& str);
+string stringToUpper(string str);
 
 //#endif
 //End of file
