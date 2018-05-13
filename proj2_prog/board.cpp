@@ -26,9 +26,10 @@ using namespace std;
  */
 Board::Board(unsigned int lines, unsigned int columns)
 {
-	this->number.lines = lines;
-	this->number.columns = columns;
+	this->size.lines = lines;
+	this->size.columns = columns;
 	dictionary = NULL;
+	internalDictionary = false;
 }
 
 /**
@@ -40,10 +41,98 @@ Board::Board(unsigned int lines, unsigned int columns)
  */
 Board::Board(unsigned int lines, unsigned int columns, Dictionary* dictionary)
 {
-	this->number.lines = lines;
-	this->number.columns = columns;
+	this->size.lines = lines;
+	this->size.columns = columns;
 	this->dictionary = dictionary;
+	internalDictionary = false;
 }
+
+/**
+ * Constructs a Board object by loading an unfinished board from a file.
+ * The dictionary pointer is initialised as NULL.
+ * <p>
+ * Requires a Dictionary to be later associated.
+ *
+ * @param	filename	Name of the file to import
+ */
+Board::Board(string filename, bool& control)
+{
+	ifstream file;
+	file.open(filename);
+	string inputBuffer;
+
+	getline(file, inputBuffer);
+	dictionary = new Dictionary(inputBuffer, control);
+	internalDictionary = true;
+
+	getline(file, inputBuffer);
+
+	unsigned int currentLine = 0;
+	unsigned int currentColumn = 0;
+
+	getline(file, inputBuffer);
+	
+	do
+	{
+		while (inputBuffer.length() > 0)
+		{
+			if (isspace(inputBuffer.at(0)))
+				inputBuffer.erase(0, 1);
+			else if (inputBuffer.at(0) == '.')
+			{
+				inputBuffer.erase(0, 1);
+				currentColumn++;
+			}
+			else
+			{
+				addedChars.emplace(stringToUpper(cvtPosNr(currentLine)) + cvtPosNr(currentColumn), inputBuffer.at(0));
+				inputBuffer.erase(0, 1);
+				currentColumn++;
+			}
+		}
+			
+		currentLine++;
+		getline(file, inputBuffer);
+	}
+	while (inputBuffer.length() > 0);
+
+	size.lines = currentLine;
+	size.lines = currentColumn;
+
+
+	while (getLine(file, inputBuffer))
+	{
+		if (inputBuffer.length() > 0)
+		{
+			string word, position;
+			bool hitSpace = false;
+			
+			while(inputBuffer.length() > 0)
+			{
+				if (!hitSpace)
+				{
+					if (inputBuffer.at(0) == ' ')
+					{
+						inputBuffer.erase(0, 1);
+						hitSpace = true;
+					}
+					else
+					{
+						position.push_back(inputBuffer.at(0));
+						inputBuffer.erase(0, 1);
+					}
+				}
+				else
+				{
+					word.push_back(inputBuffer.at(0));
+					inputBuffer.erase(0, 1);
+				}
+			}
+
+			words.emplace(position, word);
+		}
+	}
+}			
 
 //DESTRUCTOR
 
@@ -63,8 +152,10 @@ Board::Board~()
  *
  * @param	dictionary	Pointer to the Dictionary object
  */
-void Board::linkDic(Dictionary* dictionary)
+void Board::linkDic(Dictionary* dictionary, bool replace = false)
 {
+	if (replace)
+		delete this->dictionary;
 	this->dictionary = dictionary;
 }
 

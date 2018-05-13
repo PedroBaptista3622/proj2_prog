@@ -60,7 +60,7 @@ class Board
 		 *
 		 * @param	filename	Name of the file to import
 		 */
-		Board(string filename);
+		Board(string filename, bool& control); //DONE
 
 		//DESTRUCTOR
 
@@ -76,7 +76,7 @@ class Board
 		 *
 		 * @param	dictionary	Pointer to the Dictionary object
 		 */
-		void linkDic(Dictionary* dictionary); //DONE
+		void linkDic(Dictionary* dictionary, bool replace = false); //DONE
 
 		/**
 		 * Tries to insert a word from the dictionary into the board, checking
