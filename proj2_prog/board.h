@@ -125,6 +125,16 @@ class Board
 		 */
 		void show(); //DONE
 
+		/**
+		 * Constructs a wilcard for the specified position taking into account
+		 * possible overlaps. Can also return "0" if no wildcard can be constructed
+		 * or "-1" if the position is invalid.
+		 *
+		 * @param	position	the position string where it should start generating
+		 * @returns					wildcard string, or exit code string
+		 */
+		 string generateWildcard(string position, unsigned int size);
+
 	private:
 		//keeps size
 		struct size {

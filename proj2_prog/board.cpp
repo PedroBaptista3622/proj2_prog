@@ -289,6 +289,119 @@ void Board::show()
 }
 
 /**
+ * Constructs a wilcard for the specified position taking into account
+ * possible overlaps. Can also return "0" if no wildcard can be constructed,
+ * "-1" if the position is invalid, "-2" if length is too big.
+ *
+ * @param	position	the position string where it should start generating
+ * @returns					wildcard string, or exit code string
+ */
+string Board::generateWildcard(string position, unsigned int size)
+{
+	//separates the elements of the position string
+	string lineStr, colStr;
+	char direction;
+
+	while ((position.length() > 0) ? isupper(position.at(0)) : false)
+	{
+		lineStr.push_back(position.at(0));
+		position.erase(0, 1);
+	}
+
+	while ((position.length() > 0) ? islower(position.at(0)) : false)
+	{
+		colStr.push_back(position.at(0));
+		position.erase(0, 1);
+	}
+
+	if (position.length() > 0)
+		if (isupper(position.at(0)))
+			direction = position.at(0);
+
+	//checks whether a valid position was input
+	if (position.length() > 0)
+		return "-1";
+	if (lineStr.length() > 2 || lineStr.length() < 1)
+		return "-1";
+	if (colStr.length() > 2 || colStr.length() < 1)
+		return "-1";
+	if (direction != 'V' && direction != 'H')
+		return "-1";
+
+	unsigned int firstLine, firstColumn;
+	firstLine = cvtPosStr(lineStr);
+	firstColumn = cvtPosStr(colStr);
+
+	//checks whether the position is inside the board
+	if (firstLine >= number.lines && firstColumn >= number.columns)
+		return "-1";
+
+	if (direction == 'V')
+	{
+		if (firstLine + size < number.lines)
+			return "-2";
+	}
+	else
+	{
+		if (firstColumn + size < number.columns)
+			return "-2";
+	}
+
+	for (unsigned int offset = 0; offset < size; offset++)
+	{
+		if (direction == 'V')
+		{
+			if (addedChars.find(stringToUpper(cvtPosNr(firstLine + offset)) + cvtPosNr(firstColumn)) != addedChars.end())
+				if (addedChars.at(stringToUpper(cvtPosNr(firstLine + offset)) + cvtPosNr(firstColumn)) == '#')
+					return "-1";
+		}
+		else
+		{
+			if (addedChars.find(stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn + offset)) != addedChars.end())
+				if (addedChars.at(stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn + offset)) == '#')
+					return "-1";
+		}
+	}
+
+	if (direction == 'V')
+	{
+		if (addedChars.find(stringToUpper(cvtPosNr(firstLine + size)) + cvtPosNr(firstColumn)) != addedChars.end())
+			if (addedChars.at(stringToUpper(cvtPosNr(firstLine + size)) + cvtPosNr(firstColumn)) != '#')
+				return "0";
+	}
+	else
+	{
+		if (addedChars.find(stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn + size)) != addedChars.end())
+			if (addedChars.at(stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn + size)) != '#')
+				return "0";
+	}
+
+	string output;
+
+	for (unsigned int offset = 0; offset < size; offset++)
+	{
+		if (direction == 'V')
+		{
+			if (addedChars.find(stringToUpper(cvtPosNr(firstLine + offset)) + cvtPosNr(firstColumn)) != addedChars.end())
+				output.push_back(addedChars.at(stringToUpper(cvtPosNr(firstLine + offset)) + cvtPosNr(firstColumn)));
+			else
+				output.push_back('?');
+		}
+		else
+		{
+			if (addedChars.find(stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn + offset)) != addedChars.end())
+				output.push_back(addedChars.at(stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn + offset)));
+			else
+				output.push_back('?');
+		}
+	}
+
+	return output;
+}
+
+
+
+/**
  * Tries to insert a word from the dictionary into the board, checking
  * for any ilegal overlap, inexistent words, repeated words, and lack of
  * space. Then updates the black space list.
@@ -358,8 +471,10 @@ int Board::insWord(string pos, string word)
 		return -5;
 
 	if (direction == 'V')
+	{
 		if (firstLine + word.length() > number.lines)
 			return -3;
+	}
 	else
 	{
 		if (firstColumn + word.length() > number.columns)
