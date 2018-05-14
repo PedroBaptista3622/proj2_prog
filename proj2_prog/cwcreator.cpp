@@ -71,7 +71,36 @@ void createPuzzle()
 
 					if (answer == 'Y')
 					{
-						board.save();//MISSING STUFF
+						string fileName;
+						char answer2;
+						bool validAnswer2 = false;
+
+						cout << "Enter the name of the file to store the board in" << endl;
+						cin >> fileName;
+
+						cout << "Is the board finished? (Y/N)" << endl;
+
+						do {
+
+							cin >> answer2;
+
+							if (answer2 == 'y' || answer2 == 'Y')
+							{
+								validAnswer2 = true;
+								board.save(fileName, true);
+							}
+							else if (answer2 == 'n' || answer2 == 'N')
+							{
+								validAnswer2 = true;
+								board.save(fileName, false);
+							}
+							else
+							{
+								cerr << "Invalid answer, try again" << endl;
+							}
+
+						} while (!validAnswer2);
+						
 						validAnswer = true;
 					}
 					else if (answer == 'N')
@@ -113,10 +142,13 @@ void createPuzzle()
 				else if (word == "-")
 				{
 					validInput = true;
-					input.clear();
-					cout << "Enter Position (LcD / 0 = exit)";
-					cin >> input;
-					// DELETE WORD FUNCTION MISSING
+					string wordToRemove;
+					cout << "Enter the word you want to delete" << endl;
+					cin >> wordToRemove;
+
+					if (board.remWord(wordToRemove) == -1)
+						cerr << "Entered word does not exist" << endl;
+
 				}
 				else if (word == "Word?" || word == "word?")
 				{
@@ -161,6 +193,10 @@ void createPuzzle()
 
 					case -4:
 						cerr << "Repeated Words, try another one" << endl;
+						break;
+
+					case -5:
+						cerr << "Invalid Position" << endl;
 						break;
 					}
 
