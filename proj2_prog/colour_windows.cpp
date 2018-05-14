@@ -29,6 +29,20 @@ using namespace std;
 #define YELLOW 14
 #define WHITE 15
 
+// BACKGROUND COLOR CODES (for better Linux compatibility)
+#define BLACK_B			0
+#define RED_B			4
+#define GREEN_B			2
+#define YELLOW_B		14
+#define BLUE_B			1
+#define MAGENTA_B		5
+#define CYAN_B			3
+#define WHITE_B			15
+//
+
+#define DEFAULT_TEXT 15
+#define DEFAULT_BG 0
+
 //=================================================================================================
 
 void clrscr(void)

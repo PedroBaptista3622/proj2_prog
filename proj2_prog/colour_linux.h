@@ -41,6 +41,9 @@ using namespace std;
 #define WHITE_B			"\033[0;47m"
 //
 
+#define DEFAULT_TEXT	"\033[1;37m"
+#define DEFAULT_BG 		"\033[0;40m"
+
 // Functions
 //=================================================================================================
 // Position the cursor at column 'x', line 'y'

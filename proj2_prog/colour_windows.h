@@ -40,6 +40,9 @@ using namespace std;
 #define WHITE_B			15
 //
 
+#define DEFAULT_TEXT 15
+#define DEFAULT_BG 0
+
 //=================================================================================================
 
 // Functions

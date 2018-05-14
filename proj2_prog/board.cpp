@@ -1,8 +1,10 @@
-#include "stdafx.h"
+//#include "stdafx.h"
 #include "board.h"
 #include <cassert>
 #include <cctype>
 #include "utilities.h"
+#include "colour_linux.h"
+#include "Dictionary.h"
 
 using namespace std;
 
@@ -26,8 +28,8 @@ using namespace std;
  */
 Board::Board(unsigned int lines, unsigned int columns)
 {
-	this->size.lines = lines;
-	this->size.columns = columns;
+	this->number.lines = lines;
+	this->number.columns = columns;
 	dictionary = NULL;
 	internalDictionary = false;
 }
@@ -41,8 +43,8 @@ Board::Board(unsigned int lines, unsigned int columns)
  */
 Board::Board(unsigned int lines, unsigned int columns, Dictionary* dictionary)
 {
-	this->size.lines = lines;
-	this->size.columns = columns;
+	this->number.lines = lines;
+	this->number.columns = columns;
 	this->dictionary = dictionary;
 	internalDictionary = false;
 }
@@ -71,7 +73,7 @@ Board::Board(string filename, bool& control)
 	unsigned int currentColumn = 0;
 
 	getline(file, inputBuffer);
-	
+
 	do
 	{
 		while (inputBuffer.length() > 0)
@@ -90,23 +92,23 @@ Board::Board(string filename, bool& control)
 				currentColumn++;
 			}
 		}
-			
+
 		currentLine++;
 		getline(file, inputBuffer);
 	}
 	while (inputBuffer.length() > 0);
 
-	size.lines = currentLine;
-	size.lines = currentColumn;
+	number.lines = currentLine;
+	number.lines = currentColumn;
 
 
-	while (getLine(file, inputBuffer))
+	while (getline(file, inputBuffer))
 	{
 		if (inputBuffer.length() > 0)
 		{
 			string word, position;
 			bool hitSpace = false;
-			
+
 			while(inputBuffer.length() > 0)
 			{
 				if (!hitSpace)
@@ -132,14 +134,14 @@ Board::Board(string filename, bool& control)
 			words.emplace(position, word);
 		}
 	}
-}			
+}
 
 //DESTRUCTOR
 
 /**
  * Destructs Board object
  */
-Board::Board~()
+Board::~Board()
 {
 	if (internalDictionary)
 		delete dictionary;
@@ -152,7 +154,7 @@ Board::Board~()
  *
  * @param	dictionary	Pointer to the Dictionary object
  */
-void Board::linkDic(Dictionary* dictionary, bool replace = false)
+void Board::linkDic(Dictionary* dictionary, bool replace)
 {
 	if (replace)
 		delete this->dictionary;
@@ -161,16 +163,16 @@ void Board::linkDic(Dictionary* dictionary, bool replace = false)
 
 /**
  * Removes existing word from the board. Returns -1 if word does not exist, 0 if successful.
- * 
+ *
  * @param	word	The word to be removed
  * @return			The exit code of the procedure
  */
-int remWord(string word)
+int Board::remWord(string word)
 {
 	map<string,string>::iterator wordToRemove = words.end();
 	bool found = false;
 	for (map<string, string>::iterator it = words.begin(); it != words.end(); it++)
-		if (it.second() == word)
+		if (it->second == word)
 		{
 			found = true;
 			wordToRemove = it;
@@ -183,9 +185,11 @@ int remWord(string word)
 	words.erase(wordToRemove);
 
 	refill();
+
+	return 0;
 }
-	
-	
+
+
 
 /**
  * Saves the board to a file, returning 0 if sucessful and -1 if not.
@@ -198,7 +202,7 @@ int Board::save(string filename, bool finished)
 {
 	if (finished)
 		blackout();
-	
+
 	ofstream outp;
 	outp.open(filename);
 
@@ -206,18 +210,18 @@ int Board::save(string filename, bool finished)
 		return -1;
 
 	outp << dictionary->dictName() << '\n';
-	
+
 	outp << '\n';
 
-	for (unsigned int line = 0, line < size.lines, line++)
-		for (unsigned int column = 0, column < size.columns, column++)
+	for (unsigned int line = 0; line < number.lines; line++)
+		for (unsigned int column = 0; column < number.columns; column++)
 		{
 			if (addedChars.find( stringToUpper(cvtPosNr(line)) + cvtPosNr(column) ) != addedChars.end())
 				outp << addedChars.at(stringToUpper(cvtPosNr(line)) + cvtPosNr(column));
 			else
 				outp << '.';
-			
-			if (column == columns - 2)
+
+			if (column == number.columns - 2)
 				outp << '\n';
 			else
 				outp << ' ';
@@ -237,20 +241,20 @@ int Board::save(string filename, bool finished)
 void Board::show()
 {
   //prints column header
-  cout << "  "
-  if ((size.lines / 27) > 0)
+  cout << "  ";
+  if ((number.lines / 27) > 0)
     cout << ' ';
   setcolor(RED);
-  for (unsigned int column = 0; column < size.columns; column++)
+  for (unsigned int column = 0; column < number.columns; column++)
     cout << cvtPosNr(column) << ' ';
   cout << endl;
 
   //prints each row
-  for (unsigned int line = 0; line < size.lines; line++)
+  for (unsigned int line = 0; line < number.lines; line++)
   {
     setcolor(RED, BLACK_B);
     cout << stringToUpper(cvtPosNr(line));
-    if ( ((size.lines / 27) > 0) && (line < 26))
+    if ( ((number.lines / 27) > 0) && (line < 26))
       cout << "  ";
     else
       cout << ' ';
@@ -258,9 +262,9 @@ void Board::show()
     setcolor(BLACK, WHITE_B);
     cout << ' ';
 
-    for (unsigned int column = 0, column < size.columns, column++)
+    for (unsigned int column = 0; column < number.columns; column++)
 		{
-      if ( ((size.columns / 27) > 0) && (column >= 26))
+      if ( ((number.columns / 27) > 0) && (column >= 26))
         cout << ' ';
 
 			if (addedChars.find( stringToUpper(cvtPosNr(line)) + cvtPosNr(column) ) != addedChars.end())
@@ -307,14 +311,14 @@ void Board::show()
  * @param	word		The word to insert
  * @return				The exit code of the procedure
  */
-int insWord(string pos, string word)
+int Board::insWord(string pos, string word)
 {
 	if (!(dictionary->checkWordDictionary (word)))
-		return -1
+		return -1;
 
-	if (words.find(stringToUpper(word)) =! words.end())
+	if (words.find(stringToUpper(word)) != words.end())
 		return -4;
-	
+
 	//separates the elements of the position string
 	string lineStr, colStr;
 	char direction;
@@ -335,7 +339,7 @@ int insWord(string pos, string word)
 		if (isupper(pos.at(0)))
 			direction = pos.at(0);
 
-	//checks whether a valid position was input 
+	//checks whether a valid position was input
 	if (pos.length() > 0)
 		return -5;
 	if (lineStr.length() > 2 || lineStr.length() < 1)
@@ -350,15 +354,17 @@ int insWord(string pos, string word)
 	firstColumn = cvtPosStr(colStr);
 
 	//checks whether the board is big enough to place the word
-	if (firstLine >= size.lines && firstColumn >= size.columns)
+	if (firstLine >= number.lines && firstColumn >= number.columns)
 		return -5;
 
 	if (direction == 'V')
-		if (firstLine + word.length() > size.lines)
+		if (firstLine + word.length() > number.lines)
 			return -3;
 	else
-		if (firstColumn + word.length() > size.columns)
+	{
+		if (firstColumn + word.length() > number.columns)
 			return -3;
+	}
 
 	map<string, char> charMap; //provisional store of the characters
 
@@ -386,35 +392,35 @@ int insWord(string pos, string word)
 	//adds black space at the end of word, if needed
 	if (direction == 'V')
 	{
-		if (firstLine + word.length < size.lines)
+		if (firstLine + word.length() < number.lines)
 			charMap.emplace( stringToUpper( cvtPosNr(firstLine - word.length())) + cvtPosNr(firstColumn), '#');
 	}
 	else
 	{
-		if (firstColumn + word.length < size.column)
+		if (firstColumn + word.length() < number.columns)
 			charMap.emplace( stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn + word.length()), '#');
 	}
 
 	//checks for illegal overlaps and redundant characters
 	for (map<string, char>::iterator it = charMap.begin(); it != charMap.end(); it++)
 	{
-		if (addedChars.find(it.first()) != addedChars.end())
+		if (addedChars.find(it->first) != addedChars.end())
 		{
-			if (addedChars.at(it.first()) != it.second())
+			if (addedChars.at(it->first) != it->second)
 				return -2;
 			else
-				charMap.erase(it);	
+				charMap.erase(it);
 		}
 	}
 
-	for (map<string, char>::iterator it = charMap.begin(); it != charMap.end; it++)
-		addedChars.emplace( it.first(), it.second() );
+	for (map<string, char>::iterator it = charMap.begin(); it != charMap.end(); it++)
+		addedChars.emplace( it->first, it->second );
 
 	words.emplace(pos, stringToUpper(word));
 
 	return 0;
 }
-		
+
 
 //PRIVATE MEMBER FUNCTIONS
 
@@ -454,10 +460,10 @@ unsigned int Board::cvtPosStr(const string& str)
 {
 	assert(str.length() > 0);
 	assert(str.length() <= 2);
-	
+
 	for (int i = 0; i < str.length(); i++)
-		tolower(str[i]);
-	
+		str[i] = tolower(str.at(i));
+
 	if (str.length() == 1)
 		return int(str[0]) - int ('a');
 	else
@@ -473,8 +479,8 @@ unsigned int Board::cvtPosStr(const string& str)
  */
 void Board::blackout()
 {
-	for (unsigned int line = 0, line < (this->size.lines), line++)
-		for (unsigned int column = 0, column < (this->size.columns), column++);
+	for (unsigned int line = 0; line < (this->number.lines); line++)
+		for (unsigned int column = 0; column < (this->number.columns); column++)
 			if (this->addedChars.find( stringToUpper(cvtPosNr(line)) + cvtPosNr(column) ) == this->addedChars.end())
 				this->addedChars.emplace(stringToUpper(cvtPosNr(line)) + cvtPosNr(column), '#');
 }
@@ -489,16 +495,16 @@ void Board::refill()
 	/*
 	for (map<string, char>::iterator it = addedChars.begin(); it != addedChars.end(); it++)
 	{
-		if (it.second() == '#')
-			newMap.emplace(it.first(), '#');
+		if (it->second == '#')
+			newMap.emplace(it->first, '#');
 	}
 	*/
 
 	//iterates through all position-word pairs
 	for (map<string, string>::iterator par = addedChars.begin(); par != words.end(); par++)
 	{
-		string pos = par.first();
-		string word = par.second();
+		string pos = par->first;
+		string word = par->second;
 
 		//separates the elements of the position string
 		string lineStr, colStr;
@@ -539,34 +545,32 @@ void Board::refill()
 			if (firstLine > 0)
 				wordChars.emplace( stringToUpper(cvtPosNr(firstLine - 1)) + cvtPosNr(firstColumn), '#');
 
-			if (firstLine + word.length() < size.lines)
-				wordChars.emplace( stringToUpper(cvtPosNr(firstline + word.length())) + cvtPosNr(firstColumn), '#');
+			if (firstLine + word.length() < number.lines)
+				wordChars.emplace( stringToUpper(cvtPosNr(firstLine + word.length())) + cvtPosNr(firstColumn), '#');
 		}
 		else
 		{
 			if (firstColumn > 0)
 				wordChars.emplace( stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn - 1), '#');
 
-			if (firstColumn + word.length() < size.columns)
-				wordChars.emplace( stringToUpper(cvtPosNr(firstline)) + cvtPosNr(firstColumn + word.length()), '#');
+			if (firstColumn + word.length() < number.columns)
+				wordChars.emplace( stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn + word.length()), '#');
 		}
 
 		//deletes redundant characters
 		for (map<string, char>::iterator it = wordChars.begin(); it != wordChars.end(); it++)
 		{
-			if (addedChars.find(it.first()) != addedChars.end())
+			if (addedChars.find(it->first) != addedChars.end())
 			{
-				wordChars.erase(it);	
+				wordChars.erase(it);
 			}
 		}
 
 		//adds the characters from temporary storage to the new character map
-		for (map<string, char>::iterator it = charMap.begin(); it != charMap.end; it++)
-			newMap.emplace( it.first(), it.second() );
+		for (map<string, char>::iterator it = wordChars.begin(); it != wordChars.end(); it++)
+			newMap.emplace( it->first, it->second );
 	}
 
 	addedChars = newMap;
 
 }
-		
-		

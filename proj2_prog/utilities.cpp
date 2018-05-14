@@ -4,7 +4,7 @@
  ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** */
 // Author - João N. Matos
 
-#include "stdafx.h"
+//#include "stdafx.h"
 #include "utilities.h"
 #include <cctype>
 #include "board.h"
@@ -18,6 +18,7 @@ using namespace std;
  * @param	pos2	Second position string
  * @return			Truth value of predicate
  */
+/*
 bool prevPos(const string& pos1, const string& pos2)
 {
 	struct coords {
@@ -52,9 +53,9 @@ bool prevPos(const string& pos1, const string& pos2)
 	}
 	else
 		return false;
-	
-}
 
+}
+*/
 /**
  * Returns whether the first string should be ordered before the second
  * string, alphabetically
@@ -63,6 +64,7 @@ bool prevPos(const string& pos1, const string& pos2)
  * @param	rhs	the second string to compare
  * @return		the truth value of the predicate
  */
+/*
 bool first(const string& lhs, const string& rhs)
 {
 	bool smaller = (lhs.size() < rhs.size());
@@ -78,10 +80,11 @@ bool first(const string& lhs, const string& rhs)
 	}
 	return smaller;
 }
+*/
 
 /**
  * Capitalises entire string of alphabetic characters
- * 
+ *
  * @param	str		String of alphabetic characters
  * @return			Capitalised version of string
  */

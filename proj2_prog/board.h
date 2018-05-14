@@ -3,12 +3,12 @@
 //#define BOARD_H
 #pragma once
 
-#include "stdafx.h"
+//#include "stdafx.h"
 #include <string>
 #include <vector>
 #include <map>
 #include <utility>
-#include "dictionary.h"
+#include "Dictionary.h"
 #include "utilities.h"
 using namespace std;
 
@@ -67,7 +67,7 @@ class Board
 		/**
 		 * Destructs Board object
 		 */
-		Board~();
+		~Board();
 
 		//PUBLIC MEMBER FUNCTION
 
@@ -105,12 +105,12 @@ class Board
 
 		/**
 		 * Removes existing word from the board. Returns -1 if word does not exist, 0 if successful.
-		 * 
+		 *
 		 * @param	word	The word to be removed
 		 * @return			The exit code of the procedure
 		 */
 		int remWord(string word);
-		
+
 		/**
 		 * Saves the board to a file, returning 0 if sucessful and -1 if not.
 		 *

@@ -3,8 +3,9 @@
 //#define UTILITY_H
 #pragma once
 
-#include "stdafx.h"
+//#include "stdafx.h"
 #include <string>
+using namespace std;
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                                                                             *
@@ -22,7 +23,7 @@
  * @param	rhs	the second string to compare
  * @return		the truth value of the predicate
  */
-bool first(const string& lhs, const string& rhs);
+//bool first(const string& lhs, const string& rhs);
 
 /**
  * Compares two position strings and returns whether the first is before
@@ -32,11 +33,11 @@ bool first(const string& lhs, const string& rhs);
  * @param	pos2	Second position string
  * @return			Truth value of predicate
  */
-bool prevPos(const string& pos1, const string& pos2);
+//bool prevPos(const string& pos1, const string& pos2);
 
 /**
  * Capitalises entire string of alphabetic characters
- * 
+ *
  * @param	str		String of alphabetic characters
  * @return			Capitalised version of string
  */
