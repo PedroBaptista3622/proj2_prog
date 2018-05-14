@@ -157,7 +157,7 @@ class Board
 		 * @param	string	From "a" to "zz"
 		 * @return			Number in range [0, 26^2 - 1]
 		 */
-		unsigned int cvtPosStr(const string& str); //DONE
+		unsigned int cvtPosStr(string str); //DONE
 
 		/**
 		 * Fills all empty spaces with black spaces

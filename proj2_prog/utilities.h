@@ -43,5 +43,13 @@ using namespace std;
  */
 string stringToUpper(string str);
 
+/**
+ * Decapitalises entire string of alphabetic characters
+ *
+ * @param	str		String of alphabetic characters
+ * @return			Capitalised version of string
+ */
+string stringToLower(string str);
+
 //#endif
 //End of file

@@ -456,13 +456,12 @@ string Board::cvtPosNr(unsigned int number)
  * @param	string	From "a" to "zz"
  * @return			Number in range [0, 26^2 - 1]
  */
-unsigned int Board::cvtPosStr(const string& str)
+unsigned int Board::cvtPosStr(string str)
 {
 	assert(str.length() > 0);
 	assert(str.length() <= 2);
 
-	for (int i = 0; i < str.length(); i++)
-		str[i] = tolower(str.at(i));
+	str = stringToLower(str);
 
 	if (str.length() == 1)
 		return int(str[0]) - int ('a');
@@ -501,7 +500,7 @@ void Board::refill()
 	*/
 
 	//iterates through all position-word pairs
-	for (map<string, string>::iterator par = addedChars.begin(); par != words.end(); par++)
+	for (map<string, string>::iterator par = words.begin(); par != words.end(); par++)
 	{
 		string pos = par->first;
 		string word = par->second;

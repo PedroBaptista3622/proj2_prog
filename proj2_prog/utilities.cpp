@@ -96,4 +96,19 @@ string stringToUpper(string str)
 	return outp;
 }
 
+/**
+ * Decapitalises entire string of alphabetic characters
+ *
+ * @param	str		String of alphabetic characters
+ * @return			Capitalised version of string
+ */
+string stringToLower(string str)
+{
+	string outp;
+	for (unsigned int i = 0; i < str.length(); i++)
+		outp.push_back(tolower(str.at(i)));
+	return outp;
+}
+
+
 //End of file
