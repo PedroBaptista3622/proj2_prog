@@ -160,6 +160,16 @@ void Board::linkDic(Dictionary* dictionary, bool replace = false)
 }
 
 /**
+ * Removes existing word from the board. Returns -1 if word does not exist, 0 if successful.
+ * 
+ * @param	word	The word to be removed
+ * @return			The exit code of the procedure
+ */
+int remWord(string word)
+{
+	
+
+/**
  * Saves the board to a file, returning 0 if sucessful and -1 if not.
  *
  * @param	filename	Name of the file to store the board in
@@ -458,42 +468,45 @@ void Board::refill()
 {
 	map<string, char> newMap;
 
+	/*
 	for (map<string, char>::iterator it = addedChars.begin(); it != addedChars.end(); it++)
 	{
 		if (it.second() == '#')
 			newMap.emplace(it.first(), '#');
 	}
+	*/
 
+	//iterates through all position-word pairs
 	for (map<string, string>::iterator par = addedChars.begin(); par != words.end(); par++)
 	{
 		string pos = par.first();
-		string word = par.first();
+		string word = par.second();
 
 		//separates the elements of the position string
 		string lineStr, colStr;
 		char direction;
 
-		while ((pos.length() > 0) ? isupper(pos.at(0)) : false)
+		while (isupper(pos.at(0)))
 		{
 			lineStr.push_back(pos.at(0));
 			pos.erase(0, 1);
 		}
 
-		while ((pos.length() > 0) ? islower(pos.at(0)) : false)
+		while (islower(pos.at(0)))
 		{
 			colStr.push_back(pos.at(0));
 			pos.erase(0, 1);
 		}
 
-		if (pos.length() > 0)
-			if (isupper(pos.at(0)))
-			direction = pos.at(0);
+		direction = pos.at(0);
 
 		unsigned int firstLine, firstColumn;
 		firstLine = cvtPosStr(lineStr);
 		firstColumn = cvtPosStr(colStr);
 
 		map<string, char> wordChars; //provisional store of the characters
+
+		//adds position-character pairs to temporary storage
 		for (unsigned int offset = 0; offset < word.length(); offset++)
 		{
 			if (direction == 'V')
@@ -502,6 +515,25 @@ void Board::refill()
 				wordChars.emplace( stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn + offset), stringToUpper(word).at(offset));
 		}
 
+		//adds black spaces to temporary storage
+		if (direction == 'V')
+		{
+			if (firstLine > 0)
+				wordChars.emplace( stringToUpper(cvtPosNr(firstLine - 1)) + cvtPosNr(firstColumn), '#');
+
+			if (firstLine + word.length() < size.lines)
+				wordChars.emplace( stringToUpper(cvtPosNr(firstline + word.length())) + cvtPosNr(firstColumn), '#');
+		}
+		else
+		{
+			if (firstColumn > 0)
+				wordChars.emplace( stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn - 1), '#');
+
+			if (firstColumn + word.length() < size.columns)
+				wordChars.emplace( stringToUpper(cvtPosNr(firstline)) + cvtPosNr(firstColumn + word.length()), '#');
+		}
+
+		//deletes redundant characters
 		for (map<string, char>::iterator it = wordChars.begin(); it != wordChars.end(); it++)
 		{
 			if (addedChars.find(it.first()) != addedChars.end())
@@ -510,6 +542,7 @@ void Board::refill()
 			}
 		}
 
+		//adds the characters from temporary storage to the new character map
 		for (map<string, char>::iterator it = charMap.begin(); it != charMap.end; it++)
 			newMap.emplace( it.first(), it.second() );
 	}

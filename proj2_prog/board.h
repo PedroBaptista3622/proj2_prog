@@ -104,6 +104,14 @@ class Board
 		int insWord(string pos, string word); //DONE
 
 		/**
+		 * Removes existing word from the board. Returns -1 if word does not exist, 0 if successful.
+		 * 
+		 * @param	word	The word to be removed
+		 * @return			The exit code of the procedure
+		 */
+		int remWord(string word);
+		
+		/**
 		 * Saves the board to a file, returning 0 if sucessful and -1 if not.
 		 *
 		 * @param	filename	Name of the file to store the board in
