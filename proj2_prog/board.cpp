@@ -167,6 +167,24 @@ void Board::linkDic(Dictionary* dictionary, bool replace = false)
  */
 int remWord(string word)
 {
+	map<string,string>::iterator wordToRemove = words.end();
+	bool found = false;
+	for (map<string, string>::iterator it = words.begin(); it != words.end(); it++)
+		if (it.second() == word)
+		{
+			found = true;
+			wordToRemove = it;
+			break;
+		}
+
+	if (!found)
+		return -1;
+
+	words.erase(wordToRemove);
+
+	refill();
+}
+	
 	
 
 /**
