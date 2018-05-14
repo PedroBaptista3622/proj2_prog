@@ -23,7 +23,7 @@ using namespace std;
  *
  * @author	João N. Matos
  * @author	Pedro Baptista
- * @version 0.1
+ * @version 1.1
  * @see		Dictionary
  */
 class Board
