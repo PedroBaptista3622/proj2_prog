@@ -10,6 +10,7 @@
 #include <utility>
 #include "Dictionary.h"
 #include "utilities.h"
+#include "colour_linux.h"
 using namespace std;
 
 //Definitions
@@ -54,11 +55,11 @@ class Board
 
 		/**
 		 * Constructs a Board object by loading an unfinished board from a file.
-		 * The dictionary pointer is initialised as NULL.
 		 * <p>
-		 * Requires a Dictionary to be later associated.
+		 * Allocates and constructs internal dictionary with imported filename.
 		 *
 		 * @param	filename	Name of the file to import
+		 * @param	control		Variable to store sucess state of the dictionary
 		 */
 		Board(string filename, bool& control); //DONE
 
@@ -67,7 +68,7 @@ class Board
 		/**
 		 * Destructs Board object
 		 */
-		~Board();
+		~Board(); //DONE
 
 		//PUBLIC MEMBER FUNCTION
 
@@ -104,12 +105,13 @@ class Board
 		int insWord(string pos, string word); //DONE
 
 		/**
-		 * Removes existing word from the board. Returns -1 if word does not exist, 0 if successful.
+		 * Removes existing word from the board. Returns -1 if no word in position,
+		 * 0 if successful.
 		 *
-		 * @param	word	The word to be removed
+		 * @param	word	The position
 		 * @return			The exit code of the procedure
 		 */
-		int remWord(string word);
+		int remWord(string position);
 
 		/**
 		 * Saves the board to a file, returning 0 if sucessful and -1 if not.
@@ -133,9 +135,12 @@ class Board
 		 * @param	position	the position string where it should start generating
 		 * @returns					wildcard string, or exit code string
 		 */
-		 string generateWildcard(string position, unsigned int size);
+		 string generateWildcard(string position, unsigned int size); //DONE
 
-	private:
+	protected:
+
+		//FIELDS
+
 		//keeps size
 		struct size {
 			unsigned int lines;
@@ -151,6 +156,8 @@ class Board
 		Dictionary* dictionary;
 
 		bool internalDictionary;
+
+		//MEMBER FUNCTIONS
 
 		/**
 		 * Returns a string "a" to "zz" correspoding to a number up to 26^2 - 1.
@@ -168,6 +175,7 @@ class Board
 		 * @return			Number in range [0, 26^2 - 1]
 		 */
 		unsigned int cvtPosStr(string str); //DONE
+
 
 		/**
 		 * Fills all empty spaces with black spaces

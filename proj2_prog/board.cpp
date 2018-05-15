@@ -3,7 +3,6 @@
 #include <cassert>
 #include <cctype>
 #include "utilities.h"
-#include "colour_linux.h"
 #include "Dictionary.h"
 
 using namespace std;
@@ -51,11 +50,11 @@ Board::Board(unsigned int lines, unsigned int columns, Dictionary* dictionary)
 
 /**
  * Constructs a Board object by loading an unfinished board from a file.
- * The dictionary pointer is initialised as NULL.
  * <p>
- * Requires a Dictionary to be later associated.
+ * Allocates and constructs internal dictionary with imported filename.
  *
  * @param	filename	Name of the file to import
+ * @param	control		Variable to store sucess state of the dictionary
  */
 Board::Board(string filename, bool& control)
 {
@@ -162,27 +161,17 @@ void Board::linkDic(Dictionary* dictionary, bool replace)
 }
 
 /**
- * Removes existing word from the board. Returns -1 if word does not exist, 0 if successful.
- *
+ * Removes existing word from the board. Returns -1 if no word in position,
+ * 0 if successful.
  * @param	word	The word to be removed
  * @return			The exit code of the procedure
  */
-int Board::remWord(string word)
+int Board::remWord(string position)
 {
-	map<string,string>::iterator wordToRemove = words.end();
-	bool found = false;
-	for (map<string, string>::iterator it = words.begin(); it != words.end(); it++)
-		if (it->second == word)
-		{
-			found = true;
-			wordToRemove = it;
-			break;
-		}
-
-	if (!found)
+	if (words.find(position) == words.end())
 		return -1;
-
-	words.erase(wordToRemove);
+	else
+		words.erase(words.find(position));
 
 	refill();
 
@@ -284,6 +273,8 @@ void Board::show()
     setcolor(DEFAULT_TEXT, DEFAULT_BG);
 
     cout << endl;
+
+		cout << endl;
 
   }
 }
