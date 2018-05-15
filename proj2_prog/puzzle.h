@@ -21,7 +21,7 @@ class Puzzle : Board
 	public:
 
 		//CONSTRUCTOR
-		Puzzle(string filename, bool& control);
+		Puzzle(string filename, bool& control); //DONE
 
 		//MEMBER FUNCTIONS
 
@@ -63,7 +63,7 @@ class Puzzle : Board
 		 * @param	word		The word to insert
 		 * @return				The exit code of the procedure
 		 */
-		int insGuess(string position, string word);
+		int insGuess(string position, string word); //DONE
 
 		/**
 		 * Removes existing word from the board. Returns -1 if no word in position,
@@ -81,14 +81,14 @@ class Puzzle : Board
 		 * @param	position	position of the word whose synonym is returned
 		 * @return				a different synonym or the same if unique
 		 */
-		string anotherHint(string position);
+		string anotherHint(string position); //DONE
 
 		/**
 		 * Returns whether the user's guesses are correct
 		 *
 		 * @return		Are the words input by the user the correct ones?
 		 */
-		bool correct();
+		bool correct(); //DONE
 
 
 	private:
@@ -106,7 +106,7 @@ class Puzzle : Board
 		/**
 		 * Populates the hint map
 		 */
-		void getHints();
+		void getHints(); //DONE
 };
 
 //#endif
