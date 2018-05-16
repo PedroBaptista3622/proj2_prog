@@ -8,6 +8,8 @@
 #include <vector>
 #include <map>
 #include <utility>
+#include <cassert>
+#include <cctype>
 #include "Dictionary.h"
 #include "utilities.h"
 #include "colour_linux.h"

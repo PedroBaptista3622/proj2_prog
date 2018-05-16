@@ -1,9 +1,5 @@
 //#include "stdafx.h"
 #include "board.h"
-#include <cassert>
-#include <cctype>
-#include "utilities.h"
-#include "Dictionary.h"
 
 using namespace std;
 
