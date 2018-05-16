@@ -1,4 +1,4 @@
-//#include "stdafx.h"
+#include "stdafx.h"
 #include "Dictionary.h"
 #include "utilities.h"
 
@@ -40,7 +40,6 @@ bool Dictionary::wildcardMatch(const char *str, const char *strWild)
 	return !*str && !*strWild;
 }
 
-/*
 vector <string> Dictionary::getPossibleWords(string searchParam)
 {
 	vector <string> matches;
@@ -55,7 +54,6 @@ vector <string> Dictionary::getPossibleWords(string searchParam)
 
 	return matches;
 }
-*/
 
 string Dictionary::dictName()
 {
