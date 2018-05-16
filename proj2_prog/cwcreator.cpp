@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <iomanip>
+#include <sstream>
 
 using namespace std;
 
@@ -28,6 +30,32 @@ void printInputHelp()
 	cout << "Examples:" << endl;
 	cout << "BaH is used to add a word horizontally starting in the line B and column a" << endl;
 	cout << "AcV is used to add a word vertically starting in the line A and column c" << endl;
+}
+
+string boardFileName()
+{
+	ostringstream outputName;
+
+	for (unsigned i = 1; i < 1000; i++)
+	{
+		outputName << "B";
+		outputName << fixed << setfill('0');
+		outputName << setw(3) << i;
+		outputName << ".txt";
+
+		ifstream fileNameTest(outputName.str());
+
+		if (fileNameTest.is_open())
+		{
+			fileNameTest.close();
+			outputName.str("");
+			outputName.clear();
+		}
+		else
+			break;
+	}
+
+	return outputName.str();
 }
 
 void createPuzzle()
@@ -69,14 +97,11 @@ void createPuzzle()
 
 					cin >> answer;
 
-					if (answer == 'Y')
+					if (answer == 'Y' || answer == 'y')
 					{
-						string fileName;
+						string fileName = boardFileName();
 						char answer2;
 						bool validAnswer2 = false;
-
-						cout << "Enter the name of the file to store the board in" << endl;
-						cin >> fileName;
 
 						cout << "Is the board finished? (Y/N)" << endl;
 
@@ -88,22 +113,26 @@ void createPuzzle()
 							{
 								validAnswer2 = true;
 								board.save(fileName, true);
+								cout << "Board successfully saved as \"" << fileName << "\"" << endl;
 							}
 							else if (answer2 == 'n' || answer2 == 'N')
 							{
 								validAnswer2 = true;
 								board.save(fileName, false);
+								cout << "Board successfully saved as \"" << fileName << "\"" << endl;
 							}
 							else
 							{
 								cerr << "Invalid answer, try again" << endl;
+								cout << "Y = Yes" << endl;
+								cout << "N = No" << endl;
 							}
 
 						} while (!validAnswer2);
-						
+
 						validAnswer = true;
 					}
-					else if (answer == 'N')
+					else if (answer == 'N' || answer == 'n')
 					{
 						validAnswer = true;
 					}
@@ -152,11 +181,32 @@ void createPuzzle()
 				}
 				else if (word == "Word?" || word == "word?")
 				{
+					string position;
+					int size;
+
 					validInput = true;
+
+					cout << "Enter the position you want to insert the word (LcD)" << endl;
+					cin >> position;
+
+					cout << "Enter the size of the word" << endl;
+
+					do
+					{
+						cin >> size;
+
+						if (size < 0)
+						{
+							cerr << "Size of word is to small, enter a greater number" << endl;
+						}
+
+					} while (size < 1);
+					
+
+					vector <string> possibleWords = synonyms.getPossibleWords(board.generateWildcard(position, size));
+					//Contains every word in the dixtionary file that has <size> number of chars and can be inserted in <position> of the board 
+
 					cout << "Possible words: " << endl;
-
-					vector <string> possibleWords = synonyms.getPossibleWords(/*MISSING SEARCH PARAMETER*/);
-
 					for (int i = 0; i < possibleWords.size(); i++)
 					{
 						if (i == possibleWords.size() - 1)
@@ -168,6 +218,7 @@ void createPuzzle()
 							cout << possibleWords.at(i) << ", ";
 						}
 					}
+					//Prints every word usable in the previous case
 				}
 				else
 				{
@@ -249,14 +300,11 @@ void resumePuzzle()
 
 						cin >> answer;
 
-						if (answer == 'Y')
+						if (answer == 'Y' || answer == 'y')
 						{
-							string fileName;
+							string fileName = boardFileName();
 							char answer2;
 							bool validAnswer2 = false;
-
-							cout << "Enter the name of the file to store the board in" << endl;
-							cin >> fileName;
 
 							cout << "Is the board finished? (Y/N)" << endl;
 
@@ -268,22 +316,26 @@ void resumePuzzle()
 								{
 									validAnswer2 = true;
 									board.save(fileName, true);
+									cout << "Board successfully saved as \"" << fileName << "\"" << endl;
 								}
 								else if (answer2 == 'n' || answer2 == 'N')
 								{
 									validAnswer2 = true;
 									board.save(fileName, false);
+									cout << "Board successfully saved as \"" << fileName << "\"" << endl;
 								}
 								else
 								{
 									cerr << "Invalid answer, try again" << endl;
+									cout << "Y = Yes" << endl;
+									cout << "N = No" << endl;
 								}
 
 							} while (!validAnswer2);
 
 							validAnswer = true;
 						}
-						else if (answer == 'N')
+						else if (answer == 'N' || answer == 'n')
 						{
 							validAnswer = true;
 						}
@@ -398,8 +450,6 @@ void resumePuzzle()
 
 
 	}
-
-
 
 int main()
 {
