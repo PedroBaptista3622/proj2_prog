@@ -24,7 +24,7 @@ using namespace std;
  *
  * @author	João N. Matos
  * @author	Pedro Baptista
- * @version 1.1
+ * @version 1.2
  * @see		Dictionary
  */
 class Board
@@ -78,6 +78,8 @@ class Board
 		 * @param	dictionary	Pointer to the Dictionary object
 		 */
 		void linkDic(Dictionary* dictionary, bool replace = false); //DONE
+
+		Dictionary* getDicPointer();
 
 		/**
 		 * Tries to insert a word from the dictionary into the board, checking
@@ -141,12 +143,26 @@ class Board
 
 		//FIELDS
 
-		//keeps size
-		struct size {
+		//keeps dimensions of board
+		struct boardDim {
 			unsigned int lines;
 			unsigned int columns;
 		} number;
 
+		//structure to keep the separated fields of a word position
+		struct wordPosition {
+			unsigned int line;
+			unsigned int column;
+			char direction;
+			bool valid;
+		};
+
+		//structure to keep the separated fields of a character position
+		struct charPosition {
+			unsigned int line;
+			unsigned int column;
+			bool valid;
+		};
 		//keeps a list of words and its position
 		map<string,string> words;
 
@@ -176,6 +192,8 @@ class Board
 		 */
 		unsigned int cvtPosStr(string str); //DONE
 
+		bool validPosStr(string str); //DONE
+
 
 		/**
 		 * Fills all empty spaces with black spaces
@@ -186,6 +204,27 @@ class Board
 		 * Re-does the addedChars map from the existing added words
 		 */
 		void refill(); //DONE
+
+		void addBlackSpaces(); //DONE
+
+		void removeBlackSpaces(const wordPosition& position, unsigned int length); //DONE
+
+		wordPosition separateWordPos(string position); //DONE
+
+		charPosition separateCharPos(string position); //DONE
+
+		string wordPosString(const wordPosition& position); //DONE
+
+		string charPosString(const charPosition& position); //DONE
+
+		bool wordPosInBoard(const wordPosition& position); //DONE
+
+		bool charPosInBoard(const charPosition& position); //DONE
+
+		bool wordFits(const wordPosition& position, unsigned int length); //DONE
+
+		map<string,char> tempMap(const wordPosition& position, string word);
+
 
 
 };

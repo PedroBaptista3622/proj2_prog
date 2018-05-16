@@ -160,18 +160,31 @@ void Board::linkDic(Dictionary* dictionary, bool replace)
 	this->dictionary = dictionary;
 }
 
+Dictionary* Board::getDicPointer()
+{
+	return dictionary;
+}
 /**
  * Removes existing word from the board. Returns -1 if no word in position,
  * 0 if successful.
  * @param	word	The word to be removed
  * @return			The exit code of the procedure
  */
-int Board::remWord(string position)
+int Board::remWord(string position) //TODO
 {
 	if (words.find(position) == words.end())
 		return -1;
-	else
-		words.erase(words.find(position));
+
+	//separates the elements of the position string
+	wordPosition pos = separateWordPos(position);
+
+	//removes the black spaces at the end
+	removeBlackSpaces(pos, words.at(position).length());
+
+	//removes word from word list
+	words.erase(words.find(position));
+
+	addBlackSpaces();
 
 	refill();
 
@@ -289,99 +302,28 @@ void Board::show()
  */
 string Board::generateWildcard(string position, unsigned int size)
 {
-	//separates the elements of the position string
-	string lineStr, colStr;
-	char direction;
-
-	while ((position.length() > 0) ? isupper(position.at(0)) : false)
-	{
-		lineStr.push_back(position.at(0));
-		position.erase(0, 1);
-	}
-
-	while ((position.length() > 0) ? islower(position.at(0)) : false)
-	{
-		colStr.push_back(position.at(0));
-		position.erase(0, 1);
-	}
-
-	if (position.length() > 0)
-		if (isupper(position.at(0)))
-			direction = position.at(0);
-
-	//checks whether a valid position was input
-	if (position.length() > 0)
-		return "-1";
-	if (lineStr.length() > 2 || lineStr.length() < 1)
-		return "-1";
-	if (colStr.length() > 2 || colStr.length() < 1)
-		return "-1";
-	if (direction != 'V' && direction != 'H')
+	wordPosition pos = separateWordPos(position);
+	if (!wordPosInBoard(pos))
 		return "-1";
 
-	unsigned int firstLine, firstColumn;
-	firstLine = cvtPosStr(lineStr);
-	firstColumn = cvtPosStr(colStr);
-
-	//checks whether the position is inside the board
-	if (firstLine >= number.lines && firstColumn >= number.columns)
-		return "-1";
-
-	if (direction == 'V')
-	{
-		if (firstLine + size < number.lines)
-			return "-2";
-	}
-	else
-	{
-		if (firstColumn + size < number.columns)
-			return "-2";
-	}
-
-	for (unsigned int offset = 0; offset < size; offset++)
-	{
-		if (direction == 'V')
-		{
-			if (addedChars.find(stringToUpper(cvtPosNr(firstLine + offset)) + cvtPosNr(firstColumn)) != addedChars.end())
-				if (addedChars.at(stringToUpper(cvtPosNr(firstLine + offset)) + cvtPosNr(firstColumn)) == '#')
-					return "-1";
-		}
-		else
-		{
-			if (addedChars.find(stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn + offset)) != addedChars.end())
-				if (addedChars.at(stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn + offset)) == '#')
-					return "-1";
-		}
-	}
-
-	if (direction == 'V')
-	{
-		if (addedChars.find(stringToUpper(cvtPosNr(firstLine + size)) + cvtPosNr(firstColumn)) != addedChars.end())
-			if (addedChars.at(stringToUpper(cvtPosNr(firstLine + size)) + cvtPosNr(firstColumn)) != '#')
-				return "0";
-	}
-	else
-	{
-		if (addedChars.find(stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn + size)) != addedChars.end())
-			if (addedChars.at(stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn + size)) != '#')
-				return "0";
-	}
+	if(!wordFits(pos, size))
+		return "-2";
 
 	string output;
 
 	for (unsigned int offset = 0; offset < size; offset++)
 	{
-		if (direction == 'V')
+		if (pos.direction == 'V')
 		{
-			if (addedChars.find(stringToUpper(cvtPosNr(firstLine + offset)) + cvtPosNr(firstColumn)) != addedChars.end())
-				output.push_back(addedChars.at(stringToUpper(cvtPosNr(firstLine + offset)) + cvtPosNr(firstColumn)));
+			if (addedChars.find(stringToUpper(cvtPosNr(pos.line + offset)) + cvtPosNr(pos.column)) != addedChars.end())
+				output.push_back(addedChars.at(stringToUpper(cvtPosNr(pos.line + offset)) + cvtPosNr(pos.column)));
 			else
 				output.push_back('?');
 		}
 		else
 		{
-			if (addedChars.find(stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn + offset)) != addedChars.end())
-				output.push_back(addedChars.at(stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn + offset)));
+			if (addedChars.find(stringToUpper(cvtPosNr(pos.line)) + cvtPosNr(pos.column + offset)) != addedChars.end())
+				output.push_back(addedChars.at(stringToUpper(cvtPosNr(pos.line)) + cvtPosNr(pos.column + offset)));
 			else
 				output.push_back('?');
 		}
@@ -418,94 +360,24 @@ string Board::generateWildcard(string position, unsigned int size)
 int Board::insWord(string pos, string word)
 {
 	if (!(dictionary->checkWordDictionary (word)))
-		return -1;
+		return -1; //inexistent word
 
 	if (words.find(stringToUpper(word)) != words.end())
-		return -4;
+		return -4; //repeated word
 
-	//separates the elements of the position string
-	string lineStr, colStr;
-	char direction;
+	wordPosition position = separateWordPos(pos);
 
-	while ((pos.length() > 0) ? isupper(pos.at(0)) : false)
-	{
-		lineStr.push_back(pos.at(0));
-		pos.erase(0, 1);
-	}
+	if (!wordPosInBoard(position))
+		return -5; //invalid position
 
-	while ((pos.length() > 0) ? islower(pos.at(0)) : false)
-	{
-		colStr.push_back(pos.at(0));
-		pos.erase(0, 1);
-	}
 
-	if (pos.length() > 0)
-		if (isupper(pos.at(0)))
-			direction = pos.at(0);
 
-	//checks whether a valid position was input
-	if (pos.length() > 0)
-		return -5;
-	if (lineStr.length() > 2 || lineStr.length() < 1)
-		return -5;
-	if (colStr.length() > 2 || colStr.length() < 1)
-		return -5;
-	if (direction != 'V' && direction != 'H')
-		return -5;
+	if (wordFits(position, word.length()))
+		return -3; //word does not fit
 
-	unsigned int firstLine, firstColumn;
-	firstLine = cvtPosStr(lineStr);
-	firstColumn = cvtPosStr(colStr);
+	map<string, char> charMap = tempMap(position, word);
 
-	//checks whether the board is big enough to place the word
-	if (firstLine >= number.lines && firstColumn >= number.columns)
-		return -5;
 
-	if (direction == 'V')
-	{
-		if (firstLine + word.length() > number.lines)
-			return -3;
-	}
-	else
-	{
-		if (firstColumn + word.length() > number.columns)
-			return -3;
-	}
-
-	map<string, char> charMap; //provisional store of the characters
-
-	//adds a black space before, if needed
-	if (direction == 'V')
-	{
-		if (firstLine > 0)
-			charMap.emplace( stringToUpper( cvtPosNr(firstLine - 1)) + cvtPosNr(firstColumn), '#');
-	}
-	else
-	{
-		if (firstColumn > 0)
-			charMap.emplace( stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn - 1), '#');
-	}
-
-	//adds each character in the word
-	for (unsigned int offset = 0; offset < word.length(); offset++)
-	{
-		if (direction == 'V')
-			charMap.emplace( stringToUpper(cvtPosNr(firstLine + offset)) + cvtPosNr(firstColumn), stringToUpper(word).at(offset));
-		else
-			charMap.emplace( stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn + offset), stringToUpper(word).at(offset));
-	}
-
-	//adds black space at the end of word, if needed
-	if (direction == 'V')
-	{
-		if (firstLine + word.length() < number.lines)
-			charMap.emplace( stringToUpper( cvtPosNr(firstLine - word.length())) + cvtPosNr(firstColumn), '#');
-	}
-	else
-	{
-		if (firstColumn + word.length() < number.columns)
-			charMap.emplace( stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn + word.length()), '#');
-	}
 
 	//checks for illegal overlaps and redundant characters
 	for (map<string, char>::iterator it = charMap.begin(); it != charMap.end(); it++)
@@ -519,9 +391,14 @@ int Board::insWord(string pos, string word)
 		}
 	}
 
+	//adds non-redundant characters
 	for (map<string, char>::iterator it = charMap.begin(); it != charMap.end(); it++)
 		addedChars.emplace( it->first, it->second );
 
+	//adds new black spaces
+	addBlackSpaces();
+
+	//adds word to list
 	words.emplace(pos, stringToUpper(word));
 
 	return 0;
@@ -579,6 +456,19 @@ unsigned int Board::cvtPosStr(string str)
 	}
 }
 
+bool Board::validPosStr(string str)
+{
+	if (str.length() > 2 || str.length() < 1)
+		return false;
+
+	for (unsigned int i = 0; i < str.length(); i++)
+	{
+		if (!isalpha(str.at(i)))
+			return false;
+	}
+
+	return true;
+}
 /**
  * Fills all empty spaces with black spaces
  */
@@ -586,14 +476,20 @@ void Board::blackout()
 {
 	for (unsigned int line = 0; line < (this->number.lines); line++)
 		for (unsigned int column = 0; column < (this->number.columns); column++)
-			if (this->addedChars.find( stringToUpper(cvtPosNr(line)) + cvtPosNr(column) ) == this->addedChars.end())
-				this->addedChars.emplace(stringToUpper(cvtPosNr(line)) + cvtPosNr(column), '#');
+		{
+			charPosition pos;
+				pos.line = line;
+				pos.column = column;
+				pos.valid = true;
+			if (addedChars.find(charPosString(pos)) == addedChars.end())
+				addedChars.emplace(charPosString(pos), '#');
+		}
 }
 
 /**
  * Re-does the addedChars map from the existing added words
  */
-void Board::refill()
+void Board::refill() //TODO
 {
 	map<string, char> newMap;
 
@@ -608,59 +504,11 @@ void Board::refill()
 	//iterates through all position-word pairs
 	for (map<string, string>::iterator par = words.begin(); par != words.end(); par++)
 	{
-		string pos = par->first;
+		wordPosition position = separateWordPos(par->first);
 		string word = par->second;
 
-		//separates the elements of the position string
-		string lineStr, colStr;
-		char direction;
 
-		while (isupper(pos.at(0)))
-		{
-			lineStr.push_back(pos.at(0));
-			pos.erase(0, 1);
-		}
-
-		while (islower(pos.at(0)))
-		{
-			colStr.push_back(pos.at(0));
-			pos.erase(0, 1);
-		}
-
-		direction = pos.at(0);
-
-		unsigned int firstLine, firstColumn;
-		firstLine = cvtPosStr(lineStr);
-		firstColumn = cvtPosStr(colStr);
-
-		map<string, char> wordChars; //provisional store of the characters
-
-		//adds position-character pairs to temporary storage
-		for (unsigned int offset = 0; offset < word.length(); offset++)
-		{
-			if (direction == 'V')
-				wordChars.emplace( stringToUpper(cvtPosNr(firstLine + offset)) + cvtPosNr(firstColumn), stringToUpper(word).at(offset));
-			else
-				wordChars.emplace( stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn + offset), stringToUpper(word).at(offset));
-		}
-
-		//adds black spaces to temporary storage
-		if (direction == 'V')
-		{
-			if (firstLine > 0)
-				wordChars.emplace( stringToUpper(cvtPosNr(firstLine - 1)) + cvtPosNr(firstColumn), '#');
-
-			if (firstLine + word.length() < number.lines)
-				wordChars.emplace( stringToUpper(cvtPosNr(firstLine + word.length())) + cvtPosNr(firstColumn), '#');
-		}
-		else
-		{
-			if (firstColumn > 0)
-				wordChars.emplace( stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn - 1), '#');
-
-			if (firstColumn + word.length() < number.columns)
-				wordChars.emplace( stringToUpper(cvtPosNr(firstLine)) + cvtPosNr(firstColumn + word.length()), '#');
-		}
+		map<string, char> wordChars = tempMap(position, word); //provisional store of the characters
 
 		//deletes redundant characters
 		for (map<string, char>::iterator it = wordChars.begin(); it != wordChars.end(); it++)
@@ -678,4 +526,293 @@ void Board::refill()
 
 	addedChars = newMap;
 
+	addBlackSpaces();
+
+}
+
+void Board::addBlackSpaces()
+{
+	for (map<string,string>::iterator it; it != words.end(); it++)
+	{
+		wordPosition position = separateWordPos(it->first);
+		string word = it->second;
+
+		charPosition before, after;
+		if (position.direction == 'V')
+		{
+			before.line = position.line - 1;
+			before.column = position.column;
+			before.valid = true;
+
+			after.line = position.line + word.length();
+			after.column = position.column;
+			after.valid = true;
+		}
+		else
+		{
+			before.line = position.line;
+			before.column = position.column - 1;
+			before.valid = true;
+
+			after.line = position.line;
+			after.column = position.column + word.length();
+			after.valid = true;
+		}
+
+		if (charPosInBoard(before))
+		{
+			if (addedChars.find(charPosString(before)) == addedChars.end())
+				addedChars.emplace(charPosString(before), '#');
+		}
+		if (charPosInBoard(after))
+		{
+			if (addedChars.find(charPosString(after)) == addedChars.end())
+				addedChars.emplace(charPosString(after), '#');
+		}
+	}
+}
+
+void Board::removeBlackSpaces(const wordPosition& position, unsigned int length)
+{
+	charPosition before, after;
+	if (position.direction == 'V')
+	{
+		before.line = position.line - 1;
+		before.column = position.column;
+		before.valid = true;
+
+		after.line = position.line + length;
+		after.column = position.column;
+		after.valid = true;
+	}
+	else
+	{
+		before.line = position.line;
+		before.column = position.column - 1;
+		before.valid = true;
+
+		after.line = position.line;
+		after.column = position.column + length;
+		after.valid = true;
+	}
+	if (charPosInBoard(before))
+		addedChars.erase(addedChars.find(charPosString(before)));
+	if (charPosInBoard(after))
+		addedChars.erase(addedChars.find(charPosString(after)));
+
+}
+Board::wordPosition Board::separateWordPos(string position)
+{
+	wordPosition output;
+
+	string lineStr, colStr;
+	char direction = 0;
+
+	while ((position.length() > 0) ? isupper(position.at(0)) : false)
+	{
+		lineStr.push_back(position.at(0));
+		position.erase(0, 1);
+	}
+
+	while ((position.length() > 0) ? islower(position.at(0)) : false)
+	{
+		colStr.push_back(position.at(0));
+		position.erase(0, 1);
+	}
+
+	if (position.length() > 0)
+		direction = position.at(0);
+
+	//checks whether a valid position was input
+	if (position.length() > 0)
+		output.valid = false;
+
+	if (!validPosStr(lineStr) || !validPosStr(colStr))
+		output.valid = false;
+
+	if (direction != 'V' && direction != 'H')
+		output.valid = false;
+
+	if (output.valid)
+	{
+		output.line = cvtPosStr(lineStr);
+		output.column = cvtPosStr(colStr);
+		output.direction = direction;
+	}
+	else
+	{
+		output.line = 0;
+		output.column = 0;
+		output.direction = 0;
+	}
+
+	return output;
+}
+
+Board::charPosition Board::separateCharPos(string position)
+{
+	charPosition output;
+
+	string lineStr, colStr;
+
+	while ((position.length() > 0) ? isupper(position.at(0)) : false)
+	{
+		lineStr.push_back(position.at(0));
+		position.erase(0, 1);
+	}
+
+	while ((position.length() > 0) ? islower(position.at(0)) : false)
+	{
+		colStr.push_back(position.at(0));
+		position.erase(0, 1);
+	}
+
+	//checks whether a valid position was input
+	if (position.length() > 0)
+		output.valid = false;
+
+	if (!validPosStr(lineStr) || !validPosStr(colStr))
+		output.valid = false;
+
+	if (output.valid)
+	{
+		output.line = cvtPosStr(lineStr);
+		output.column = cvtPosStr(colStr);
+	}
+	else
+	{
+		output.line = 0;
+		output.column = 0;
+	}
+
+	return output;
+}
+
+string Board::wordPosString(const wordPosition& position)
+{
+	assert(position.valid);
+	string line, column;
+
+	line = stringToUpper(cvtPosNr(position.line));
+	column = cvtPosNr(position.column);
+
+	string output = line + column;
+	output.push_back(position.direction);
+	return output;
+}
+
+string Board::charPosString(const charPosition& position)
+{
+	assert(position.valid);
+	string line, column;
+
+	line = stringToUpper(cvtPosNr(position.line));
+	column = cvtPosNr(position.column);
+
+	string output = line + column;
+	return output;
+}
+
+bool Board::wordPosInBoard(const wordPosition& position)
+{
+	if (!position.valid)
+		return false;
+
+	bool output;
+	output = (position.line <= 0 && position.line <= 0);
+	output = output && (position.line < number.lines && position.column < number.columns);
+	return output;
+}
+
+bool Board::charPosInBoard(const charPosition& position)
+{
+	if (!position.valid)
+		return false;
+
+		bool output;
+		output = (position.line <= 0 && position.line <= 0);
+		output = output && (position.line < number.lines && position.column < number.columns);
+		return output;
+}
+
+bool Board::wordFits(const wordPosition& position, unsigned int length)
+{
+	if (!wordPosInBoard(position))
+		return false;
+
+	//can the word fit in the board?
+	if (position.direction == 'V')
+	{
+		if (position.line + length > number.lines)
+			return false;
+	}
+	else
+	{
+		if (position.column + length > number.columns)
+			return false;
+	}
+
+	//is there a constrain put in by other words?
+	charPosition before, after;
+	if (position.direction == 'V')
+	{
+		before.line = position.line - 1;
+		before.column = position.column;
+		before.valid = true;
+
+		after.line = position.line + length;
+		after.column = position.column;
+		after.valid = true;
+	}
+	else
+	{
+		before.line = position.line;
+		before.column = position.column - 1;
+		before.valid = true;
+
+		after.line = position.line;
+		after.column = position.column + length;
+		after.valid = true;
+	}
+
+	if (charPosInBoard(before))
+	{
+		if (addedChars.find(charPosString(before)) != addedChars.end())
+			if (addedChars.at(charPosString(before)) != '#')
+				return false;
+	}
+	if (charPosInBoard(after))
+	{
+		if (addedChars.find(charPosString(after)) != addedChars.end())
+			if (addedChars.at(charPosString(after)) != '#')
+				return false;
+	}
+
+	return true;
+}
+
+map<string,char> Board::tempMap(const wordPosition& position, string word)
+{
+	map<string,char> output;
+
+	for (unsigned int offset = 0; offset < word.length(); offset++)
+	{
+		charPosition letter;
+		if (position.direction == 'V')
+		{
+			letter.line = position.line + offset;
+			letter.column = position.column;
+			letter.valid = true;
+		}
+		else
+		{
+			letter.line = position.line;
+			letter.column = position.column + offset;
+			letter.valid = true;
+		}
+
+		output.emplace(charPosString(letter), word.at(offset));
+	}
+
+	return output;
 }
