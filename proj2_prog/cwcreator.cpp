@@ -171,12 +171,12 @@ void createPuzzle()
 				else if (word == "-")
 				{
 					validInput = true;
-					string wordToRemove;
-					cout << "Enter the word you want to delete" << endl;
-					cin >> wordToRemove;
+					string pos;
+					cout << "Enter the position of the word you want to delete" << endl;
+					cin >> pos;
 
-					if (board.remWord(wordToRemove) == -1)
-						cerr << "Entered word does not exist" << endl;
+					if (board.remWord(pos) == -1)
+						cerr << "There is no word in such position" << endl;
 
 				}
 				else if (word == "Word?" || word == "word?")
@@ -374,20 +374,19 @@ void resumePuzzle()
 					else if (word == "-")
 					{
 						validInput = true;
-						string wordToRemove;
-						cout << "Enter the word you want to delete" << endl;
-						cin >> wordToRemove;
+						string pos;
+						cout << "Enter the position of the word you want to delete" << endl;
+						cin >> pos;
 
-						if (board.remWord(wordToRemove) == -1)
-							cerr << "Entered word does not exist" << endl;
-
+						if (board.remWord(pos) == -1)
+							cerr << "There is no word in such position" << endl;
 					}
 					else if (word == "Word?" || word == "word?")
 					{
 						validInput = true;
 						cout << "Possible words: " << endl;
 
-						vector <string> possibleWords = synonyms.getPossibleWords(/*MISSING SEARCH PARAMETER*/);
+						vector <string> possibleWords = 
 
 						for (int i = 0; i < possibleWords.size(); i++)
 						{
