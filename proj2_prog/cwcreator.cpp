@@ -204,7 +204,7 @@ void createPuzzle()
 					
 
 					vector <string> possibleWords = synonyms.getPossibleWords(board.generateWildcard(position, size));
-					//Contains every word in the dixtionary file that has <size> number of chars and can be inserted in <position> of the board 
+					//Contains every word in the dictionary file that has <size> number of chars and can be inserted in <position> of the board 
 
 					cout << "Possible words: " << endl;
 					for (int i = 0; i < possibleWords.size(); i++)
@@ -383,10 +383,25 @@ void resumePuzzle()
 					}
 					else if (word == "Word?" || word == "word?")
 					{
-						validInput = true;
-						cout << "Possible words: " << endl;
+						string position;
+						int size;
 
-						vector <string> possibleWords = 
+						cout << "Enter the position you want to insert the word (LcD)" << endl;
+						cin >> position;
+
+						cout << "Enter the size of the word you want to insert" << endl;
+
+						do
+						{
+							cin >> size;
+
+							if (size < 0)
+								cerr << "Invalid size, please enter a number greater than 0" << endl;
+
+						} while (size < 0);
+
+
+						vector <string> possibleWords = board.getDicPointer()->getPossibleWords(board.generateWildcard(position, size));
 
 						for (int i = 0; i < possibleWords.size(); i++)
 						{
@@ -438,15 +453,6 @@ void resumePuzzle()
 		}
 
 	} while (errorOpeningFile);
-	
-	/*
-
-
-	MISSING DICTIONARY ASSOCIATION
-
-
-	*/
-
 
 	}
 
@@ -472,7 +478,6 @@ int main()
 		{
 			validAction = true;
 			resumePuzzle();
-			//MISSING STUFF
 		}
 		else if (action == 0)
 		{
