@@ -46,7 +46,7 @@ vector <string> Dictionary::getPossibleWords(string searchParam)
 
 	for (auto elem : dictionary)
 	{
-		if (wildcardMatch(elem.first.c_str, searchParam.c_str))
+		if (wildcardMatch(elem.first.c_str(), searchParam.c_str()))
 		{
 			matches.push_back(elem.first);
 		}

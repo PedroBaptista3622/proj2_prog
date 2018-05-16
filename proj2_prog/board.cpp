@@ -265,6 +265,8 @@ void Board::show()
       if ( ((number.columns / 27) > 0) && (column >= 26))
         cout << ' ';
 
+			cout << ' ';
+
 			if (addedChars.find( stringToUpper(cvtPosNr(line)) + cvtPosNr(column) ) != addedChars.end())
       {
         if (addedChars.at(stringToUpper(cvtPosNr(line)) + cvtPosNr(column)) == '#')
