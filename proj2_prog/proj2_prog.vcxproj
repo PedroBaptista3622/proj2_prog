@@ -160,7 +160,6 @@
     <ClCompile Include="cwplayer.cpp" />
     <ClCompile Include="cwcreator.cpp" />
     <ClCompile Include="Dictionary.cpp" />
-    <ClCompile Include="proj2_prog.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

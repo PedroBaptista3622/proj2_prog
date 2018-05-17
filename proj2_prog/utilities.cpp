@@ -4,7 +4,7 @@
  ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** */
 // Author - João N. Matos
 
-//#include "stdafx.h"
+#include "stdafx.h"
 #include "utilities.h"
 #include <cctype>
 #include "board.h"

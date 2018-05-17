@@ -3,7 +3,7 @@
 //#define UTILITY_H
 #pragma once
 
-//#include "stdafx.h"
+#include "stdafx.h"
 #include <string>
 using namespace std;
 

@@ -44,9 +44,6 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="proj2_prog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="cwcreator.cpp">
       <Filter>Source Files\CrosswordCreator</Filter>
     </ClCompile>

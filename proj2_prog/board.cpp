@@ -1,4 +1,4 @@
-//#include "stdafx.h"
+#include "stdafx.h"
 #include "board.h"
 
 using namespace std;
@@ -71,6 +71,8 @@ Board::Board(string filename, bool& control)
 
 	do
 	{
+		currentColumn = 0;
+
 		while (inputBuffer.length() > 0)
 		{
 			if (isspace(inputBuffer.at(0)))
@@ -94,7 +96,7 @@ Board::Board(string filename, bool& control)
 	while (inputBuffer.length() > 0);
 
 	number.lines = currentLine;
-	number.lines = currentColumn;
+	number.columns = currentColumn;
 
 
 	while (getline(file, inputBuffer))

@@ -3,7 +3,7 @@
 //#define BOARD_H
 #pragma once
 
-//#include "stdafx.h"
+#include "stdafx.h"
 #include <string>
 #include <vector>
 #include <map>
@@ -12,7 +12,7 @@
 #include <cctype>
 #include "Dictionary.h"
 #include "utilities.h"
-#include "colour_linux.h"
+#include "colour_windows.h"
 using namespace std;
 
 //Definitions
