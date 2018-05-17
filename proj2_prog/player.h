@@ -10,7 +10,7 @@ class Player
 public:
 
   Player(string playerName);
-  string getName;
+  string getName();
   void start();
   void end();
   void gotHint();
