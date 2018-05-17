@@ -38,7 +38,7 @@ string boardFileName()
 {
 	ostringstream outputName;
 
-	for (unsigned i = 1; i < 1000; i++)
+	for (int i = 1; i < 1000; i++)
 	{
 		outputName << "B";
 		outputName << fixed << setfill('0');
@@ -62,7 +62,7 @@ string boardFileName()
 
 void createPuzzle()
 {
-	unsigned int lines, columns; // Lines/Columns = number of lines/columns
+	int lines, columns; // Lines/Columns = number of lines/columns
 	string filename;
 	bool error = false; //Variable used to check if any errors opening the dictionary happened
 

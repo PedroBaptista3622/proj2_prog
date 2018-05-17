@@ -49,7 +49,7 @@ class Board
 		 * @param	lines	The number of lines the board will have
 		 * @param	columns	The number of columns in the board will have
 		 */
-		Board(unsigned int lines, unsigned int columns); //DONE
+		Board(int lines, int columns); //DONE
 
 		/**
 		 * Constructs a Board object and associates a Dictionary to it.
@@ -58,7 +58,7 @@ class Board
 		 * @param	columns		The number of columns in the board will have
 		 * @param	dictionary	Pointer to the Dictionary object
 		 */
-		Board(unsigned int lines, unsigned int columns, Dictionary* dictionary); //DONE
+		Board(int lines, int columns, Dictionary* dictionary); //DONE
 
 		/**
 		 * Constructs a Board object by loading an unfinished board from a file.
@@ -144,7 +144,7 @@ class Board
 		 * @param	position	the position string where it should start generating
 		 * @returns					wildcard string, or exit code string
 		 */
-		 string generateWildcard(string position, unsigned int size); //DONE
+		 string generateWildcard(string position, int size); //DONE
 
 	protected:
 
@@ -152,22 +152,22 @@ class Board
 
 		//keeps dimensions of board
 		struct boardDim {
-			unsigned int lines;
-			unsigned int columns;
+			int lines;
+			int columns;
 		} number;
 
 		//structure to keep the separated fields of a word position
 		struct wordPosition {
-			unsigned int line;
-			unsigned int column;
+			int line;
+			int column;
 			char direction;
 			bool valid;
 		};
 
 		//structure to keep the separated fields of a character position
 		struct charPosition {
-			unsigned int line;
-			unsigned int column;
+			int line;
+			int column;
 			bool valid;
 		};
 		//keeps a list of words and its position
@@ -188,7 +188,7 @@ class Board
 		 * @param	number	In range [0, 26^2 - 1]
 		 * @return			String from "a" to "zz"
 		 */
-		string cvtPosNr(unsigned int number); //DONE
+		string cvtPosNr(int number); //DONE
 
 		/**
 		 * Returns a number up to 26^2 - 1 corresponding to a string
@@ -197,7 +197,7 @@ class Board
 		 * @param	string	From "a" to "zz"
 		 * @return			Number in range [0, 26^2 - 1]
 		 */
-		unsigned int cvtPosStr(string str); //DONE
+		int cvtPosStr(string str); //DONE
 
 		bool validPosStr(string str); //DONE
 
@@ -214,7 +214,7 @@ class Board
 
 		void addBlackSpaces(); //DONE
 
-		void removeBlackSpaces(const wordPosition& position, unsigned int length); //DONE
+		void removeBlackSpaces(const wordPosition& position, int length); //DONE
 
 		wordPosition separateWordPos(string position); //DONE
 
@@ -228,7 +228,7 @@ class Board
 
 		bool charPosInBoard(const charPosition& position); //DONE
 
-		bool wordFits(const wordPosition& position, unsigned int length); //DONE
+		bool wordFits(const wordPosition& position, int length); //DONE
 
 		map<string,char> tempMap(const wordPosition& position, string word);
 

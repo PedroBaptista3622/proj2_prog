@@ -33,7 +33,7 @@ void Player::gotHint()
   nHints++;
 }
 
-unsigned int Player::timeToComplete()
+int Player::timeToComplete()
 {
   return difftime(endTime, startTime);
 }

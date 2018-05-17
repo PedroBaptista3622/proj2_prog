@@ -1,0 +1,18 @@
+cwcreator.out: cwcreator.o board.o Dictionary.o colour_linux.o utilities.o
+	g++ -o cwcreator.out cwcreator.o board.o Dictionary.o colour_linux.o \
+	                     utilities.o
+
+cwcreator.o: cwcreator.cpp board.h Dictionary.h
+	g++ -c -o cwcreator.o cwcreator.cpp
+
+board.o: board.cpp board.h Dictionary.h utilities.h colour_linux.h
+	g++ -c -o board.o board.cpp
+
+Dictionary.o: Dictionary.cpp Dictionary.h board.cpp utilities.h
+	g++ -c -o Dictionary.o Dictionary.cpp
+
+colour_linux.o: colour_linux.cpp colour_linux.h
+	g++ -c -o colour_linux.o colour_linux.cpp
+
+utilities.o: utilities.cpp utilities.h
+	g++ -c -o utilities.o utilities.cpp

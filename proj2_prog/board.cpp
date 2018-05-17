@@ -23,7 +23,7 @@ using namespace std;
  * @param	lines	The number of lines the board will have
  * @param	columns	The number of columns in the board will have
  */
-Board::Board(unsigned int lines, unsigned int columns)
+Board::Board(int lines, int columns)
 {
 	this->number.lines = lines;
 	this->number.columns = columns;
@@ -38,7 +38,7 @@ Board::Board(unsigned int lines, unsigned int columns)
  * @param	columns		The number of columns in the board will have
  * @param	dictionary	Pointer to the Dictionary object
  */
-Board::Board(unsigned int lines, unsigned int columns, Dictionary* dictionary)
+Board::Board(int lines, int columns, Dictionary* dictionary)
 {
 	this->number.lines = lines;
 	this->number.columns = columns;
@@ -66,8 +66,8 @@ Board::Board(string filename, bool& control)
 
 	getline(file, inputBuffer);
 
-	unsigned int currentLine = 0;
-	unsigned int currentColumn = 0;
+	int currentLine = 0;
+	int currentColumn = 0;
 
 	getline(file, inputBuffer);
 
@@ -217,8 +217,8 @@ int Board::save(string filename, bool finished)
 
 	outp << '\n';
 
-	for (unsigned int line = 0; line < number.lines; line++)
-		for (unsigned int column = 0; column < number.columns; column++)
+	for (int line = 0; line < number.lines; line++)
+		for (int column = 0; column < number.columns; column++)
 		{
 			if (addedChars.find( stringToUpper(cvtPosNr(line)) + cvtPosNr(column) ) != addedChars.end())
 				outp << addedChars.at(stringToUpper(cvtPosNr(line)) + cvtPosNr(column));
@@ -249,12 +249,12 @@ void Board::show()
   if ((number.lines / 27) > 0)
     cout << ' ';
   setcolor(RED);
-  for (unsigned int column = 0; column < number.columns; column++)
+  for (int column = 0; column < number.columns; column++)
     cout << cvtPosNr(column) << ' ';
   cout << endl;
 
   //prints each row
-  for (unsigned int line = 0; line < number.lines; line++)
+  for (int line = 0; line < number.lines; line++)
   {
     setcolor(RED, BLACK_B);
     cout << stringToUpper(cvtPosNr(line));
@@ -267,7 +267,7 @@ void Board::show()
     setcolor(BLACK, WHITE_B);
     //cout << ' ';
 
-    for (unsigned int column = 0; column < number.columns; column++)
+    for (int column = 0; column < number.columns; column++)
 		{
 			if ( ((number.columns / 27) > 0) && (column >= 26))
 				cout << ' ';
@@ -305,7 +305,7 @@ void Board::show()
  * @param	position	the position string where it should start generating
  * @returns					wildcard string, or exit code string
  */
-string Board::generateWildcard(string position, unsigned int size)
+string Board::generateWildcard(string position, int size)
 {
 	wordPosition pos = separateWordPos(position);
 	if (!wordPosInBoard(pos))
@@ -316,7 +316,7 @@ string Board::generateWildcard(string position, unsigned int size)
 
 	string output;
 
-	for (unsigned int offset = 0; offset < size; offset++)
+	for (int offset = 0; offset < size; offset++)
 	{
 		if (pos.direction == 'V')
 		{
@@ -418,7 +418,7 @@ int Board::insWord(string pos, string word)
  * @param	number	In range [0, 26^2 + 25]
  * @return			String from "a" to "zz"
  */
-string Board::cvtPosNr(unsigned int number)
+string Board::cvtPosNr(int number)
 {
 	assert(number >= 0);
 	assert(number <= (26*26 + 25));
@@ -444,7 +444,7 @@ string Board::cvtPosNr(unsigned int number)
  * @param	string	From "a" to "zz"
  * @return			Number in range [0, 26^2 - 1]
  */
-unsigned int Board::cvtPosStr(string str)
+int Board::cvtPosStr(string str)
 {
 	assert(str.length() > 0);
 	assert(str.length() <= 2);
@@ -455,8 +455,8 @@ unsigned int Board::cvtPosStr(string str)
 		return int(str[0]) - int ('a');
 	else
 	{
-		unsigned int rightChar = int(str[1]) - int ('a');
-		unsigned int leftChar = int(str[0]) - int ('a');
+		int rightChar = int(str[1]) - int ('a');
+		int leftChar = int(str[0]) - int ('a');
 		return rightChar + 26*(leftChar + 1);
 	}
 }
@@ -466,7 +466,7 @@ bool Board::validPosStr(string str)
 	if (str.length() > 2 || str.length() < 1)
 		return false;
 
-	for (unsigned int i = 0; i < str.length(); i++)
+	for (int i = 0; i < str.length(); i++)
 	{
 		if (!isalpha(str.at(i)))
 			return false;
@@ -480,8 +480,8 @@ bool Board::validPosStr(string str)
  */
 void Board::blackout()
 {
-	for (unsigned int line = 0; line < (this->number.lines); line++)
-		for (unsigned int column = 0; column < (this->number.columns); column++)
+	for (int line = 0; line < (this->number.lines); line++)
+		for (int column = 0; column < (this->number.columns); column++)
 		{
 			charPosition pos;
 				pos.line = line;
@@ -578,7 +578,7 @@ void Board::addBlackSpaces()
 	}
 }
 
-void Board::removeBlackSpaces(const wordPosition& position, unsigned int length)
+void Board::removeBlackSpaces(const wordPosition& position, int length)
 {
 	charPosition before, after;
 	if (position.direction == 'V')
@@ -730,8 +730,7 @@ bool Board::wordPosInBoard(const wordPosition& position)
 		return false;
 
 	bool output;
-	output = (position.line >= 0 && position.column >= 0);
-	output = output && (position.line < number.lines && position.column < number.columns);
+	output = (position.line < number.lines && position.column < number.columns);
 	return output;
 }
 
@@ -741,12 +740,11 @@ bool Board::charPosInBoard(const charPosition& position)
 		return false;
 
 		bool output;
-		output = (position.line >= 0 && position.column >= 0);
-		output = output && (position.line < number.lines && position.column < number.columns);
+		output = (position.line < number.lines && position.column < number.columns);
 		return output;
 }
 
-bool Board::wordFits(const wordPosition& position, unsigned int length)
+bool Board::wordFits(const wordPosition& position, int length)
 {
 	if (!wordPosInBoard(position))
 		return false;
@@ -806,7 +804,7 @@ map<string,char> Board::tempMap(const wordPosition& position, string word)
 {
 	map<string,char> output;
 
-	for (unsigned int offset = 0; offset < word.length(); offset++)
+	for (int offset = 0; offset < word.length(); offset++)
 	{
 		charPosition letter;
 		if (position.direction == 'V')

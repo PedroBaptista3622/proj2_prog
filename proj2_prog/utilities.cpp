@@ -94,7 +94,7 @@ bool first(const string& lhs, const string& rhs)
 string stringToUpper(string str)
 {
 	string outp;
-	for (unsigned int i = 0; i < str.length(); i++)
+	for (int i = 0; i < str.length(); i++)
 		outp.push_back(toupper(str.at(i)));
 	return outp;
 }
@@ -108,7 +108,7 @@ string stringToUpper(string str)
 string stringToLower(string str)
 {
 	string outp;
-	for (unsigned int i = 0; i < str.length(); i++)
+	for (int i = 0; i < str.length(); i++)
 		outp.push_back(tolower(str.at(i)));
 	return outp;
 }

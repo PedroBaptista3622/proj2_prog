@@ -18,13 +18,13 @@ public:
   void start();
   void end();
   void gotHint();
-  unsigned int timeToComplete();
+  int timeToComplete();
 
 
 private:
 
   time_t startTime, endTime;
   string name;
-  unsigned int nHints;
+  int nHints;
 
 };

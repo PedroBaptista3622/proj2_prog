@@ -18,7 +18,7 @@ Puzzle::Puzzle(string filename, bool& control)
 			toRemove.push_back(it);
 	}
 
-	for (unsigned int i = 0; i < toRemove.size(); i++)
+	for (int i = 0; i < toRemove.size(); i++)
 		addedChars.erase(toRemove.at(i));
 
 	if (control)
@@ -144,14 +144,14 @@ int Puzzle::insGuess(string position, string word)
 		if (isupper(position.at(0)))
 			direction = position.at(0);
 
-	unsigned int firstLine, firstColumn;
+	int firstLine, firstColumn;
 	firstLine = cvtPosStr(lineStr);
 	firstColumn = cvtPosStr(colStr);
 
 	map<string, char> charMap; //provisional store of the characters
 
 	//adds each character in the word
-	for (unsigned int offset = 0; offset < word.length(); offset++)
+	for (int offset = 0; offset < word.length(); offset++)
 	{
 		if (direction == 'V')
 			charMap.emplace( stringToUpper(cvtPosNr(firstLine + offset)) + cvtPosNr(firstColumn), stringToUpper(word).at(offset));
