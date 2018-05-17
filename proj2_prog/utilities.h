@@ -3,7 +3,10 @@
 //#define UTILITY_H
 #pragma once
 
+#ifdef _WIN32
 #include "stdafx.h"
+#endif
+
 #include <string>
 using namespace std;
 

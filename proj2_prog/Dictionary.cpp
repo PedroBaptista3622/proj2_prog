@@ -1,4 +1,6 @@
+#ifdef _WIN32
 #include "stdafx.h"
+#endif
 #include "Dictionary.h"
 
 bool Dictionary::wildcardMatch(const char *str, const char *strWild)

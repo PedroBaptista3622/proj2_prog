@@ -2,6 +2,11 @@
 //#ifndef PUZZLE_H
 //#define PUZZLE_H
 #pragma once
+
+#ifdef _WIN32
+#include "stdafx.h"
+#endif
+
 #include "board.h"
 #include <ctime>
 #include <cstdlib>

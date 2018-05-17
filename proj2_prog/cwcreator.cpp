@@ -1,4 +1,6 @@
+#ifdef _WIN32
 #include "stdafx.h"
+#endif
 #include "board.h"
 #include "Dictionary.h"
 #include <iostream>
@@ -157,7 +159,7 @@ void createPuzzle()
 
 			cout << "Enter Word (- = remove / ? = help / 0 = exit)";
 			cout << "You can also get some words to help by entering \"Word?\"" << endl;
-			
+
 			do {
 
 				cin >> word;
@@ -205,10 +207,10 @@ void createPuzzle()
 						}
 
 					} while (size < 1);
-					
+
 
 					vector <string> possibleWords = synonyms.getPossibleWords(board.generateWildcard(position, size));
-					//Contains every word in the dictionary file that has <size> number of chars and can be inserted in <position> of the board 
+					//Contains every word in the dictionary file that has <size> number of chars and can be inserted in <position> of the board
 
 					cout << "Possible words: " << endl;
 					for (int i = 0; i < possibleWords.size(); i++)
@@ -473,7 +475,7 @@ int main()
 	printPossibleActions();
 	cout << "LcD stands for line column and direction" << endl;
 
-	do 
+	do
 	{
 		cin >> action;
 

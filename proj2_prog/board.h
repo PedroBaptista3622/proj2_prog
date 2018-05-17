@@ -3,7 +3,13 @@
 //#define BOARD_H
 #pragma once
 
+#ifdef _WIN32
 #include "stdafx.h"
+#include "colour_windows.h"
+#else
+#include "colour_linux.h"
+#endif
+
 #include <string>
 #include <vector>
 #include <map>
@@ -12,7 +18,6 @@
 #include <cctype>
 #include "Dictionary.h"
 #include "utilities.h"
-#include "colour_windows.h"
 using namespace std;
 
 //Definitions

@@ -4,7 +4,10 @@
  ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** */
 // Author - João N. Matos
 
+#ifdef _WIN32
 #include "stdafx.h"
+#endif
+
 #include "utilities.h"
 #include <cctype>
 #include "board.h"
