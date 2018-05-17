@@ -39,6 +39,12 @@
     <ClInclude Include="board.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="puzzle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -61,6 +67,12 @@
     </ClCompile>
     <ClCompile Include="board.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>Source Files\CrosswordsPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="puzzle.cpp">
+      <Filter>Source Files\CrosswordsPlayer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
