@@ -149,7 +149,8 @@ void Dictionary::printDictionary()
 
 bool Dictionary::checkWordDictionary(const string &keyWord)
 {
-	return this->dictionary.find(keyWord) != dictionary.end();
+	string word = stringToUpper(keyWord);
+	return this->dictionary.find(word) != dictionary.end();
 }
 
 vector <string> Dictionary::getSynonyms(const string &keyWord)

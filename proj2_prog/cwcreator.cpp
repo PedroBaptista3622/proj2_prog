@@ -88,6 +88,10 @@ void createPuzzle()
 
 			if (cin.eof())
 			{
+				cout << "Press Enter to continue ";
+				cin.clear();
+				cin.ignore(100000, '\n');
+
 				char answer;
 				bool validAnswer = false;
 
@@ -286,11 +290,15 @@ void resumePuzzle()
 
 				board.show();
 
-				cout << "Enter Position (LcD / CTRL + Z = Save and Exit / 0 = Exit)";
+				cout << "Enter Position (LcD / CTRL + Z = Save and Exit / 0 = Exit) ";
 				cin >> input;
 
 				if (cin.eof())
 				{
+					cout << "Press Enter to continue ";
+					cin.clear();
+					cin.ignore(100000,'\n');
+
 					char answer;
 					bool validAnswer = false;
 

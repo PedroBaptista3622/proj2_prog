@@ -162,12 +162,14 @@ Dictionary* Board::getDicPointer()
 {
 	return dictionary;
 }
+
 /**
  * Removes existing word from the board. Returns -1 if no word in position,
  * 0 if successful.
  * @param	word	The word to be removed
  * @return			The exit code of the procedure
  */
+
 int Board::remWord(string position) //TODO
 {
 	if (words.find(position) == words.end())
@@ -221,7 +223,7 @@ int Board::save(string filename, bool finished)
 			else
 				outp << '.';
 
-			if (column == number.columns - 2)
+			if (column == number.columns - 1)
 				outp << '\n';
 			else
 				outp << ' ';
@@ -241,7 +243,7 @@ int Board::save(string filename, bool finished)
 void Board::show()
 {
   //prints column header
-  cout << "  ";
+  cout << "   ";
   if ((number.lines / 27) > 0)
     cout << ' ';
   setcolor(RED);
@@ -254,18 +256,19 @@ void Board::show()
   {
     setcolor(RED, BLACK_B);
     cout << stringToUpper(cvtPosNr(line));
-    if ( ((number.lines / 27) > 0) && (line < 26))
+
+	if ( ((number.lines / 27) > 0) && (line < 26))
       cout << "  ";
     else
       cout << ' ';
 
     setcolor(BLACK, WHITE_B);
-    cout << ' ';
+    //cout << ' ';
 
     for (unsigned int column = 0; column < number.columns; column++)
 		{
-      if ( ((number.columns / 27) > 0) && (column >= 26))
-        cout << ' ';
+			if ( ((number.columns / 27) > 0) && (column >= 26))
+				cout << ' ';
 
 			cout << ' ';
 
@@ -372,7 +375,7 @@ int Board::insWord(string pos, string word)
 
 
 
-	if (wordFits(position, word.length()))
+	if (!wordFits(position, word.length()))
 		return -3; //word does not fit
 
 	map<string, char> charMap = tempMap(position, word);
@@ -469,6 +472,7 @@ bool Board::validPosStr(string str)
 
 	return true;
 }
+
 /**
  * Fills all empty spaces with black spaces
  */
@@ -601,9 +605,11 @@ void Board::removeBlackSpaces(const wordPosition& position, unsigned int length)
 		addedChars.erase(addedChars.find(charPosString(after)));
 
 }
+
 Board::wordPosition Board::separateWordPos(string position)
 {
 	wordPosition output;
+	output.valid = true;
 
 	string lineStr, colStr;
 	char direction = 0;
@@ -621,7 +627,10 @@ Board::wordPosition Board::separateWordPos(string position)
 	}
 
 	if (position.length() > 0)
+	{
 		direction = position.at(0);
+		position.erase(0, 1);
+	}
 
 	//checks whether a valid position was input
 	if (position.length() > 0)
@@ -719,7 +728,7 @@ bool Board::wordPosInBoard(const wordPosition& position)
 		return false;
 
 	bool output;
-	output = (position.line <= 0 && position.line <= 0);
+	output = (position.line >= 0 && position.column >= 0);
 	output = output && (position.line < number.lines && position.column < number.columns);
 	return output;
 }
@@ -730,7 +739,7 @@ bool Board::charPosInBoard(const charPosition& position)
 		return false;
 
 		bool output;
-		output = (position.line <= 0 && position.line <= 0);
+		output = (position.line >= 0 && position.column >= 0);
 		output = output && (position.line < number.lines && position.column < number.columns);
 		return output;
 }

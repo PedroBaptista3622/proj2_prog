@@ -7,7 +7,6 @@ synonyms.txt
 . . . # . . . .
 . # M A T E # .
 
-
 AbV BAR
 AdH SEX
 AhV ADD
