@@ -1,12 +1,13 @@
 #pragma once
 
-#include "stdafx.h"
+//#include "stdafx.h"
 #include <iostream>
 #include <map>
 #include <string>
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include "utilities.h"
 
 using namespace std;
 

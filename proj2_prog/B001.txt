@@ -1,0 +1,15 @@
+synonyms.txt
+
+. B # S E X # A
+. A . O . . . D
+. R . A . . . D
+. # . K . . . #
+. . . # . . . .
+. # M A T E # .
+
+
+AbV BAR
+AdH SEX
+AhV ADD
+AdV SOAK
+FcH MATE
