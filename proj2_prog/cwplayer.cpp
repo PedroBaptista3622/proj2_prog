@@ -1,4 +1,4 @@
-/*
+
 #include <iostream>
 #include <iomanip>
 #include <sstream>
@@ -52,8 +52,8 @@ int guessWord(Puzzle *puzzle, string position, string word)
 		break;
 	}
 }
-*/
-/*
+
+
 int main()
 {
 	int numberBoardToLoad;
@@ -131,26 +131,92 @@ int main()
 	string position;
 	string guess;
 	bool validGuess = false;
+	int action;
 
-	puzzle.showPuzzle(); // Empty puzzle?
-	puzzle.showSynonyms();
-
-	cout << "Enter the position you want to guess (LcD)" << endl;
-	cin >> position;
-
+	player.start();
+	
+	cout << "Note: This program will automatically recognize when the puzzle is complete, so if it didn't end it's probably because some word is wrong..." << endl;
+	
 	do
 	{
-		cout << "Enter the guess word" << endl;
-		cin >> guess;
+		puzzle.showPuzzle(); // Empty puzzle?
+		puzzle.showSynonyms();
 
-		if (guessWord(&puzzle, position, guess) == 0)
-			validGuess = true;
+		cout << "Select action:" << endl;
+		cout << "1 - Guess a word" << endl;
+		cout << "2 - Delete word from board" << endl;
+		cout << "0 - Exit" << endl;
+		
+		do
+		{
+			cin >> action;
 
-		if (!validGuess)
-			cout << "Try another word" << endl;
+			if (action < 0 || action > 2)
+			{
+				cerr << "Invalid action, try again" << endl;
+			}
 
-	} while (!validGuess);
+		} while (action < 0 || action > 2);
+
+		
+		if (action == 1)
+		{
+			cout << "Enter the position you want to guess (LcD)" << endl;
+			cin >> position;
+
+			do
+			{
+				cout << "Enter the guess word" << endl;
+				cout << "You can also get some help by entering \'?\'" << endl;
+				cin >> guess;
+
+
+				if (guess == "?")
+				{
+					cout << "Hint: " << puzzle.anotherHint(position) << endl;
+				}
+				else
+				{
+					if (guessWord(&puzzle, position, guess) == 0)
+						validGuess = true;
+
+					if (!validGuess)
+						cout << "Try another word" << endl;
+				}
+
+
+			} while (!validGuess);
+
+		}
+		else if (action == 2)
+		{
+			string position;
+			bool validPosition = false;
+
+			cout << "Enter the position of the word you want to remove" << endl;
+			
+			do
+			{
+				cin >> position;
+
+				if (puzzle.remGuess(position) == 0)
+					validPosition = true;
+				else
+					cerr << "No word in such position, enter another one" << endl;
+
+			} while (!validPosition);
+
+		}
+
+	} while (!puzzle.correct() || action != 0);
+
+	if (puzzle.correct())
+	{
+		player.end();
+		cout << "Congratulations, " << player.getName() << " you finished the puzzle in " << player.timeToComplete() << " seconds." << endl;
+		/*MISSING STUFF*/
+	}
+
 
 	return 0;
 }
-*/
