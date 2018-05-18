@@ -119,10 +119,11 @@ Dictionary::Dictionary(string filename, bool &control)
 
 		}
 		dict.close(); //Closes file
+		control = false;
 	}
 	else
 	{
-		cerr << "Error opening file" << endl;
+		//cerr << "Error opening file" << endl;
 		control = true;
 	}
 }

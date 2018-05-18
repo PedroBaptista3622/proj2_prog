@@ -8,6 +8,7 @@
 #include <vector>
 #include <iomanip>
 #include <sstream>
+#include <cctype>
 
 using namespace std;
 
@@ -60,18 +61,72 @@ string boardFileName()
 	return outputName.str();
 }
 
+int numberOf(string rowType)
+{
+	bool good = false;
+	string input;
+
+	while (!good)
+	{
+		cout << "How many " << rowType << " should the board have?" << endl;
+		getline(cin, input);
+
+		if (input.size() > 0)
+		{
+			good = true;
+
+			for (int i = 0; i < input.length(); i++)
+			{
+				if (!isdigit(input[i]))
+					good = false;
+			}
+
+			if (good)
+			{
+				int rows = stoi(input);
+				if (rows < 703)
+					return rows;
+				else
+				{
+					good = false;
+					cout << "Invalid input. Please input the number of " << rowType << "the board should have." << endl;
+					cout << "It should be an integer between 1 and 702." << endl;
+					cout << "Your input: ";
+				}
+			}
+		}
+
+		cin.clear();
+		cin.ignore(10000,'\n');
+
+	}	
+}
+
 void createPuzzle()
 {
-	int lines, columns; // Lines/Columns = number of lines/columns
+	int lines = numberOf("lines");
+	int columns = numberOf("columns");// Lines/Columns = number of lines/columns
 	string filename;
 	bool error = false; //Variable used to check if any errors opening the dictionary happened
 
-	cout << "Insert size of board (lines and then columns)" << endl;
-	cin >> lines >> columns;
 	cout << "Insert dictionary file name" << endl;
-	cin >> filename;
+	getline(cin, filename);
 
 	Dictionary synonyms(filename, error);
+
+	while (error)
+	{
+		cout << "Error opening dictionary. Does the file exist?" << endl;
+
+		cout << "Insert dictionary file name" << endl;
+		getline(cin, filename);
+
+		synonyms = Dictionary(filename, error);
+		//Dictionary newDic(filename, error);
+		
+		//if (!error)
+			//synonyms = newDic;
+	}
 
 	if (!error)
 	{
@@ -85,7 +140,7 @@ void createPuzzle()
 
 			board.show();
 
-			cout << "Enter Position (LcD / CTRL + Z = Save and Exit / 0 = Exit)";
+			cout << "Enter Position (LcD / CTRL + Z = Save and Exit / 0 = Exit)" << endl;
 			cin >> input;
 
 			if (cin.eof())
@@ -157,10 +212,10 @@ void createPuzzle()
 				break;
 			}
 
-			cout << "Enter Word (- = remove / ? = help / 0 = exit)";
-			cout << "You can also get some words to help by entering \"Word?\"" << endl;
-
 			do {
+
+				cout << "Enter Word (- = remove / ? = help / 0 = exit)" << endl;
+				cout << "You can also get some words to help by entering \"Word?\"" << endl;
 
 				cin >> word;
 

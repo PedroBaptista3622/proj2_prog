@@ -364,6 +364,8 @@ string Board::generateWildcard(string position, int size)
  */
 int Board::insWord(string pos, string word)
 {
+	word = stringToUpper(word);
+
 	if (!(dictionary->checkWordDictionary (word)))
 		return -1; //inexistent word
 
@@ -396,6 +398,9 @@ int Board::insWord(string pos, string word)
 		}
 	}
 
+	//adds word to list
+	words.emplace(pos, stringToUpper(word));
+
 	//adds non-redundant characters
 	for (map<string, char>::iterator it = charMap.begin(); it != charMap.end(); it++)
 		addedChars.emplace( it->first, it->second );
@@ -403,8 +408,7 @@ int Board::insWord(string pos, string word)
 	//adds new black spaces
 	addBlackSpaces();
 
-	//adds word to list
-	words.emplace(pos, stringToUpper(word));
+	
 
 	return 0;
 }
@@ -538,7 +542,7 @@ void Board::refill() //TODO
 
 void Board::addBlackSpaces()
 {
-	for (map<string,string>::iterator it; it != words.end(); it++)
+	for (map<string,string>::iterator it = words.begin(); it != words.end(); it++)
 	{
 		wordPosition position = separateWordPos(it->first);
 		string word = it->second;

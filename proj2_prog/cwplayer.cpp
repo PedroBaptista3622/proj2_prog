@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #endif
 */
-
+/*
 #include <iostream>
 #include <iomanip>
 #include <sstream>
@@ -57,7 +57,8 @@ int guessWord(Puzzle *puzzle, string position, string word)
 		break;
 	}
 }
-
+*/
+/*
 int main()
 {
 	int numberBoardToLoad;
@@ -157,3 +158,4 @@ int main()
 
 	return 0;
 }
+*/
