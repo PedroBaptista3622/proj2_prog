@@ -8,7 +8,7 @@ cwcreator.o: cwcreator.cpp board.h Dictionary.h
 board.o: board.cpp board.h Dictionary.h utilities.h colour_linux.h
 	g++ -c -o board.o board.cpp
 
-Dictionary.o: Dictionary.cpp Dictionary.h board.cpp utilities.h
+Dictionary.o: Dictionary.cpp Dictionary.h utilities.h
 	g++ -c -o Dictionary.o Dictionary.cpp
 
 colour_linux.o: colour_linux.cpp colour_linux.h

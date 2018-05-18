@@ -50,5 +50,44 @@ string stringToUpper(string str);
  */
 string stringToLower(string str);
 
+bool validPosStr(string str);
+
+
+class Position
+{
+public:
+
+	Position(int line, int column);
+	
+	int getLine() const;
+
+	int getColumn() const;
+
+	bool isValid() const;
+
+protected:
+
+	Position();
+
+	void setLine(int line);
+
+	void setColumn(int column);
+
+	void setCoords(int line, int column);
+
+  void setValidity(bool valid);
+
+private:
+
+	void updateValidity();
+
+	int line, column;
+
+	bool valid;
+
+};
+
+
+
 //#endif
 //End of file

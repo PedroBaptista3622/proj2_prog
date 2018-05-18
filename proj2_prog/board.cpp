@@ -4,7 +4,7 @@ using namespace std;
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                                                                             *
- *                       BOARD CLASS - IMPLEMENTATION                          *
+ *                          board.h - IMPLEMENTATION                           *
  *                                                                             *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -175,7 +175,7 @@ int Board::remWord(string position) //TODO
 		return -1;
 
 	//separates the elements of the position string
-	wordPosition pos = separateWordPos(position);
+	wordPosition pos(position);
 
 	//removes the black spaces at the end
 	removeBlackSpaces(pos, words.at(position).length());
@@ -289,9 +289,9 @@ void Board::show()
 
     cout << endl;
 
-		cout << endl;
-
   }
+
+	cout << endl;
 }
 
 /**
@@ -304,8 +304,8 @@ void Board::show()
  */
 string Board::generateWildcard(string position, int size)
 {
-	wordPosition pos = separateWordPos(position);
-	if (!wordPosInBoard(pos))
+	wordPosition pos(position);
+	if (!pos.inBoard(number.lines, number.columns))
 		return "-1";
 
 	if(!wordFits(pos, size))
@@ -315,17 +315,17 @@ string Board::generateWildcard(string position, int size)
 
 	for (int offset = 0; offset < size; offset++)
 	{
-		if (pos.direction == 'V')
+		if (pos.getDirection() == 'V')
 		{
-			if (addedChars.find(stringToUpper(cvtPosNr(pos.line + offset)) + cvtPosNr(pos.column)) != addedChars.end())
-				output.push_back(addedChars.at(stringToUpper(cvtPosNr(pos.line + offset)) + cvtPosNr(pos.column)));
+			if (addedChars.find(stringToUpper(cvtPosNr(pos.getLine() + offset)) + cvtPosNr(pos.getColumn())) != addedChars.end())
+				output.push_back(addedChars.at(stringToUpper(cvtPosNr(pos.getLine() + offset)) + cvtPosNr(pos.getColumn())));
 			else
 				output.push_back('?');
 		}
 		else
 		{
-			if (addedChars.find(stringToUpper(cvtPosNr(pos.line)) + cvtPosNr(pos.column + offset)) != addedChars.end())
-				output.push_back(addedChars.at(stringToUpper(cvtPosNr(pos.line)) + cvtPosNr(pos.column + offset)));
+			if (addedChars.find(stringToUpper(cvtPosNr(pos.getLine())) + cvtPosNr(pos.getColumn() + offset)) != addedChars.end())
+				output.push_back(addedChars.at(stringToUpper(cvtPosNr(pos.getLine())) + cvtPosNr(pos.getColumn() + offset)));
 			else
 				output.push_back('?');
 		}
@@ -369,9 +369,9 @@ int Board::insWord(string pos, string word)
 	if (words.find(stringToUpper(word)) != words.end())
 		return -4; //repeated word
 
-	wordPosition position = separateWordPos(pos);
+	wordPosition position(pos);
 
-	if (!wordPosInBoard(position))
+	if (!position.inBoard(number.lines, number.columns))
 		return -5; //invalid position
 
 
@@ -405,77 +405,13 @@ int Board::insWord(string pos, string word)
 	//adds new black spaces
 	addBlackSpaces();
 
-	
+
 
 	return 0;
 }
 
 
 //PRIVATE MEMBER FUNCTIONS
-
-/**
- * Returns a string "a" to "zz" correspoding to a number up to 26^2 + 25.
- *
- * @param	number	In range [0, 26^2 + 25]
- * @return			String from "a" to "zz"
- */
-string Board::cvtPosNr(int number)
-{
-	assert(number >= 0);
-	assert(number <= (26*26 + 25));
-	if ((number / 26) == 0)
-	{
-		string output;
-		output.push_back(char(int('a') + number));
-		return output;
-	}
-	else
-	{
-		string output;
-		output.push_back(char(int('a') + number / 26 - 1));
-		output.push_back(char(int('a') + number % 26));
-		return output;
-	}
-}
-
-/**
- * Returns a number up to 26^2 - 1 corresponding to a string
- * from "a" to "zz".
- *
- * @param	string	From "a" to "zz"
- * @return			Number in range [0, 26^2 - 1]
- */
-int Board::cvtPosStr(string str)
-{
-	assert(str.length() > 0);
-	assert(str.length() <= 2);
-
-	str = stringToLower(str);
-
-	if (str.length() == 1)
-		return int(str[0]) - int ('a');
-	else
-	{
-		int rightChar = int(str[1]) - int ('a');
-		int leftChar = int(str[0]) - int ('a');
-		return rightChar + 26*(leftChar + 1);
-	}
-}
-
-bool Board::validPosStr(string str)
-{
-	if (str.length() > 2 || str.length() < 1)
-		return false;
-
-	for (int i = 0; i < str.length(); i++)
-	{
-		if (!isalpha(str.at(i)))
-			return false;
-	}
-
-	return true;
-}
-
 /**
  * Fills all empty spaces with black spaces
  */
@@ -484,12 +420,10 @@ void Board::blackout()
 	for (int line = 0; line < (this->number.lines); line++)
 		for (int column = 0; column < (this->number.columns); column++)
 		{
-			charPosition pos;
-				pos.line = line;
-				pos.column = column;
-				pos.valid = true;
-			if (addedChars.find(charPosString(pos)) == addedChars.end())
-				addedChars.emplace(charPosString(pos), '#');
+			charPosition pos(line, column);
+			if (pos.isValid())
+				if (addedChars.find(pos.str()) == addedChars.end())
+					addedChars.emplace(pos.str(), '#');
 		}
 }
 
@@ -511,7 +445,7 @@ void Board::refill() //TODO
 	//iterates through all position-word pairs
 	for (map<string, string>::iterator par = words.begin(); par != words.end(); par++)
 	{
-		wordPosition position = separateWordPos(par->first);
+		wordPosition position(par->first);
 		string word = par->second;
 
 
@@ -541,74 +475,57 @@ void Board::addBlackSpaces()
 {
 	for (map<string,string>::iterator it = words.begin(); it != words.end(); it++)
 	{
-		wordPosition position = separateWordPos(it->first);
+		wordPosition position(it->first);
 		string word = it->second;
 
-		charPosition before, after;
-		if (position.direction == 'V')
+		charPosition before(0, 0);
+		charPosition after(0, 0);
+		if (position.getDirection() == 'V')
 		{
-			before.line = position.line - 1;
-			before.column = position.column;
-			before.valid = true;
-
-			after.line = position.line + word.length();
-			after.column = position.column;
-			after.valid = true;
+			before = charPosition(position.getLine() - 1, position.getColumn());
+			after = charPosition(position.getLine() + word.length(), position.getColumn());
 		}
 		else
 		{
-			before.line = position.line;
-			before.column = position.column - 1;
-			before.valid = true;
-
-			after.line = position.line;
-			after.column = position.column + word.length();
-			after.valid = true;
+			before = charPosition(position.getLine(), position.getColumn() - 1);
+			after = charPosition(position.getLine(), position.getColumn() + word.length());
 		}
 
-		if (charPosInBoard(before))
+		if (before.inBoard(number.lines, number.columns))
 		{
-			if (addedChars.find(charPosString(before)) == addedChars.end())
-				addedChars.emplace(charPosString(before), '#');
+			if (addedChars.find(before.str()) == addedChars.end())
+				addedChars.emplace(before.str(), '#');
 		}
-		if (charPosInBoard(after))
+		if (after.inBoard(number.lines, number.columns))
 		{
-			if (addedChars.find(charPosString(after)) == addedChars.end())
-				addedChars.emplace(charPosString(after), '#');
+			if (addedChars.find(after.str()) == addedChars.end())
+				addedChars.emplace(after.str(), '#');
 		}
 	}
 }
 
 void Board::removeBlackSpaces(const wordPosition& position, int length)
 {
-	charPosition before, after;
-	if (position.direction == 'V')
+	charPosition before(0, 0);
+	charPosition after(0, 0);
+	if (position.getDirection() == 'V')
 	{
-		before.line = position.line - 1;
-		before.column = position.column;
-		before.valid = true;
-
-		after.line = position.line + length;
-		after.column = position.column;
-		after.valid = true;
+		before = charPosition(position.getLine() - 1, position.getColumn());
+		after = charPosition(position.getLine() + length, position.getColumn());
 	}
 	else
 	{
-		before.line = position.line;
-		before.column = position.column - 1;
-		before.valid = true;
-
-		after.line = position.line;
-		after.column = position.column + length;
-		after.valid = true;
+		before = charPosition(position.getLine(), position.getColumn() - 1);
+		after = charPosition(position.getLine(), position.getColumn() + length);
 	}
-	if (charPosInBoard(before))
-		addedChars.erase(addedChars.find(charPosString(before)));
-	if (charPosInBoard(after))
-		addedChars.erase(addedChars.find(charPosString(after)));
+	if (before.inBoard(number.lines, number.columns))
+		addedChars.erase(addedChars.find(before.str()));
+	if (after.inBoard(number.lines, number.columns))
+		addedChars.erase(addedChars.find(after.str()));
 
 }
 
+/*
 Board::wordPosition Board::separateWordPos(string position)
 {
 	wordPosition output;
@@ -744,57 +661,50 @@ bool Board::charPosInBoard(const charPosition& position)
 		output = (position.line < number.lines && position.column < number.columns);
 		return output;
 }
+*/
 
-bool Board::wordFits(const wordPosition& position, int length)
+bool Board::wordFits(wordPosition& position, int length)
 {
-	if (!wordPosInBoard(position))
+	if (!position.inBoard(number.lines, number.columns))
 		return false;
 
 	//can the word fit in the board?
-	if (position.direction == 'V')
+	if (position.getDirection() == 'V')
 	{
-		if (position.line + length > number.lines)
+		if (position.getLine() + length > number.lines)
 			return false;
 	}
 	else
 	{
-		if (position.column + length > number.columns)
+		if (position.getColumn() + length > number.columns)
 			return false;
 	}
 
 	//is there a constrain put in by other words?
-	charPosition before, after;
-	if (position.direction == 'V')
+	charPosition before(0, 0);
+	charPosition after(0, 0);
+	if (position.getDirection() == 'V')
 	{
-		before.line = position.line - 1;
-		before.column = position.column;
-		before.valid = true;
-
-		after.line = position.line + length;
-		after.column = position.column;
-		after.valid = true;
+		before = charPosition(position.getLine() - 1, position.getColumn());
+		after = charPosition(position.getLine() + length, position.getColumn());
 	}
 	else
 	{
-		before.line = position.line;
-		before.column = position.column - 1;
-		before.valid = true;
-
-		after.line = position.line;
-		after.column = position.column + length;
-		after.valid = true;
+		before = charPosition(position.getLine(), position.getColumn() - 1);
+		after = charPosition(position.getLine(), position.getColumn() + length);
 	}
 
-	if (charPosInBoard(before))
+	if (before.inBoard(number.lines, number.columns))
 	{
-		if (addedChars.find(charPosString(before)) != addedChars.end())
-			if (addedChars.at(charPosString(before)) != '#')
+		if (addedChars.find(before.str()) != addedChars.end())
+			if (addedChars.at(before.str()) != '#')
 				return false;
 	}
-	if (charPosInBoard(after))
+
+	if (after.inBoard(number.lines, number.columns))
 	{
-		if (addedChars.find(charPosString(after)) != addedChars.end())
-			if (addedChars.at(charPosString(after)) != '#')
+		if (addedChars.find(after.str()) != addedChars.end())
+			if (addedChars.at(after.str()) != '#')
 				return false;
 	}
 
@@ -807,22 +717,218 @@ map<string,char> Board::tempMap(const wordPosition& position, string word)
 
 	for (int offset = 0; offset < word.length(); offset++)
 	{
-		charPosition letter;
-		if (position.direction == 'V')
+		charPosition letter(0, 0);
+		if (position.getDirection() == 'V')
 		{
-			letter.line = position.line + offset;
-			letter.column = position.column;
-			letter.valid = true;
+			letter = charPosition(position.getLine() + offset, position.getColumn());
 		}
 		else
 		{
-			letter.line = position.line;
-			letter.column = position.column + offset;
-			letter.valid = true;
+			letter = charPosition(position.getLine() + offset, position.getColumn());
 		}
 
-		output.emplace(charPosString(letter), word.at(offset));
+		output.emplace(letter.str(), word.at(offset));
 	}
 
 	return output;
+}
+
+charPosition::charPosition(int line, int column)
+{
+  setCoords(line, column);
+}
+
+charPosition::charPosition(string position)
+{
+	string lineStr, colStr;
+
+	while ((position.length() > 0) ? isupper(position.at(0)) : false)
+	{
+		lineStr.push_back(position.at(0));
+		position.erase(0, 1);
+	}
+
+	while ((position.length() > 0) ? islower(position.at(0)) : false)
+	{
+		colStr.push_back(position.at(0));
+		position.erase(0, 1);
+	}
+
+	//checks whether a valid position was input
+	if (position.length() == 0 )
+		if (validPosStr(lineStr) && validPosStr(colStr))
+			setCoords(cvtPosStr(lineStr), cvtPosStr(colStr));
+}
+
+bool charPosition::inBoard(int nLines, int nColumns)
+{
+	return (isValid() && getLine() < nLines && getColumn() < nColumns);
+}
+
+string charPosition::str()
+{
+	if (isValid())
+	{
+	string line, column;
+
+	line = stringToUpper(cvtPosNr(getLine()));
+	column = cvtPosNr(getColumn());
+
+	string output = line + column;
+	return output;
+	}
+	else
+		return "";
+}
+
+wordPosition::wordPosition(int line, int column, char direction)
+{
+	setCoords(line, column, direction);
+	updateValidity();
+}
+
+wordPosition::wordPosition(string position)
+{
+	string lineStr, colStr;
+	char direction;
+
+	while ((position.length() > 0) ? isupper(position.at(0)) : false)
+	{
+		lineStr.push_back(position.at(0));
+		position.erase(0, 1);
+	}
+
+	while ((position.length() > 0) ? islower(position.at(0)) : false)
+	{
+		colStr.push_back(position.at(0));
+		position.erase(0, 1);
+	}
+
+	if (position.length() > 0)
+	{
+		direction = position.at(0);
+		position.erase(0, 1);
+	}
+
+	//checks whether a valid position was input
+	if (position.length() == 0 )
+	{
+		if (validPosStr(lineStr) && validPosStr(colStr))
+			if (direction == 'H' || direction == 'V')
+				setCoords(cvtPosStr(lineStr), cvtPosStr(colStr), direction);
+	}
+	else
+		this->direction = 0;
+
+}
+
+bool wordPosition::inBoard(int nLines, int nColumns)
+{
+	return (isValid() && getLine() < nLines && getColumn() < nColumns);
+}
+
+string wordPosition::str()
+{
+	if (isValid())
+	{
+	string line, column;
+
+	line = stringToUpper(cvtPosNr(getLine()));
+	column = cvtPosNr(getColumn());
+
+	string output = line + column + direction;
+	return output;
+	}
+	else
+		return "";
+}
+
+char wordPosition::getDirection() const
+{
+	return direction;
+}
+
+wordPosition::wordPosition()
+{
+	direction = 0;
+}
+
+void wordPosition::setDirection(char direction)
+{
+	this->direction = direction;
+	updateValidity();
+}
+
+void wordPosition::setCoords(int line, int column, char direction)
+{
+	setLine(line);
+	setColumn(column);
+	setDirection(direction);
+}
+
+void wordPosition::updateValidity()
+{
+	bool validity = (getLine() >= 0 && getLine() < 703);
+	validity = validity && (getColumn() >= 0 && getColumn() < 703);
+	setValidity(validity && (direction == 'V' || direction == 'H'));
+}
+
+int Board::getLines()
+{
+	return number.lines;
+}
+
+int Board::getColumns()
+{
+	return number.columns;
+}
+
+
+/**
+ * Returns a string "a" to "zz" correspoding to a number up to 26^2 + 25.
+ *
+ * @param	number	In range [0, 26^2 + 25]
+ * @return			String from "a" to "zz"
+ */
+string cvtPosNr(int number)
+{
+	assert(number >= 0);
+	assert(number <= (26*26 + 25));
+	if ((number / 26) == 0)
+	{
+		string output;
+		output.push_back(char(int('a') + number));
+		return output;
+	}
+	else
+	{
+		string output;
+		output.push_back(char(int('a') + number / 26 - 1));
+		output.push_back(char(int('a') + number % 26));
+		return output;
+	}
+}
+
+/**
+ * Returns a number up to 26^2 - 1 corresponding to a string
+ * from "a" to "zz".
+ *
+ * @param	string	From "a" to "zz"
+ * @return			Number in range [0, 26^2 - 1]
+ */
+int cvtPosStr(string str)
+{
+	assert(str.length() > 0);
+	assert(str.length() <= 2);
+
+	str = stringToLower(str);
+
+	if (str.length() == 1)
+		return int(str[0]) - int ('a');
+	else
+	{
+		int rightChar = int(str[1]) - int ('a');
+		int leftChar = int(str[0]) - int ('a');
+		return rightChar + 26*(leftChar + 1);
+	}
 }

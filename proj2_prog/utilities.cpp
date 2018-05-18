@@ -110,4 +110,77 @@ string stringToLower(string str)
 }
 
 
+bool validPosStr(string str)
+{
+	if (str.length() > 2 || str.length() < 1)
+		return false;
+
+	for (int i = 0; i < str.length(); i++)
+	{
+		if (!isalpha(str.at(i)))
+			return false;
+	}
+
+	return true;
+}
+
+
+Position::Position()
+{
+  line = -1;
+  column = -1;
+  valid = false;
+}
+
+void Position::updateValidity()
+{
+  valid = (line >= 0) && (line < 703) && (column >= 0) && (column < 703);
+}
+
+bool Position::isValid() const
+{
+  return valid;
+}
+
+Position::Position(int line, int column)
+{
+  this->line = line;
+  this->column = column;
+  updateValidity();
+}
+
+int Position::getLine() const
+{
+  return line;
+}
+
+int Position::getColumn() const
+{
+  return column;
+}
+
+void Position::setLine(int line)
+{
+  this->line = line;
+  updateValidity();
+}
+
+void Position::setColumn(int column)
+{
+  this->column = column;
+  updateValidity();
+}
+
+void Position::setCoords(int line, int column)
+{
+  this->line = line;
+  this->column = column;
+  updateValidity();
+}
+
+void Position::setValidity(bool valid)
+{
+  this->valid = valid;
+}
+
 //End of file

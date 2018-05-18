@@ -21,6 +21,52 @@ using namespace std;
 
 //Definitions
 
+class charPosition : public Position
+{
+public:
+
+  charPosition(int line, int column);
+
+	charPosition(string position);
+
+	bool inBoard(int nLines, int nColumn);
+
+  string str();
+
+};
+
+class wordPosition : public Position
+{
+public:
+
+  wordPosition(int line, int column, char direction);
+
+  wordPosition(string position);
+
+  bool inBoard(int nLines, int nColumn);
+
+  char getDirection() const;
+
+  string str();
+
+protected:
+
+  wordPosition();
+
+  void setDirection(char direction);
+
+  void setCoords(int line, int column, char direction);
+
+private:
+
+  char direction;
+
+  void updateValidity();
+
+friend map<string,char> tempMap(const wordPosition& position, string word);
+
+};
+
 /**
  * Board is a class that stores the atributes of a crosswords puzzle, including
  * its size, inserted words and an associated dictionary.
@@ -145,6 +191,10 @@ class Board
 		 */
 		 string generateWildcard(string position, int size); //DONE
 
+     int getLines();
+
+     int getColumns();
+
 	protected:
 
 		//FIELDS
@@ -154,7 +204,7 @@ class Board
 			int lines;
 			int columns;
 		} number;
-
+    /*
 		//structure to keep the separated fields of a word position
 		struct wordPosition {
 			int line;
@@ -169,6 +219,8 @@ class Board
 			int column;
 			bool valid;
 		};
+    */
+
 		//keeps a list of words and its position
 		map<string,string> words;
 
@@ -180,27 +232,6 @@ class Board
 		bool internalDictionary;
 
 		//MEMBER FUNCTIONS
-
-		/**
-		 * Returns a string "a" to "zz" correspoding to a number up to 26^2 - 1.
-		 *
-		 * @param	number	In range [0, 26^2 - 1]
-		 * @return			String from "a" to "zz"
-		 */
-		string cvtPosNr(int number); //DONE
-
-		/**
-		 * Returns a number up to 26^2 - 1 corresponding to a string
-		 * from "a" to "zz".
-		 *
-		 * @param	string	From "a" to "zz"
-		 * @return			Number in range [0, 26^2 - 1]
-		 */
-		int cvtPosStr(string str); //DONE
-
-		bool validPosStr(string str); //DONE
-
-
 		/**
 		 * Fills all empty spaces with black spaces
 		 */
@@ -215,25 +246,28 @@ class Board
 
 		void removeBlackSpaces(const wordPosition& position, int length); //DONE
 
-		wordPosition separateWordPos(string position); //DONE
+		bool wordFits(wordPosition& position, int length); //DONE
 
-		charPosition separateCharPos(string position); //DONE
-
-		string wordPosString(const wordPosition& position); //DONE
-
-		string charPosString(const charPosition& position); //DONE
-
-		bool wordPosInBoard(const wordPosition& position); //DONE
-
-		bool charPosInBoard(const charPosition& position); //DONE
-
-		bool wordFits(const wordPosition& position, int length); //DONE
-
-		map<string,char> tempMap(const wordPosition& position, string word);
-
-
+    map<string,char> tempMap(const wordPosition& position, string word);
 
 };
+
+/**
+ * Returns a string "a" to "zz" correspoding to a number up to 26^2 - 1.
+ *
+ * @param	number	In range [0, 26^2 - 1]
+ * @return			String from "a" to "zz"
+ */
+string cvtPosNr(int number); //DONE
+
+/**
+ * Returns a number up to 26^2 - 1 corresponding to a string
+ * from "a" to "zz".
+ *
+ * @param	string	From "a" to "zz"
+ * @return			Number in range [0, 26^2 - 1]
+ */
+int cvtPosStr(string str); //DONE
 
 //#endif
 //End of file
