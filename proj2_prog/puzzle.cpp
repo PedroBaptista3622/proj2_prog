@@ -1,8 +1,4 @@
 //COMPILER DIRECTIVES
-#ifdef _WIN32
-#include "stdafx.h"
-#endif
-
 #include "puzzle.h"
 using namespace std;
 

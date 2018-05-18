@@ -4,7 +4,6 @@
 #pragma once
 
 #ifdef _WIN32
-#include "stdafx.h"
 #include "colour_windows.h"
 #else
 #include "colour_linux.h"

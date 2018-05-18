@@ -2,7 +2,6 @@
 // JAS
 // Example of a programme that prints coloured characters on the console (in text mode)
 
-#include "stdafx.h"
 #include <iostream>
 #include <ctime>
 #include <cstdlib>

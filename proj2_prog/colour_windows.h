@@ -3,7 +3,6 @@
 // Header for a library that prints coloured characters on the console (in text mode)
 #ifndef COLOUR_WINDOWS_H
 #define COLOUR_WINDOWS_H
-#include "stdafx.h"
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
