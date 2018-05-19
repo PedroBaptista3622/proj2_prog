@@ -2,7 +2,7 @@ cwplayer.out: obj/cwplayer.o obj/board.o obj/Dictionary.o obj/colour_linux.o obj
 								obj/player.o obj/puzzle.o
 	g++ -o cwplayer.out obj/cwplayer.o obj/board.o obj/Dictionary.o obj/colour_linux.o obj/utilities.o obj/player.o obj/puzzle.o
 
-obj/cwplayer.o: cwplayer.cpp board.h player.h puzzle.h
+obj/cwplayer.o: cwplayer.cpp board.h player.h puzzle.h utilities.h
 	g++ -c -o obj/cwplayer.o cwplayer.cpp
 
 obj/puzzle.o: puzzle.cpp puzzle.h board.h
