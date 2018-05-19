@@ -724,7 +724,7 @@ map<string,char> Board::tempMap(const wordPosition& position, string word)
 		}
 		else
 		{
-			letter = charPosition(position.getLine() + offset, position.getColumn());
+			letter = charPosition(position.getLine(), position.getColumn() + offset);
 		}
 
 		output.emplace(letter.str(), word.at(offset));

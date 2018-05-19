@@ -90,6 +90,8 @@ class Puzzle : Board
 		 * @return		Are the words input by the user the correct ones?
 		 */
 		bool correct(); //DONE
+		
+		bool complete();
 
 
 	private:
