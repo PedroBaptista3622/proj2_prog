@@ -7,14 +7,15 @@
 #include <iomanip>
 #include <sstream>
 #include <cctype>
+#ifdef _WIN32
+const std::string eofkey = "Ctrl + Z";
+#include "colour_windows.h"
+#else
+const std::string eofkey = "Ctrl + D";
+#include "colour_linux.h"
+#endif
 
 using namespace std;
-
-#ifdef _WIN32
-const string eofkey = "Ctrl + Z";
-#else
-const string eofkey = "Ctrl + D";
-#endif
 
 void printLogo()
 {
