@@ -455,7 +455,7 @@ void Board::refill()
 		//deletes redundant characters
 		for (map<string, char>::iterator it = wordChars.begin(); it != wordChars.end(); it++)
 		{
-			if (addedChars.find(it->first) != addedChars.end())
+			if (newMap.find(it->first) != newMap.end())
 			{
 				wordChars.erase(it);
 			}
