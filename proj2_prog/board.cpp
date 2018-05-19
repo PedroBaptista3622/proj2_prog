@@ -157,7 +157,11 @@ void Board::linkDic(Dictionary* dictionary, bool replace)
 	this->dictionary = dictionary;
 }
 
-Dictionary* Board::getDicPointer()
+/**
+ * Returns a copy of the dictionary pointer.
+ * @return	A copy of the dictionary pointer.
+ */
+Dictionary* Board::getDicPointer() const
 {
 	return dictionary;
 }
@@ -168,8 +172,7 @@ Dictionary* Board::getDicPointer()
  * @param	word	The word to be removed
  * @return			The exit code of the procedure
  */
-
-int Board::remWord(string position) //TODO
+int Board::remWord(string position)
 {
 	if (words.find(position) == words.end())
 		return -1;
@@ -302,7 +305,7 @@ void Board::show()
  * @param	position	the position string where it should start generating
  * @returns					wildcard string, or exit code string
  */
-string Board::generateWildcard(string position, int size)
+string Board::generateWildcard(string position, int size) const
 {
 	wordPosition pos(position);
 	if (!pos.inBoard(number.lines, number.columns))
@@ -430,7 +433,7 @@ void Board::blackout()
 /**
  * Re-does the addedChars map from the existing added words
  */
-void Board::refill() //TODO
+void Board::refill()
 {
 	map<string, char> newMap;
 
@@ -471,6 +474,9 @@ void Board::refill() //TODO
 
 }
 
+/**
+ * Adds black spaces to the extremities of the words
+ */
 void Board::addBlackSpaces()
 {
 	for (map<string,string>::iterator it = words.begin(); it != words.end(); it++)
@@ -504,6 +510,12 @@ void Board::addBlackSpaces()
 	}
 }
 
+/**
+ * Removes the black spaces from around a word.
+ * 
+ * @param	position	The starting position of the word
+ * @param	length		The length of the word
+ */
 void Board::removeBlackSpaces(const wordPosition& position, int length)
 {
 	charPosition before(0, 0);
@@ -525,145 +537,14 @@ void Board::removeBlackSpaces(const wordPosition& position, int length)
 
 }
 
-/*
-Board::wordPosition Board::separateWordPos(string position)
-{
-	wordPosition output;
-	output.valid = true;
-
-	string lineStr, colStr;
-	char direction = 0;
-
-	while ((position.length() > 0) ? isupper(position.at(0)) : false)
-	{
-		lineStr.push_back(position.at(0));
-		position.erase(0, 1);
-	}
-
-	while ((position.length() > 0) ? islower(position.at(0)) : false)
-	{
-		colStr.push_back(position.at(0));
-		position.erase(0, 1);
-	}
-
-	if (position.length() > 0)
-	{
-		direction = position.at(0);
-		position.erase(0, 1);
-	}
-
-	//checks whether a valid position was input
-	if (position.length() > 0)
-		output.valid = false;
-
-	if (!validPosStr(lineStr) || !validPosStr(colStr))
-		output.valid = false;
-
-	if (direction != 'V' && direction != 'H')
-		output.valid = false;
-
-	if (output.valid)
-	{
-		output.line = cvtPosStr(lineStr);
-		output.column = cvtPosStr(colStr);
-		output.direction = direction;
-	}
-	else
-	{
-		output.line = 0;
-		output.column = 0;
-		output.direction = 0;
-	}
-
-	return output;
-}
-
-Board::charPosition Board::separateCharPos(string position)
-{
-	charPosition output;
-
-	string lineStr, colStr;
-
-	while ((position.length() > 0) ? isupper(position.at(0)) : false)
-	{
-		lineStr.push_back(position.at(0));
-		position.erase(0, 1);
-	}
-
-	while ((position.length() > 0) ? islower(position.at(0)) : false)
-	{
-		colStr.push_back(position.at(0));
-		position.erase(0, 1);
-	}
-
-	//checks whether a valid position was input
-	if (position.length() > 0)
-		output.valid = false;
-
-	if (!validPosStr(lineStr) || !validPosStr(colStr))
-		output.valid = false;
-
-	if (output.valid)
-	{
-		output.line = cvtPosStr(lineStr);
-		output.column = cvtPosStr(colStr);
-	}
-	else
-	{
-		output.line = 0;
-		output.column = 0;
-	}
-
-	return output;
-}
-
-string Board::wordPosString(const wordPosition& position)
-{
-	assert(position.valid);
-	string line, column;
-
-	line = stringToUpper(cvtPosNr(position.line));
-	column = cvtPosNr(position.column);
-
-	string output = line + column;
-	output.push_back(position.direction);
-	return output;
-}
-
-string Board::charPosString(const charPosition& position)
-{
-	assert(position.valid);
-	string line, column;
-
-	line = stringToUpper(cvtPosNr(position.line));
-	column = cvtPosNr(position.column);
-
-	string output = line + column;
-	return output;
-}
-
-bool Board::wordPosInBoard(const wordPosition& position)
-{
-	if (!position.valid)
-		return false;
-
-	bool output;
-	output = (position.line < number.lines && position.column < number.columns);
-	return output;
-}
-
-bool Board::charPosInBoard(const charPosition& position)
-{
-	if (!position.valid)
-		return false;
-
-		bool output;
-		output = (position.line < number.lines && position.column < number.columns);
-		return output;
-}
-*/
-
-bool Board::wordFits(wordPosition& position, int length)
+/**
+ * Returns whether a word of given length fits in a given position
+ * 
+ * @param	position	Starting position of the word
+ * @param	length		Length of the word
+ * @return				Value of the predicate
+ */
+bool Board::wordFits(wordPosition& position, int length) const
 {
 	if (!position.inBoard(number.lines, number.columns))
 		return false;
@@ -711,7 +592,15 @@ bool Board::wordFits(wordPosition& position, int length)
 	return true;
 }
 
-map<string,char> Board::tempMap(const wordPosition& position, string word)
+/**
+ * Produces a map with the characters of the given word and their position
+ * strings.
+ * 
+ * @param	position	The starting position of the word
+ * @param	word		The word
+ * @return				A map of the characters and their position strings
+ */
+map<string,char> Board::tempMap(const wordPosition& position, string word) const
 {
 	map<string,char> output;
 
@@ -733,11 +622,23 @@ map<string,char> Board::tempMap(const wordPosition& position, string word)
 	return output;
 }
 
+/**
+ * Constructs object from coordinates. Updates validity internally.
+ * 
+ * @param	line	Line to be set
+ * @param	column	Column to be set
+ */
 charPosition::charPosition(int line, int column)
 {
   setCoords(line, column);
 }
 
+/**
+ * Converts character position string to numeric coordinates and constructs
+ * the object.
+ * 
+ * @param	position	The position string
+ */
 charPosition::charPosition(string position)
 {
 	string lineStr, colStr;
@@ -760,12 +661,26 @@ charPosition::charPosition(string position)
 			setCoords(cvtPosStr(lineStr), cvtPosStr(colStr));
 }
 
-bool charPosition::inBoard(int nLines, int nColumns)
+/**
+ * Returns whether the position can describe a valid position in a board of
+ * specified dimensions.
+ * 
+ * @param	nLines	The number of lines of the board
+ * @param	nColumn	The number of columns of the board
+ * @return			The truth vale of the afore mentioned predicate
+ */
+bool charPosition::inBoard(int nLines, int nColumns) const
 {
 	return (isValid() && getLine() < nLines && getColumn() < nColumns);
 }
 
-string charPosition::str()
+/**
+ * Converts the position coordinates to a position string. If the position is
+ * not valid, it returns an empty string instead.
+ * 
+ * @return	The corresponding position string
+ */
+string charPosition::str() const
 {
 	if (isValid())
 	{
@@ -781,12 +696,25 @@ string charPosition::str()
 		return "";
 }
 
+/**
+ * Constructs object from its coordinates. Internally determines validity
+ * 
+ * @param	line		Starting line
+ * @param	column		Starting column
+ * @param	direction	Direction in which the word is laid out
+ */
 wordPosition::wordPosition(int line, int column, char direction)
 {
 	setCoords(line, column, direction);
 	updateValidity();
 }
 
+/**
+ * Converts the coordinates from a position string to their numeric values
+ * and constructs the object. Internally determines validity
+ *
+ * @param	position	The position string
+ */
 wordPosition::wordPosition(string position)
 {
 	string lineStr, colStr;
@@ -822,12 +750,25 @@ wordPosition::wordPosition(string position)
 
 }
 
+/**
+ * Determines whether the position is valid and inside of a board of
+ * specified dimension.
+ * 
+ * @param	nLines		Number of lines the board has
+ * @param	nColumn		Number of columns the board has
+ * @return				The value of the afore mentioned predicate
+ */
 bool wordPosition::inBoard(int nLines, int nColumns)
 {
 	return (isValid() && getLine() < nLines && getColumn() < nColumns);
 }
 
-string wordPosition::str()
+/**
+ * Returns a position string corresponding to the position.
+ * 
+ * @return	The corresponding position string
+ */
+string wordPosition::str() const
 {
 	if (isValid())
 	{
@@ -843,22 +784,43 @@ string wordPosition::str()
 		return "";
 }
 
+/**
+ * Returns the direction in which the word is laid out.
+ * 
+ * @return		The direction in which the word is laid out
+ */
 char wordPosition::getDirection() const
 {
 	return direction;
 }
 
+/**
+ * Default constructor for the object. Initialises line and column as -1,
+ * the direction as null and as invalid.
+ */
 wordPosition::wordPosition()
 {
 	direction = 0;
 }
 
+/**
+ * Sets the value of the direction character. Updates validity.
+ * 
+ * @param	direction	The direction in which the word is laid out
+ */
 void wordPosition::setDirection(char direction)
 {
 	this->direction = direction;
 	updateValidity();
 }
 
+/**
+ * Sets the coordinates of the position. Updates validity.
+ * 
+ * @param	line		The starting line
+ * @param	column		The starting column
+ * @param	direction	The direction in which the word is laid out
+ */
 void wordPosition::setCoords(int line, int column, char direction)
 {
 	setLine(line);
@@ -866,34 +828,51 @@ void wordPosition::setCoords(int line, int column, char direction)
 	setDirection(direction);
 }
 
+/**
+ * Updates the validity value, which obeys the following criteria:
+ * <p>
+ * - Positive integer between (and including) 0 and 701 for line and column
+	 * <p>
+ * - Direction character 'V' (vertical) or 'H' (horizontal)
+ */
 void wordPosition::updateValidity()
 {
-	bool validity = (getLine() >= 0 && getLine() < 703);
-	validity = validity && (getColumn() >= 0 && getColumn() < 703);
+	bool validity = (getLine() >= 0 && getLine() < 702);
+	validity = validity && (getColumn() >= 0 && getColumn() < 702);
 	setValidity(validity && (direction == 'V' || direction == 'H'));
 }
 
-int Board::getLines()
+/*
+ * Returns the number of lines in the board
+ * 
+ * @return	The number of lines in the board
+ */
+int Board::getLines() const
 {
 	return number.lines;
 }
 
-int Board::getColumns()
+/**
+ * Returns the number of columns in the board
+ * 
+ * @return The number of column in the board
+ */
+int Board::getColumns() const
 {
 	return number.columns;
 }
 
 
 /**
- * Returns a string "a" to "zz" correspoding to a number up to 26^2 + 25.
+ * Returns a string "a" to "zz" correspoding to a number up to 701.
  *
- * @param	number	In range [0, 26^2 + 25]
+ * @param	number	In range [0, 701]
  * @return			String from "a" to "zz"
  */
 string cvtPosNr(int number)
 {
 	assert(number >= 0);
-	assert(number <= (26*26 + 25));
+	assert(number <= 701);
 	if ((number / 26) == 0)
 	{
 		string output;
@@ -910,11 +889,11 @@ string cvtPosNr(int number)
 }
 
 /**
- * Returns a number up to 26^2 - 1 corresponding to a string
+ * Returns a number up to 701 corresponding to a string
  * from "a" to "zz".
  *
  * @param	string	From "a" to "zz"
- * @return			Number in range [0, 26^2 - 1]
+ * @return			Number in range [0, 701]
  */
 int cvtPosStr(string str)
 {
