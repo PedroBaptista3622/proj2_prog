@@ -68,42 +68,23 @@ string boardFileName()
 int numberOf(string rowType)
 {
 	bool good = false;
-	string input;
+	int rows;
 
-	while (!good)
+	cout << "How many " << rowType << " should the board have?" << endl;
+
+	do
 	{
-		cout << "How many " << rowType << " should the board have?" << endl;
-		getline(cin, input);
-
-		if (input.size() > 0)
+		rows = readInt("Invalid input. Please input the number of " + rowType + " in the board (1 to 702).\nYour input: ");
+		if (rows < 1 || rows > 702)
 		{
-			good = true;
-
-			for (int i = 0; i < input.length(); i++)
-			{
-				if (!isdigit(input[i]))
-					good = false;
-			}
-
-			if (good)
-			{
-				int rows = stoi(input);
-				if (rows < 703)
-					return rows;
-				else
-				{
-					good = false;
-					cout << "Invalid input. Please input the number of " << rowType << "the board should have." << endl;
-					cout << "It should be an integer between 1 and 702." << endl;
-					cout << "Your input: ";
-				}
-			}
+			cout << "Invalid input. The board should have between 1 and 702 " << rowType << ". Please try again" << endl;
+			cout << "Your input: ";
 		}
+		else
+			good = true;
+	} while (!good);
 
-		cin.clear();
-		cin.ignore(10000,'\n');
-
-	}	
+	return rows;
 }
 
 void createPuzzle()
@@ -113,8 +94,8 @@ void createPuzzle()
 	string filename;
 	bool error = false; //Variable used to check if any errors opening the dictionary happened
 
-	cout << "Insert dictionary file name" << endl;
-	getline(cin, filename);
+	cout << "Insert dictionary file name:" << endl;
+	filename = readString("Please input something.\nYour input: ");
 
 	Dictionary synonyms(filename, error);
 
@@ -122,14 +103,10 @@ void createPuzzle()
 	{
 		cout << "Error opening dictionary. Does the file exist?" << endl;
 
-		cout << "Insert dictionary file name" << endl;
-		getline(cin, filename);
+		cout << "Insert dictionary file name:" << endl;
+		filename = readString("Please input something.\nYour input: ");
 
 		synonyms = Dictionary(filename, error);
-		//Dictionary newDic(filename, error);
-		
-		//if (!error)
-			//synonyms = newDic;
 	}
 
 	if (!error)
