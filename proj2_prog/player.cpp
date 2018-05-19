@@ -10,7 +10,7 @@ Player::Player(string playerName)
   nHints = 0;
 }
 
-string Player::getName()
+string Player::getName() const
 {
   return name;
 }
@@ -30,12 +30,12 @@ void Player::gotHint()
   nHints++;
 }
 
-int Player::timeToComplete()
+int Player::timeToComplete() const
 {
   return difftime(endTime, startTime);
 }
 
-int Player::getNumHints()
+int Player::getNumHints() const
 {
 	return nHints;
 }

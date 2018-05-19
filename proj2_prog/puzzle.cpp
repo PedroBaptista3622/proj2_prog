@@ -8,7 +8,7 @@ Puzzle::Puzzle(string filename, bool& control)
 {
 	vector<map<string,char>::iterator> toRemove;
 
-	for (map<string,char>::iterator it = addedChars.begin(); it != addedChars.end();)
+	for (map<string,char>::iterator it = addedChars.begin(); it != addedChars.end(); it++)
 	{
 		if (it->second != '#')
 			toRemove.push_back(it);

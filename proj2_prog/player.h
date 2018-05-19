@@ -10,12 +10,12 @@ class Player
 public:
 
   Player(string playerName);
-  string getName();
+  string getName() const;
   void start();
   void end();
   void gotHint();
-  int timeToComplete();
-  int getNumHints();
+  int timeToComplete() const;
+  int getNumHints() const;
 
 
 private:
