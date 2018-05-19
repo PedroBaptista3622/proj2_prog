@@ -4,6 +4,7 @@
 #pragma once
 
 #include <string>
+#include <iostream>
 using namespace std;
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -58,7 +59,7 @@ class Position
 public:
 
 	Position(int line, int column);
-	
+
 	int getLine() const;
 
 	int getColumn() const;
@@ -86,6 +87,12 @@ private:
 	bool valid;
 
 };
+
+int readInt(string errormsg, istream& instream = cin, ostream& outstream = cout);
+
+char readChar(string errormsg, istream& instream = cin, ostream& outstream = cout);
+
+string readString(string errormsg, istream& instream = cin, ostream& outstream = cout);
 
 
 

@@ -1,18 +1,18 @@
-cwcreator.out: cwcreator.o board.o Dictionary.o colour_linux.o utilities.o
-	g++ -o cwcreator.out cwcreator.o board.o Dictionary.o colour_linux.o \
-	                     utilities.o
+cwcreator.out: obj/cwcreator.o obj/board.o obj/Dictionary.o obj/colour_linux.o obj/utilities.o
+	g++ -o cwcreator.out obj/cwcreator.o obj/board.o obj/Dictionary.o obj/colour_linux.o \
+	                     obj/utilities.o
 
-cwcreator.o: cwcreator.cpp board.h Dictionary.h
-	g++ -c -o cwcreator.o cwcreator.cpp
+obj/cwcreator.o: cwcreator.cpp board.h Dictionary.h utilities.h
+	g++ -c -o obj/cwcreator.o cwcreator.cpp
 
-board.o: board.cpp board.h Dictionary.h utilities.h colour_linux.h
-	g++ -c -o board.o board.cpp
+obj/board.o: board.cpp board.h Dictionary.h utilities.h colour_linux.h
+	g++ -c -o obj/board.o board.cpp
 
-Dictionary.o: Dictionary.cpp Dictionary.h utilities.h
-	g++ -c -o Dictionary.o Dictionary.cpp
+obj/Dictionary.o: Dictionary.cpp Dictionary.h utilities.h
+	g++ -c -o obj/Dictionary.o Dictionary.cpp
 
-colour_linux.o: colour_linux.cpp colour_linux.h
-	g++ -c -o colour_linux.o colour_linux.cpp
+obj/colour_linux.o: colour_linux.cpp colour_linux.h
+	g++ -c -o obj/colour_linux.o colour_linux.cpp
 
-utilities.o: utilities.cpp utilities.h
-	g++ -c -o utilities.o utilities.cpp
+obj/utilities.o: utilities.cpp utilities.h
+	g++ -c -o obj/utilities.o utilities.cpp

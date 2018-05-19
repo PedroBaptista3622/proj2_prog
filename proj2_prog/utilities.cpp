@@ -183,4 +183,79 @@ void Position::setValidity(bool valid)
   this->valid = valid;
 }
 
+int readInt(string errormsg, istream& instream, ostream& outstream)
+{
+	string input;
+	bool valid;
+
+	do
+	{
+		valid = true;
+		getline(instream, input);
+
+		if (input.length() == 0)
+		{
+			valid = false;
+			outstream << errormsg;
+		}
+		else if (input.length() == 1)
+		{
+			if (!isdigit(input.at(0)))
+			{
+				valid = false;
+				outstream << errormsg;
+			}
+		}
+		else
+		{
+			if (!isdigit(input.at(0)) && input.at(0) != '-')
+				valid = false;
+
+			for (int i = 1; i < input.length(); i++)
+				if (!isdigit(input.at(i)))
+					valid = false;
+
+			if (!valid)
+				outstream << errormsg;
+		}
+	} while (!valid);
+
+	return stoi(input);
+}
+
+char readChar(string errormsg, istream& instream, ostream& outstream)
+{
+	string input;
+	bool valid;
+
+	do {
+		valid = true;
+		getline(instream, input);
+		if (input.length() != 1)
+		{
+			valid = false;
+			outstream << errormsg;
+		}
+	} while (!valid);
+
+	return input.at(0);
+}
+
+string readString(string errormsg, istream& instream, ostream& outstream)
+{
+	string input;
+
+	bool valid;
+	do {
+		valid = true;
+		getline(instream, input);
+		if (input.length() == 0)
+		{
+			valid = false;
+			outstream << errormsg;
+		}
+	} while (!valid);
+
+	return input;
+}
 //End of file
