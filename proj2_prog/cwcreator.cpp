@@ -1,5 +1,6 @@
 #include "board.h"
 #include "Dictionary.h"
+#include "utilities.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -8,6 +9,12 @@
 #include <cctype>
 
 using namespace std;
+
+#ifdef _WIN32
+const string eofkey = "Ctrl + Z";
+#else
+const string eofkey = "Ctrl + D";
+#endif
 
 void printLogo()
 {
