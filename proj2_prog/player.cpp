@@ -34,3 +34,8 @@ int Player::timeToComplete()
 {
   return difftime(endTime, startTime);
 }
+
+int Player::getNumHints()
+{
+	return nHints;
+}
