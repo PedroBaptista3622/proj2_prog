@@ -24,7 +24,7 @@ using namespace std;
 /**
  * Represents the position occupied by a character on the crosswords board.
  * Very light additions to the base Position class.
- * 
+ *
  * @author	João N. Matos
  * @version	1.0
  * @see		Position
@@ -35,7 +35,7 @@ public:
 
 	/**
 	 * Constructs object from coordinates. Updates validity internally.
-	 * 
+	 *
 	 * @param	line	Line to be set
 	 * @param	column	Column to be set
 	 */
@@ -44,7 +44,7 @@ public:
 	/**
 	 * Converts character position string to numeric coordinates and constructs
 	 * the object.
-	 * 
+	 *
 	 * @param	position	The position string
 	 */
 	charPosition(string position);
@@ -52,7 +52,7 @@ public:
 	/**
 	 * Returns whether the position can describe a valid position in a board of
 	 * specified dimensions.
-	 * 
+	 *
 	 * @param	nLines	The number of lines of the board
 	 * @param	nColumn	The number of columns of the board
 	 * @return			The truth vale of the afore mentioned predicate
@@ -62,7 +62,7 @@ public:
 	/**
 	 * Converts the position coordinates to a position string. If the position
 	 * is not valid, returns an empty string instead.
-	 * 
+	 *
 	 * @return	The corresponding position string
 	 */
 	string str() const;
@@ -73,7 +73,7 @@ public:
  * Adds functionality to the base class Position to deal with word start
  * positions in a crosswords board. Specifically, it supports indication
  * of the direction in which the word is laid out.
- * 
+ *
  * @author	João N. Matos
  * @version 1.0
  * @see		Position
@@ -84,7 +84,7 @@ public:
 
 	/**
 	 * Constructs object from its coordinates. Internally determines validity
-	 * 
+	 *
 	 * @param	line		Starting line
 	 * @param	column		Starting column
 	 * @param	direction	Direction in which the word is laid out
@@ -100,9 +100,15 @@ public:
 	wordPosition(string position);
 
 	/**
+	 * Default constructor for the object. Initialises line and column as -1,
+	 * the direction as null and as invalid.
+	 */
+	wordPosition();
+
+	/**
 	 * Determines whether the position is valid and inside of a board of
 	 * specified dimension.
-	 * 
+	 *
 	 * @param	nLines		Number of lines the board has
 	 * @param	nColumn		Number of columns the board has
 	 * @return				The value of the afore mentioned predicate
@@ -111,14 +117,14 @@ public:
 
 	/**
 	 * Returns the direction in which the word is laid out.
-	 * 
+	 *
 	 * @return		The direction in which the word is laid out
 	 */
 	char getDirection() const;
 
 	/**
 	 * Returns a position string corresponding to the position.
-	 * 
+	 *
 	 * @return	The corresponding position string
 	 */
 	string str() const;
@@ -126,14 +132,8 @@ public:
 protected:
 
 	/**
-	 * Default constructor for the object. Initialises line and column as -1,
-	 * the direction as null and as invalid.
-	 */
-	wordPosition();
-
-	/**
 	 * Sets the value of the direction character. Updates validity.
-	 * 
+	 *
 	 * @param	direction	The direction in which the word is laid out
 	 */
 	void setDirection(char direction);
@@ -267,6 +267,15 @@ public:
 	int remWord(string position);
 
 	/**
+	 * Returns whether a word of given length fits in a given position
+	 *
+	 * @param	position	Starting position of the word
+	 * @param	length		Length of the word
+	 * @return				Value of the predicate
+	 */
+	bool wordFits(wordPosition& position, int length) const; //DONE
+
+	/**
 	 * Saves the board to a file, returning 0 if sucessful and -1 if not.
 	 *
 	 * @param	filename	Name of the file to store the board in
@@ -292,18 +301,18 @@ public:
 
 	/*
 	 * Returns the number of lines in the board
-	 * 
+	 *
 	 * @return	The number of lines in the board
 	 */
 	int getLines() const;
 
 	/**
 	 * Returns the number of columns in the board
-	 * 
+	 *
 	 * @return The number of column in the board
 	 */
 	int getColumns() const;
-	
+
 protected:
 
 	//FIELDS
@@ -342,25 +351,16 @@ protected:
 
 	/**
 	 * Removes the black spaces from around a word.
-	 * 
+	 *
 	 * @param	position	The starting position of the word
 	 * @param	length		The length of the word
 	 */
 	void removeBlackSpaces(const wordPosition& position, int length); //DONE
 
 	/**
-	 * Returns whether a word of given length fits in a given position
-	 * 
-	 * @param	position	Starting position of the word
-	 * @param	length		Length of the word
-	 * @return				Value of the predicate
-	 */
-	bool wordFits(wordPosition& position, int length) const; //DONE
-
-	/**
 	 * Produces a map with the characters of the given word and their position
 	 * strings.
-	 * 
+	 *
 	 * @param	position	The starting position of the word
 	 * @param	word		The word
 	 * @return				A map of the characters and their position strings

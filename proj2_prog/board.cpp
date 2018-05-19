@@ -293,8 +293,6 @@ void Board::show() const
     cout << endl;
 
   }
-
-	cout << endl;
 }
 
 /**
