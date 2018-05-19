@@ -15,6 +15,7 @@ public:
   void end();
   void gotHint();
   int timeToComplete();
+  int getNumHints();
 
 
 private:
