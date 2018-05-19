@@ -266,7 +266,7 @@ int readInt(string errormsg, istream& instream, ostream& outstream)
 	{
 		valid = true;
 		getline(instream, input);
-
+		instream.clear();
 		if (input.length() == 0)
 		{
 			valid = false;
@@ -316,6 +316,7 @@ char readChar(string errormsg, istream& instream, ostream& outstream)
 	do {
 		valid = true;
 		getline(instream, input);
+		instream.clear();
 		if (input.length() != 1)
 		{
 			valid = false;
@@ -346,6 +347,7 @@ string readString(string errormsg, istream& instream, ostream& outstream)
 	do {
 		valid = true;
 		getline(instream, input);
+		instream.clear();
 		if (input.length() == 0)
 		{
 			valid = false;
