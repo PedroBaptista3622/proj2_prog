@@ -47,18 +47,19 @@ class Puzzle : Board
 		 * space. Then updates the black space list.
 		 * <p>
 	 	 * Returns the following exit codes:
-		 * <p>
 		 *  0: success;
 		 * <p>
-		 * -1: inexistent word;
+		 * -1: excessive length
 		 * <p>
-		 * -2: ilegal overlap (different characters, black spaces);
+		 * -2: ilegal overlap
 		 * <p>
-		 * -3: lack of space;
+		 * -3: too small
 		 * <p>
 		 * -4: repeated words;
 		 * <p>
-		 * -5: invalid position.
+		 * -5: invalid position;
+		 * <p>
+		 * -6: repeated position;
 		 *
 		 * @param	position	The position string to insert the word in
 		 * @param	word		The word to insert
