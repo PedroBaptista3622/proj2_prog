@@ -1,0 +1,15 @@
+synonyms.txt
+
+U # # # # # # #
+N # # # # # # #
+E # # # # # # #
+Q # A V E R S E
+U # # # # O # #
+A # # # # U # #
+L # # # # S # #
+# S P A C E # #
+
+AaV UNEQUAL
+DcH AVERSE
+DfV ROUSE
+HbH SPACE

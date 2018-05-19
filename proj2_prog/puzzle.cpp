@@ -17,7 +17,7 @@ Puzzle::Puzzle(string filename, bool& control)
 	for (int i = 0; i < toRemove.size(); i++)
 		addedChars.erase(toRemove.at(i));
 
-	if (control)
+	if (!control)
 		getHints();
 }
 

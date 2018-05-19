@@ -35,14 +35,14 @@ public:
 	/**
 	 * Prints the dictionary to std::cout
 	 */
-	void printDictionary();
+	void printDictionary() const;
 
 	/**
 	 * Returns a string with the name of the dictionary file.
 	 * 
 	 * @return	Filename
 	 */
-	string dictName();
+	string dictName() const;
 
 	/**
 	 * Is true when the word is a key in the dictionary
@@ -50,7 +50,7 @@ public:
 	 * @param	keyWord		The word to search
 	 * @return				Whether it exists in the dictionary
 	 */
-	bool checkWordDictionary(const string& keyWord);//Checks if a certain word is present in the dictionary map container
+	bool checkWordDictionary(const string& keyWord) const;//Checks if a certain word is present in the dictionary map container
 
 	/**
 	 * Returns a vector with the synonyms of the word searched
@@ -58,7 +58,7 @@ public:
 	 * @param	keyWord		The word to search
 	 * @return				Its synonyms
 	 */
-	vector <string> getSynonyms(const string& keyWord);//Returns the corresponding string vector of the keyWord
+	vector <string> getSynonyms(const string& keyWord) const;//Returns the corresponding string vector of the keyWord
 
 	/**
 	 * Returns a vector with all the possible matches to a given wildcard in the
@@ -67,7 +67,7 @@ public:
 	 * @param	searchParam The wildcard to be used as a search parameter
 	 * @return				All matches to the search parameter
 	 */
-	vector <string> getPossibleWords(string searchParam);
+	vector <string> getPossibleWords(string searchParam) const;
 
 private:
 	map <string, vector <string> > dictionary; // Contains Every Word And Synonyms. The string element is the key.

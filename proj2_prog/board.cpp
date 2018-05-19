@@ -242,7 +242,7 @@ int Board::save(string filename, bool finished)
 /**
 * Shows the board on screen.
 */
-void Board::show()
+void Board::show() const
 {
   //prints column header
   cout << "   ";
@@ -758,7 +758,7 @@ wordPosition::wordPosition(string position)
  * @param	nColumn		Number of columns the board has
  * @return				The value of the afore mentioned predicate
  */
-bool wordPosition::inBoard(int nLines, int nColumns)
+bool wordPosition::inBoard(int nLines, int nColumns) const
 {
 	return (isValid() && getLine() < nLines && getColumn() < nColumns);
 }
