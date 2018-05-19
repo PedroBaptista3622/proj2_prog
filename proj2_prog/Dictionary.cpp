@@ -1,6 +1,13 @@
 #include "Dictionary.h"
 
-bool Dictionary::wildcardMatch(const char *str, const char *strWild)
+/**
+ * Compares the compatibility of a wildcard with another C string
+ * 
+ * @param	str		Pointer to the beginning of the normal string
+ * @param	strWild	Pointer to the beginning of the wildcard
+ * @return			Whether the string and the wildcard match
+ */
+bool wildcardMatch(const char *str, const char *strWild)
 {
 
 	while (*strWild)
@@ -38,7 +45,14 @@ bool Dictionary::wildcardMatch(const char *str, const char *strWild)
 	return !*str && !*strWild;
 }
 
-vector <string> Dictionary::getPossibleWords(string searchParam)
+/**
+ * Returns a vector with all the possible matches to a given wildcard in the
+ * dictionary keys.
+ * 
+ * @param	searchParam The wildcard to be used as a search parameter
+ * @return				All matches to the search parameter
+ */
+vector <string> Dictionary::getPossibleWords(string searchParam) const
 {
 	vector <string> matches;
 
@@ -53,12 +67,22 @@ vector <string> Dictionary::getPossibleWords(string searchParam)
 	return matches;
 }
 
-string Dictionary::dictName()
+/**
+ * Returns a string with the name of the dictionary file.
+ * 
+ * @return	Filename
+ */
+string Dictionary::dictName() const
 {
 	return this->name;
 }
 
-void Dictionary::removeSpaces(string &word)
+/**
+ * Removes the space at the index 0 of a string, if existent.
+ * 
+ * @param	word	The string to process
+ */
+void removeSpaces(string& word)
 {
 	if (word.length() >= 1)
 		if (word.at(0) == ' ')
@@ -67,7 +91,15 @@ void Dictionary::removeSpaces(string &word)
 		}
 }
 
-Dictionary::Dictionary(string filename, bool &control)
+/**
+ * Reads a synonym dictionary file and constructs a structured representation of it.
+ * <p>
+ * Outputs sucess state to a control variable (true if an error ocurrs).
+	 * 
+ * @param	filename	The name of the file
+ * @param	control		The adress of a control variable
+ */
+Dictionary::Dictionary(string filename, bool& control)
 {
 	this->name = filename;
 	ifstream dict;
@@ -125,7 +157,10 @@ Dictionary::Dictionary(string filename, bool &control)
 	}
 }
 
-void Dictionary::printDictionary()
+/**
+ * Prints the dictionary to std::cout
+ */
+void Dictionary::printDictionary() const
 {
 	for (auto elem : dictionary) // Goes through every pair of the dictionary map
 	{
@@ -147,13 +182,28 @@ void Dictionary::printDictionary()
 	}
 }
 
-bool Dictionary::checkWordDictionary(const string &keyWord)
+/**
+ * Is true when the word is a key in the dictionary
+ * 
+ * @param	keyWord		The word to search
+ * @return				Whether it exists in the dictionary
+ */
+bool Dictionary::checkWordDictionary(const string& keyWord) const
 {
 	string word = stringToUpper(keyWord);
 	return this->dictionary.find(word) != dictionary.end();
 }
 
-vector <string> Dictionary::getSynonyms(const string &keyWord)
+/**
+ * Returns a vector with the synonyms of the word searched
+ * 
+ * @param	keyWord		The word to search
+ * @return				Its synonyms
+ */
+vector<string> Dictionary::getSynonyms(const string& keyWord) const
 {
-	return this->dictionary.find(keyWord)->second;
+	if (this->dictionary.find(keyWord) == this->dictionary.end())
+		return vector<string>();
+	else
+		return this->dictionary.find(keyWord)->second;
 }
