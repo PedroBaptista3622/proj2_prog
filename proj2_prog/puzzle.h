@@ -17,7 +17,7 @@ using namespace std;
  * @see		Board
  * @see		Dictionary
  */
-class Puzzle : Board
+class Puzzle : public Board
 {
 	public:
 
@@ -91,9 +91,8 @@ class Puzzle : Board
 		 * @return		Are the words input by the user the correct ones?
 		 */
 		bool correct(); //DONE
-		
-		bool complete();
 
+		bool complete();
 
 	private:
 
