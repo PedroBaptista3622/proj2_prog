@@ -121,6 +121,10 @@ bool validPosStr(string str)
 			return false;
 	}
 
+	if (str.length() == 2)
+		if ( isupper(str.at(0)) != isupper(str.at(1)) )
+			return false;
+
 	return true;
 }
 
