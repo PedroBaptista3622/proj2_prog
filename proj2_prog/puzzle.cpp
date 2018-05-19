@@ -34,14 +34,6 @@ void Puzzle::provideBackupDictionary(Dictionary* dictionary, bool replace) //DON
 }
 
 /**
- * Shows the puzzle
- */
-void Puzzle::showPuzzle()
-{
-	show();
-}
-
-/**
  * Shows a synonym for each position
  */
 void Puzzle::showSynonyms()
@@ -100,15 +92,15 @@ void Puzzle::showSynonyms()
  * @param	word		The word to insert
  * @return				The exit code of the procedure
  */
-int Puzzle::insGuess(string position, string word)
+int Puzzle::insWord(string position, string word)
 {
 	word = stringToUpper(word);
 	wordPosition pos(position);
-	
+
 	//invalid position
 	if (!pos.inBoard(getLines(),getColumns()))
 		return -5;
-		
+
 	//repeated word
 	if (guessedWords.find(position) != guessedWords.end())
 		return -6;
@@ -156,18 +148,54 @@ int Puzzle::insGuess(string position, string word)
  * @param	word	The position
  * @return			The exit code of the procedure
  */
-int Puzzle::remGuess(string position)
+int Puzzle::remWord(string position)
 {
 	if (guessedWords.find(position) == guessedWords.end())
 		return -1;
 	else
-		words.erase(words.find(position));
+		guessedWords.erase(guessedWords.find(position));
 
 	refill();
 
 	return 0;
 }
 
+void Puzzle::refill()
+{
+	map<string, char> newMap;
+
+	for (map<string, char>::iterator it = addedChars.begin(); it != addedChars.end(); it++)
+	{
+		if (it->second == '#')
+			newMap.emplace(it->first, '#');
+	}
+
+	//iterates through all position-word pairs
+	for (map<string, string>::iterator par = guessedWords.begin(); par != guessedWords.end(); par++)
+	{
+		wordPosition position(par->first);
+		string word = par->second;
+
+
+		map<string, char> wordChars = tempMap(position, word); //provisional store of the characters
+
+		//deletes redundant characters
+		for (map<string, char>::iterator it = wordChars.begin(); it != wordChars.end(); it++)
+		{
+			if (newMap.find(it->first) != newMap.end())
+			{
+				wordChars.erase(it);
+			}
+		}
+
+		//adds the characters from temporary storage to the new character map
+		for (map<string, char>::iterator it = wordChars.begin(); it != wordChars.end(); it++)
+			newMap.emplace( it->first, it->second );
+	}
+
+	addedChars = newMap;
+
+}
 /**
  * Returns a different synonym of the word in the given position, or the
  * same if there is only one

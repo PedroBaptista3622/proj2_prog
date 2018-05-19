@@ -20,7 +20,7 @@ void printLogo()
 
 int guessWord(Puzzle *puzzle, string position, string word)
 {
-	switch (puzzle->insGuess(position, word))
+	switch (puzzle->insWord(position, word))
 	{
 		case -1:
 		cerr << "That word is too big" << endl;
@@ -140,7 +140,7 @@ int main()
 	{
 		do
 		{
-			puzzle.showPuzzle();
+			puzzle.show();
 			puzzle.showSynonyms();
 
 			cout << "Select action:" << endl;
@@ -160,6 +160,8 @@ int main()
 
 			} while (action < 0 || action > 2);
 			//Takes care of actions. Only accepts actions = 0, 1 or 2.
+			puzzle.show();
+			puzzle.showSynonyms();
 
 			if (action == 1)
 			{
@@ -173,6 +175,7 @@ int main()
 					if (!pos.inBoard(puzzle.getLines(),puzzle.getColumns()))
 					{
 						cout << "Invalid input. You must enter a valid position inside of the board." << endl;
+						continue;
 					}
 					do
 					{
@@ -184,12 +187,15 @@ int main()
 						if (guess == "?")
 						{
 							cout << "Hint: " << puzzle.anotherHint(position) << endl;
+							validGuess = false;
 							player.gotHint();
 						}
 						else
 						{
 							if (guessWord(&puzzle, position, guess) == 0)
 								validGuess = true;
+							else
+								validGuess = false;
 						}
 					} while (!validGuess);
 				} while (!pos.isValid());
@@ -214,7 +220,7 @@ int main()
 						continue;
 					}
 
-					if (puzzle.remGuess(position) == 0)
+					if (puzzle.remWord(position) == 0)
 						validPosition = true;
 					else
 						cerr << "No word in such position, enter another one" << endl;
@@ -247,13 +253,13 @@ int main()
 						cout << "Congratulations, " << player.getName() << " you finished the puzzle in " << player.timeToComplete() << " seconds." << endl;
 
 						ostringstream fileName;
-						ofstream outFile;
-						outFile.open(fileName.str(), std::ios_base::app);
-
 						fileName << "B";
 						fileName << fixed << setfill('0');
 						fileName << setw(3) << numberBoardToLoad;
 						fileName << "_p.txt";
+
+						ofstream outFile;
+						outFile.open(fileName.str(), std::ios_base::app);
 
 						outFile << "The player \"" << player.getName() << "\" completed this puzzle in " << player.timeToComplete() << " seconds, and used " << player.getNumHints() << " hints" << endl;
 

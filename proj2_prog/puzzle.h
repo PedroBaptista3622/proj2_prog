@@ -32,11 +32,6 @@ class Puzzle : public Board
 		void provideBackupDictionary(Dictionary* dictionary, bool replace = false); //DONE
 
 		/**
-		 * Shows the puzzle
-		 */
-		void showPuzzle(); //DONE
-
-		/**
 		 * Shows a synonym for each position
 		 */
 		void showSynonyms(); //DONE
@@ -65,7 +60,7 @@ class Puzzle : public Board
 		 * @param	word		The word to insert
 		 * @return				The exit code of the procedure
 		 */
-		int insGuess(string position, string word); //DONE
+		int insWord(string position, string word); //DONE
 
 		/**
 		 * Removes existing word from the board. Returns -1 if no word in position,
@@ -74,7 +69,7 @@ class Puzzle : public Board
 		 * @param	word	The position
 		 * @return			The exit code of the procedure
 		 */
-		int remGuess(string position); //DONE
+		int remWord(string position); //DONE
 
 		/**
 		 * Returns a different synonym of the word in the given position, or the
@@ -93,6 +88,10 @@ class Puzzle : public Board
 		bool correct(); //DONE
 
 		bool complete();
+
+	protected:
+
+		void refill();
 
 	private:
 
