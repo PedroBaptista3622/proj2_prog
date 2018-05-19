@@ -1,4 +1,4 @@
-
+#include "stdafx.h"
 #include <iostream>
 #include <iomanip>
 #include <sstream>
@@ -59,6 +59,7 @@ int main()
 	int numberBoardToLoad;
 	bool validBoardNumber = false;
 	ostringstream boardFileName;
+	ifstream inFileTest;
 	bool errorOpeningFile = false;
 	
 
@@ -70,17 +71,45 @@ int main()
 		{
 			cin >> numberBoardToLoad;
 
-			if (numberBoardToLoad >= 0 && numberBoardToLoad <= 999)
-				validBoardNumber = true;
+			if ((numberBoardToLoad > -1) && (numberBoardToLoad <= 999))
+			{
+
+				boardFileName << "B";
+				boardFileName << fixed << setfill('0');
+				boardFileName << setw(3) << numberBoardToLoad;
+				boardFileName << ".txt";
+
+				inFileTest.open(boardFileName.str());
+
+				if (inFileTest.is_open())
+				{
+					validBoardNumber = true;
+				}
+				else
+				{
+					boardFileName.str("");
+					boardFileName.clear();
+
+
+					cout << "Board with number " << numberBoardToLoad << " doesn't exist, try another one" << endl;
+
+					cin.ignore(999999, '\n');
+					cin.clear();
+				}
+
+			}
+			else
+			{
+				cout << "Board number out of boundaries (Min: 0 Max: 999), try a different number" << endl;
+			}
+
+
 
 		} while (!validBoardNumber);
 
-		boardFileName << "B";
-		boardFileName << fixed << setfill('0');
-		boardFileName << setw(3) << numberBoardToLoad;
-		boardFileName << ".txt";
 
 		Puzzle puzzle(boardFileName.str(), errorOpeningFile);
+
 
 		if (errorOpeningFile)
 		{
@@ -94,13 +123,13 @@ int main()
 	char answer;
 
 	cout << "Time to get information about you, what's your name?" << endl;
+
+	cin.ignore(999999, '\n');
+	cin.clear();
 	
 	do
 	{
 		getline(cin, playerName);
-
-		cin.clear();
-		cin.ignore(999999);
 
 		cout << "Is \"" << playerName << "\" your name? (Y/N)" << endl;
 		
@@ -116,6 +145,8 @@ int main()
 			else if (answer == 'N' || answer == 'n')
 			{
 				validAnswer = true;
+				cin.ignore(999999, '\n');
+				cin.clear();
 				cout << "Enter another name" << endl;
 			}
 			else
@@ -144,6 +175,9 @@ int main()
 			puzzle.showPuzzle();
 			puzzle.showSynonyms();
 
+			cin.ignore(999999, '\n');
+			cin.clear();
+
 			cout << "Select action:" << endl;
 			cout << "1 - Guess a word" << endl;
 			cout << "2 - Delete word from board" << endl;
@@ -154,6 +188,7 @@ int main()
 			{
 				cin >> action;
 
+
 				if (action < 0 || action > 2)
 				{
 					cerr << "Invalid action, try again" << endl;
@@ -161,6 +196,9 @@ int main()
 
 			} while (action < 0 || action > 2);
 			//Takes care of actions. Only accepts actions = 0, 1 or 2.
+
+			cin.ignore(999999, '\n');
+			cin.clear();
 
 			if (action == 1)
 			{
@@ -185,15 +223,18 @@ int main()
 							validGuess = true;
 
 						if (!validGuess)
+						{
 							cout << "Try another word" << endl;
+						}
 					}
-
 
 				} while (!validGuess);
 
+				// WORKING ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 			}
 			else if (action == 2)
 			{
+				
 				string position;
 				bool validPosition = false;
 
@@ -204,9 +245,13 @@ int main()
 					cin >> position;
 
 					if (puzzle.remGuess(position) == 0)
+					{
 						validPosition = true;
+					}
 					else
+					{
 						cerr << "No word in such position, enter another one" << endl;
+					}
 
 				} while (!validPosition);
 
@@ -272,6 +317,7 @@ int main()
 		if (action == 0)
 		{
 			cout << "Goodbye" << endl;
+			return 0;
 		}
 
 	}while (!correctPuzzle);
