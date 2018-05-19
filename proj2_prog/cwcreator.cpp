@@ -307,7 +307,6 @@ void createPuzzle()
 			} while (!validInput);
 		}
 	}
-
 }
 
 void resumePuzzle()
@@ -319,7 +318,7 @@ void resumePuzzle()
 
 	do
 	{
-		cin >> nameOfFile;
+		getline(cin, nameOfFile);
 
 		Board board(nameOfFile, errorOpeningFile);
 
@@ -338,7 +337,7 @@ void resumePuzzle()
 				board.show();
 
 				cout << "Enter Position (LcD / " << eofkey << " = Save and Exit / 0 = Exit) ";
-				cin >> input;
+				getline(cin, input);
 
 				if (cin.eof())
 				{
@@ -357,7 +356,7 @@ void resumePuzzle()
 
 						if (answer == 'Y' || answer == 'y')
 						{
-							string fileName = boardFileName();
+							string fileName = nameOfFile;
 							char answer2;
 							bool validAnswer2 = false;
 
@@ -365,7 +364,7 @@ void resumePuzzle()
 
 							do {
 
-								cin >> answer2;
+								answer2 = readChar("Please answer the question (Y/N).\nYour answer: ");
 
 								if (answer2 == 'y' || answer2 == 'Y')
 								{
@@ -406,15 +405,29 @@ void resumePuzzle()
 				}
 				else if (input == "0")
 				{
+					cout << "Exiting...";
 					break;
 				}
 
-				cout << "Enter Word (- = remove / ? = help / 0 = exit)";
-				cout << "You can also get some words to help by entering \"Word?\"" << endl;
+				wordPosition pos(input);
+				if (!pos.isValid())
+				{
+					cout << "Invalid input." << endl;
+				}
+				if (!pos.inBoard(board.getLines(), board.getColumns()))
+				{
+					setcolor(RED);
+					cout << "Out of bounds. Please take into account the size of the board." << endl;
+					setcolor(DEFAULT_TEXT);
+					continue;
+				}
 
 				do {
 
-					cin >> word;
+					cout << "Enter Word (- = remove / ? = help / 0 = exit)" << endl;
+					cout << "You can also get some words to help by entering \"Word?\"" << endl;
+
+					getline(cin, word);
 
 					if (input == "0")
 					{
@@ -429,45 +442,49 @@ void resumePuzzle()
 					else if (word == "-")
 					{
 						validInput = true;
-						string pos;
-						cout << "Enter the position of the word you want to delete" << endl;
-						cin >> pos;
-
-						if (board.remWord(pos) == -1)
-							cerr << "There is no word in such position" << endl;
+						if (board.remWord(pos.str()) == -1)
+							cout << "There is no word in such position" << endl;
 					}
 					else if (word == "Word?" || word == "word?")
 					{
-						string position;
+						//string position;
 						int size;
 
-						cout << "Enter the position you want to insert the word (LcD)" << endl;
-						cin >> position;
+						validInput = true;
 
-						cout << "Enter the size of the word you want to insert" << endl;
+						cout << "Enter the size of the word:" << endl;
+						do {
+							size = readInt("Invalid input. Please enter the size of the word.\nSize: ");
 
-						do
+							if (size > 1) continue;
+
+							cout << "That number is too small, please enter at least 2." << endl;
+							cout << "Size: ";
+						}
+						while (size < 2);
+
+						vector <string> possibleWords; //Contains every word in the dictionary file that has <size> number of chars and can be inserted in <position> of the board
+
+						if (!board.wordFits(pos,size))
+							cout << "It is impossible to fit a word of size " << size << " in that position." << endl;
+						else
 						{
-							cin >> size;
-
-							if (size < 0)
-								cerr << "Invalid size, please enter a number greater than 0" << endl;
-
-						} while (size < 0);
+							possibleWords = board.getDicPointer()->getPossibleWords(board.generateWildcard(pos.str(), size));
 
 
-						vector <string> possibleWords = board.getDicPointer()->getPossibleWords(board.generateWildcard(position, size));
-
-						for (int i = 0; i < possibleWords.size(); i++)
-						{
-							if (i == possibleWords.size() - 1)
+							cout << "Possible words: " << endl;
+							for (int i = 0; i < possibleWords.size(); i++)
 							{
-								cout << possibleWords.at(i) << endl;
+								if (i == possibleWords.size() - 1)
+								{
+									cout << possibleWords.at(i) << endl;
+								}
+								else
+								{
+									cout << possibleWords.at(i) << ", ";
+								}
 							}
-							else
-							{
-								cout << possibleWords.at(i) << ", ";
-							}
+							//Prints every word usable in the previous case
 						}
 					}
 					else
@@ -506,10 +523,8 @@ void resumePuzzle()
 				} while (!validInput);
 			}
 		}
-
 	} while (errorOpeningFile);
-
-	}
+}
 
 int main()
 {
