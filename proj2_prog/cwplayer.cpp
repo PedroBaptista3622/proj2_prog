@@ -201,7 +201,7 @@ int main()
 						}
 						else
 						{
-							guessWord(&puzzle, position, guess) == 0
+							if(guessWord(&puzzle, position, guess) == 0)
 							validGuess = true;
 						}
 					} while (!validGuess);
