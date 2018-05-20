@@ -202,6 +202,7 @@ int main()
 						else
 						{
 							guessWord(&puzzle, position, guess);
+							setcolor(DEFAULT_TEXT);
 							validGuess = true;
 						}
 					} while (!validGuess);
