@@ -252,8 +252,3 @@ void Puzzle::getHints()
 		hints.emplace(word, synonym);
 	}
 }
-
-bool Puzzle::complete()
-{
-	return addedChars.size() == (number.lines * number.columns);
-}

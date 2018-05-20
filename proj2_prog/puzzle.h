@@ -87,8 +87,6 @@ class Puzzle : public Board
 		 */
 		bool correct(); //DONE
 
-		bool complete();
-
 	protected:
 
 		void refill();

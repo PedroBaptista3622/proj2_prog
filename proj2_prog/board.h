@@ -140,7 +140,7 @@ protected:
 
 	/**
 	 * Sets the coordinates of the position. Updates validity.
-	 * 
+	 *
 	 * @param	line		The starting line
 	 * @param	column		The starting column
 	 * @param	direction	The direction in which the word is laid out
@@ -312,6 +312,8 @@ public:
 	 * @return The number of column in the board
 	 */
 	int getColumns() const;
+
+	bool complete();
 
 protected:
 

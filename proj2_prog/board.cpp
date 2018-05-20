@@ -510,7 +510,7 @@ void Board::addBlackSpaces()
 
 /**
  * Removes the black spaces from around a word.
- * 
+ *
  * @param	position	The starting position of the word
  * @param	length		The length of the word
  */
@@ -537,7 +537,7 @@ void Board::removeBlackSpaces(const wordPosition& position, int length)
 
 /**
  * Returns whether a word of given length fits in a given position
- * 
+ *
  * @param	position	Starting position of the word
  * @param	length		Length of the word
  * @return				Value of the predicate
@@ -593,7 +593,7 @@ bool Board::wordFits(wordPosition& position, int length) const
 /**
  * Produces a map with the characters of the given word and their position
  * strings.
- * 
+ *
  * @param	position	The starting position of the word
  * @param	word		The word
  * @return				A map of the characters and their position strings
@@ -622,7 +622,7 @@ map<string,char> Board::tempMap(const wordPosition& position, string word) const
 
 /**
  * Constructs object from coordinates. Updates validity internally.
- * 
+ *
  * @param	line	Line to be set
  * @param	column	Column to be set
  */
@@ -634,7 +634,7 @@ charPosition::charPosition(int line, int column)
 /**
  * Converts character position string to numeric coordinates and constructs
  * the object.
- * 
+ *
  * @param	position	The position string
  */
 charPosition::charPosition(string position)
@@ -662,7 +662,7 @@ charPosition::charPosition(string position)
 /**
  * Returns whether the position can describe a valid position in a board of
  * specified dimensions.
- * 
+ *
  * @param	nLines	The number of lines of the board
  * @param	nColumn	The number of columns of the board
  * @return			The truth vale of the afore mentioned predicate
@@ -675,7 +675,7 @@ bool charPosition::inBoard(int nLines, int nColumns) const
 /**
  * Converts the position coordinates to a position string. If the position is
  * not valid, it returns an empty string instead.
- * 
+ *
  * @return	The corresponding position string
  */
 string charPosition::str() const
@@ -696,7 +696,7 @@ string charPosition::str() const
 
 /**
  * Constructs object from its coordinates. Internally determines validity
- * 
+ *
  * @param	line		Starting line
  * @param	column		Starting column
  * @param	direction	Direction in which the word is laid out
@@ -751,7 +751,7 @@ wordPosition::wordPosition(string position)
 /**
  * Determines whether the position is valid and inside of a board of
  * specified dimension.
- * 
+ *
  * @param	nLines		Number of lines the board has
  * @param	nColumn		Number of columns the board has
  * @return				The value of the afore mentioned predicate
@@ -763,7 +763,7 @@ bool wordPosition::inBoard(int nLines, int nColumns) const
 
 /**
  * Returns a position string corresponding to the position.
- * 
+ *
  * @return	The corresponding position string
  */
 string wordPosition::str() const
@@ -784,7 +784,7 @@ string wordPosition::str() const
 
 /**
  * Returns the direction in which the word is laid out.
- * 
+ *
  * @return		The direction in which the word is laid out
  */
 char wordPosition::getDirection() const
@@ -803,7 +803,7 @@ wordPosition::wordPosition()
 
 /**
  * Sets the value of the direction character. Updates validity.
- * 
+ *
  * @param	direction	The direction in which the word is laid out
  */
 void wordPosition::setDirection(char direction)
@@ -814,7 +814,7 @@ void wordPosition::setDirection(char direction)
 
 /**
  * Sets the coordinates of the position. Updates validity.
- * 
+ *
  * @param	line		The starting line
  * @param	column		The starting column
  * @param	direction	The direction in which the word is laid out
@@ -842,7 +842,7 @@ void wordPosition::updateValidity()
 
 /*
  * Returns the number of lines in the board
- * 
+ *
  * @return	The number of lines in the board
  */
 int Board::getLines() const
@@ -852,7 +852,7 @@ int Board::getLines() const
 
 /**
  * Returns the number of columns in the board
- * 
+ *
  * @return The number of column in the board
  */
 int Board::getColumns() const
@@ -908,4 +908,9 @@ int cvtPosStr(string str)
 		int leftChar = int(str[0]) - int ('a');
 		return rightChar + 26*(leftChar + 1);
 	}
+}
+
+bool Board::complete()
+{
+	return addedChars.size() == (number.lines * number.columns);
 }
