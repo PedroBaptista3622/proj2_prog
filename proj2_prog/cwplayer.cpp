@@ -292,6 +292,7 @@ int main()
 		if (action == 0)
 		{
 			cout << "Goodbye" << endl;
+			return 0;
 		}
 
 	}while (!correctPuzzle);
