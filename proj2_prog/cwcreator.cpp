@@ -40,6 +40,12 @@ void printInputHelp()
 	cout << "AcV is used to add a word vertically starting in the line A and column c" << endl;
 }
 
+/**
+ * Checks sequencially the existence of files with name BXXX from 001 to 999 and
+ * returns the first that does not exist
+ * 
+ * @return		The first free name
+ */
 string boardFileName()
 {
 	ostringstream outputName;
@@ -66,6 +72,12 @@ string boardFileName()
 	return outputName.str();
 }
 
+/**
+ * Does the necessary checks and returns the number of rows of a certain type
+ * 
+ * @param	rowType	The type of row to ask for (lines/columns)
+ * @return			The number of rows of that type the board should have
+ */
 int numberOf(string rowType)
 {
 	bool good = false;
@@ -88,6 +100,9 @@ int numberOf(string rowType)
 	return rows;
 }
 
+/**
+ * Main puzzle creation procedure
+ */
 void createPuzzle()
 {
 	int lines = numberOf("lines");
@@ -309,6 +324,9 @@ void createPuzzle()
 	}
 }
 
+/**
+ * Main resuming puzzle from file procedure
+ */
 void resumePuzzle()
 {
 	string nameOfFile;

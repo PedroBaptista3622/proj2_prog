@@ -18,6 +18,9 @@ void printLogo()
 	cout << "-----------------------------" << endl;
 }//To be changed
 
+/**
+ * Handles the error cases for inserting a guess
+ */
 int guessWord(Puzzle *puzzle, string position, string word)
 {
 	switch (puzzle->insWord(position, word))
