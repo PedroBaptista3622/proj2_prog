@@ -910,7 +910,7 @@ int cvtPosStr(string str)
 	}
 }
 
-bool Board::complete()
+bool Board::complete() const
 {
 	return addedChars.size() == (number.lines * number.columns);
 }

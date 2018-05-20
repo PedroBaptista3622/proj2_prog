@@ -313,7 +313,7 @@ public:
 	 */
 	int getColumns() const;
 
-	bool complete();
+	bool complete() const;
 
 protected:
 
