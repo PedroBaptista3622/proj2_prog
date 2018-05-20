@@ -1,0 +1,15 @@
+synonyms.txt
+
+. . A S T U T E
+. R . . . . . .
+. E . . . . . .
+. V . . . . . .
+. O . . . . S .
+S K I M . . A .
+. E . . . . Y .
+. . . . . . . .
+
+AcH ASTUTE
+BbV REVOKE
+EgV SAY
+FaH SKIM
