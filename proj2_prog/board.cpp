@@ -910,6 +910,11 @@ int cvtPosStr(string str)
 	}
 }
 
+/**
+ * Returns whether the board is has a character in all possible positions
+ * 
+ * @return		If the board is complete
+ */
 bool Board::complete() const
 {
 	return addedChars.size() == (number.lines * number.columns);

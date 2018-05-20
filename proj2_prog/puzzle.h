@@ -89,6 +89,10 @@ class Puzzle : public Board
 
 	protected:
 
+		/**
+		 * Refills the board with the existing black characters and the characters
+		 * corresponding to the existing guesses
+		 */
 		void refill();
 
 	private:

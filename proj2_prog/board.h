@@ -313,6 +313,11 @@ public:
 	 */
 	int getColumns() const;
 
+	/**
+	 * Returns whether the board is has a character in all possible positions
+	 * 
+	 * @return		If the board is complete
+	 */
 	bool complete() const;
 
 protected:

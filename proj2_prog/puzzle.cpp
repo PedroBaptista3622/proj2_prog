@@ -160,6 +160,10 @@ int Puzzle::remWord(string position)
 	return 0;
 }
 
+/**
+ * Refills the board with the existing black characters and the characters
+ * corresponding to the existing guesses
+ */
 void Puzzle::refill()
 {
 	map<string, char> newMap;

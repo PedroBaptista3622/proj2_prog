@@ -132,7 +132,7 @@ void createPuzzle()
 				char answer;
 				bool validAnswer = false;
 
-				cout << "Do you want to save the board to a file? (Y/N)" << endl;
+				cout << "\nDo you want to save the board to a file? (Y/N)" << endl;
 
 				do {
 
@@ -341,22 +341,19 @@ void resumePuzzle()
 
 				if (cin.eof())
 				{
-					cout << "Press Enter to continue ";
 					cin.clear();
-					cin.ignore(100000,'\n');
-
 					char answer;
 					bool validAnswer = false;
 
-					cout << "Do you want to save the board to resume it later? (Y/N)" << endl;
+					cout << "\nDo you want to save the board to resume it later? (Y/N)" << endl;
 
 					do {
 
-						cin >> answer;
+						answer = readChar("Please answer the question (Y/N).\nYour answer: ");
 
 						if (answer == 'Y' || answer == 'y')
 						{
-							string fileName = nameOfFile;
+							string fileName = boardFileName();
 							char answer2;
 							bool validAnswer2 = false;
 
