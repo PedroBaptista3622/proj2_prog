@@ -27,36 +27,38 @@ void printLogo()
  */
 int guessWord(Puzzle *puzzle, string position, string word)
 {
+	setcolor(RED);
 	switch (puzzle->insWord(position, word))
 	{
 		case -1:
-		cerr << "That word is too big" << endl;
+		cout << "That word is too big" << endl;
 		return -1;
 
 		case -2:
-		cerr << "There was an ilegal overlap" << endl;
+		cout << "There was an ilegal overlap" << endl;
 		return -2;
 
 		case -3:
-		cerr << "That word is too small" << endl;
+		cout << "That word is too small" << endl;
 		return -3;
 
 		case -4:
-		cerr << "You already input that word" << endl;
+		cout << "You already input that word" << endl;
 		return -4;
 
 		case -5:
-		cerr << "Invalid Position" << endl;
+		cout << "Invalid Position" << endl;
 		return -5;
 
 		case -6:
-		cerr << "There is already a word in that position" << endl;
+		cout << "There is already a word in that position" << endl;
 		return -6;
 
 		case 0:
 		return 0;
 		break;
 	}
+	setcolor(DEFAULT_TEXT);
 }
 
 
@@ -92,8 +94,8 @@ int main()
 
 	if (errorOpeningFile)
 	{
-		cerr << "Error loading board and dictionary." << endl;
-		cerr << "You might have input the wrong number, or the dictionary does not exist anymore" << endl;
+		cout << "Error loading board and dictionary." << endl;
+		cout << "You might have input the wrong number, or the dictionary does not exist anymore" << endl;
 	}
 
 
@@ -199,10 +201,8 @@ int main()
 						}
 						else
 						{
-							if (guessWord(&puzzle, position, guess) == 0)
-								validGuess = true;
-							else
-								validGuess = false;
+							guessWord(&puzzle, position, guess) == 0
+							validGuess = true;
 						}
 					} while (!validGuess);
 				} while (!pos.isValid());
@@ -230,7 +230,7 @@ int main()
 					if (puzzle.remWord(position) == 0)
 						validPosition = true;
 					else
-						cerr << "No word in such position, enter another one" << endl;
+						cout << "No word in such position, enter another one" << endl;
 
 				} while (!validPosition);
 
@@ -287,7 +287,7 @@ int main()
 				}
 
 				if (!validAnswer)
-				cerr << "Invalid answer, try again" << endl;
+				cout << "Invalid answer, try again" << endl;
 
 			} while (!validAnswer);
 
