@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "board.h"
 #include "Dictionary.h"
 #include "utilities.h"
