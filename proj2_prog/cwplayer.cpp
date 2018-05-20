@@ -1,7 +1,8 @@
-
+#include "stdafx.h"
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+
 
 
 #include "board.h"
@@ -13,10 +14,14 @@ using namespace std;
 
 void printLogo()
 {
-	cout << "-----------------------------" << endl;
-	cout << "-----------CwPlayer----------" << endl;
-	cout << "-----------------------------" << endl;
-}//To be changed
+	cout << "  _______          _______  _           __     ________ _____ " << endl;
+	cout << " / ____\\ \\        / /  __ \\| |        /\\\\ \\   / /  ____|  __ \\ " << endl;
+	cout << "| |     \\ \\ / \\  / /| |__) | |       /  \\\\ \\_/ /| |__  | |__) | " << endl;
+	cout << "| |      \\ \\/  \\/ / |  ___/| |      / /\\ \\\\   / |  __| |  _  / " << endl;
+	cout << "| |____   \\  /\\  /  | |    | |____ / ____ \\| |  | |____| | \\ \\ " << endl;
+	cout << " \\_____|   \\/  \\/   |_|    |______/_/    \\_\\_|  |______|_|  \\_\\ " << endl;
+		 
+}
 
 /**
  * Handles the error cases for inserting a guess

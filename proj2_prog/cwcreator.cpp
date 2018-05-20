@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "board.h"
 #include "Dictionary.h"
 #include "utilities.h"
@@ -19,11 +20,15 @@ using namespace std;
 
 void printLogo()
 {
-	cout << "-----------------------------------" << endl;
-	cout << "-------- Cross Word Creator -------" << endl;
-	cout << "-----------------------------------" << endl;
+	
+	cout << "  _______          _______ _____  ______       _______ ____  _____ " << endl;
+	cout << " / ____\\ \\        / / ____|  __ \\|  ____|   /\\|__   __/ __ \\|  __ \\ " << endl;
+	cout << "| |     \\ \\  /\\  / / |    | |__) | |__     /  \\  | | | |  | | |__) | " << endl;
+	cout << "| |      \\ \\/  \\/ /| |    |  _  /|  __|   / /\\ \\ | | | |  | |  _  /  " << endl;
+	cout << "| |____   \\  /\\  / | |____| | \\ \\| |____ / ____ \\| | | |__| | | \\ \\ " << endl;
+	cout << " \\_____|   \\/  \\/   \\_____|_|  \\_\\______/_/    \\_\\_|  \\____/|_|  \\_\\ " << endl;
+
 }
-// To be changed
 
 void printPossibleActions()
 {
