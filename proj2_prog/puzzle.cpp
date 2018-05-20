@@ -39,9 +39,9 @@ void Puzzle::provideBackupDictionary(Dictionary* dictionary, bool replace) //DON
 void Puzzle::showSynonyms()
 {
 	//Prints horizontal synonyms
-	setcolor(BLACK, WHITE_B);
+	setcolor(RED);
 	cout << "HORIZONTAL WORDS:";
-	setcolor(DEFAULT_TEXT, DEFAULT_BG);
+	setcolor(DEFAULT_TEXT);
 	cout << endl;
 	for (map<string,string>::iterator it = words.begin(); it != words.end(); it++)
 	{
@@ -50,12 +50,11 @@ void Puzzle::showSynonyms()
 			cout << it->first << ": " << hints.find(it->second)->second << endl;
 		}
 	}
-	cout << endl;
 
 	//Prints vertical synonyms
-	setcolor(BLACK, WHITE_B);
+	setcolor(RED);
 	cout << "VERTICAL WORDS:";
-	setcolor(DEFAULT_TEXT, DEFAULT_BG);
+	setcolor(DEFAULT_TEXT);
 	cout << endl;
 	for (map<string,string>::iterator it = words.begin(); it != words.end(); it++)
 	{
